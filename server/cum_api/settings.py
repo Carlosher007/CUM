@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     # third's apps
     'corsheaders',
     'rest_framework',
+    'coreapi',
     # my apps
     'car_dealership'
 ]
@@ -129,4 +130,8 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # cors authorization
-CORS_ALLOWED_ORIGINS = []
+CORS_ALLOWED_ORIGINS = ['http://localhost:3000'] # permite que react realice peticiones 
+
+REST_FRAMEWORK = {
+    'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
+}
