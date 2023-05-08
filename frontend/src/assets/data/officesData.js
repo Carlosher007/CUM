@@ -1,0 +1,68 @@
+const officesData = [
+  {
+    id: 1,
+    managerId: 123456,
+    workshopChiefId: 654321,
+    city: 'Bogotá',
+    address: 'Carrera 11 # 93-94',
+    phone: '+57 1 2345678',
+  },
+  {
+    id: 2,
+    managerId: 234567,
+    workshopChiefId: 765432,
+    city: 'Medellín',
+    address: 'Calle 44 # 70-28',
+    phone: '+57 4 9876543',
+  },
+  {
+    id: 3,
+    managerId: 345678,
+    workshopChiefId: 876543,
+    city: 'Cali',
+    address: 'Calle 5 # 38A-35',
+    phone: '+57 2 5554444',
+  },
+  {
+    id: 4,
+    managerId: 456789,
+    workshopChiefId: 987654,
+    city: 'Barranquilla',
+    address: 'Calle 77 # 52-27',
+    phone: '+57 5 3332222',
+  },
+  {
+    id: 5,
+    managerId: 567890,
+    workshopChiefId: 876543,
+    city: 'Cartagena',
+    address: 'Avenida Venezuela # 13-24',
+    phone: '+57 5 5554444',
+  },
+  {
+    id: 6,
+    managerId: 678901,
+    workshopChiefId: 765432,
+    city: 'Cúcuta',
+    address: 'Avenida 0 # 7-51',
+    phone: '+57 7 7776666',
+  },
+  {
+    id: 7,
+    managerId: 789012,
+    workshopChiefId: 654321,
+    city: 'Pereira',
+    address: 'Carrera 8 # 23-56',
+    phone: '+57 6 8887777',
+  },
+  {
+    id: 8,
+    managerId: 890123,
+    workshopChiefId: 543210,
+    city: 'Santa Marta',
+    address: 'Carrera 1 # 17-74',
+    phone: '+57 5 2221111',
+  },
+];
+
+export default officesData;
