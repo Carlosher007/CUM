@@ -31,13 +31,12 @@ const CarItem = (props) => {
             </span>
           </div>
 
-          {/* <button className=" w-50 car__item-btn car__btn-details">
-            <Link to={`/cars/${id}`}>Detalles</Link>
-          </button> */}
-          <div className="d-flex justify-content-center">
-            <button className="w-50 car__item-btn car__btn-rent">
-              <Link to={`/cars/${id}`}>Cotizar</Link>
-            </button>
+          <div className="text-center">
+            <Link to={`/cars/${id}`}>
+              <button className=" w-50 car__item-btn car__btn-details justify-content-center">
+                Cotizar
+              </button>
+            </Link>
           </div>
         </div>
       </div>

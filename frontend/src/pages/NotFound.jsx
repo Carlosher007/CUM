@@ -3,10 +3,10 @@ import '../styles/not-found.css';
 
 const NotFound = () => {
   return (
-    <div class="body">
-      <div class="box">
+    <div className="body">
+      <div className="box">
         <h2>
-          4<span class="zero"></span>4
+          4<span className="zero"></span>4
         </h2>
       </div>
     </div>
