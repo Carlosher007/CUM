@@ -49,6 +49,7 @@ LOCAL_APPS = [
     'apps.vehiculo',
     'apps.sucursal',
     'apps.cliente',
+    'apps.usuario',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
