@@ -30,20 +30,27 @@ ALLOWED_HOSTS = []
 
 # Application definition
 
-INSTALLED_APPS = [
+DEFAULT_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    # third's apps
+]
+
+THIRD_PARTY_APPS = [
     'corsheaders',
     'rest_framework',
     'coreapi',
-    # my apps
-    'apps.vehiculo',
 ]
+
+LOCAL_APPS = [
+    'apps.vehiculo',
+    'apps.sucursal',
+]
+
+INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
