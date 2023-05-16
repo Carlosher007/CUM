@@ -4,119 +4,123 @@ import { useParams } from 'react-router-dom';
 import { Col, Container, Row } from 'reactstrap';
 import carData from '../assets/data/carData';
 import Helmet from '../components/Helmet/Helmet';
-import BookingForm from '../components/UI/BookingForm';
+import VirtualQuoteForm from '../components/UI/VirtualQuoteForm';
 
 const CarDetails = () => {
   const { slug } = useParams();
 
-  const singleCarItem = carData.find((item) => item.id.toString() === slug);
+  const car = carData.find((item) => item.id.toString() === slug);
 
   useEffect(() => {
     window.scrollTo(0, 0);
-  }, [singleCarItem]);
+  }, [car]);
 
   return (
-    <Helmet title={singleCarItem.carName}>
+    <Helmet title={car.carName}>
       <section>
         <Container>
           <Row>
             <Col lg="6">
-              <img src={singleCarItem.imgUrl} alt="" className="w-100" />
+              <img src={car.imgURL} alt="" className="w-100" />
             </Col>
 
             <Col lg="6">
               <div className="car__info">
                 <h2 className="section__title">
-                  {singleCarItem.name} :{' '}
-                  {singleCarItem.color.charAt(0).toUpperCase() +
-                    singleCarItem.color.slice(1)}
+                  {car.modelo}: {car.year} -{' '}
+                  {car.color.charAt(0).toUpperCase() +
+                    car.color.slice(1)}
                 </h2>
 
                 <div className=" d-flex align-items-center gap-5 mb-4 mt-3">
-                  <h6 className="rent__price fw-bold fs-4">
-                    ${singleCarItem.price}.00
-                  </h6>
+                  <h6 className="rent__price fw-bold fs-4">${car.precio}</h6>
                 </div>
 
-                <p className="section__description">
-                  {singleCarItem.description}
-                </p>
+                <p className="section__description">{car.descripcion}</p>
+
+                <div
+                  className=" d-flex align-items-center mt-3"
+                  style={{ columnGap: '0rem' }}
+                >
+                  <span className=" d-flex align-items-center gap-1 section__description">
+                    <h7 style={{ color: '#f9a826' }}>Motor:</h7>
+                    {car.motor}
+                  </span>
+                </div>
 
                 <div
                   className=" d-flex align-items-center mt-3"
                   style={{ columnGap: '4rem' }}
                 >
                   <span className=" d-flex align-items-center gap-1 section__description">
-                    <h7 style={{ color: '#f9a826' }}>Velocidad Maxima:</h7>
-                    {singleCarItem.max_speed}
-                  </span>
-
-                  <span className=" d-flex align-items-center gap-1 section__description">
-                    <h7 style={{ color: '#f9a826' }}>Con ABS:</h7>
-                    {singleCarItem.abs ? 'Si' : 'No'}
-                  </span>
-
-                  <span className=" d-flex align-items-center gap-1 section__description">
-                    <h7 style={{ color: '#f9a826' }}>Asientos:</h7>
-                    {singleCarItem.seats}
+                    <h7 style={{ color: '#f9a826' }}>Suspension:</h7>
+                    {car.suspension}
                   </span>
                 </div>
 
                 <div
                   className=" d-flex align-items-center mt-3"
-                  style={{ columnGap: '2.8rem' }}
+                  style={{ columnGap: '3rem' }}
                 >
+                  <span className=" d-flex align-items-center gap-1 section__description">
+                    <h7 style={{ color: '#f9a826' }}>Carroceria:</h7>
+                    {car.carroceria}
+                  </span>
+
+                  <span className=" d-flex align-items-center gap-1 section__description">
+                    <h7 style={{ color: '#f9a826' }}>Puertas:</h7>
+                    {car.puertas}
+                  </span>
+
                   <span className=" d-flex align-items-center gap-1 section__description">
                     <h7 style={{ color: '#f9a826' }}>Potencia:</h7>
-                    {singleCarItem.power}
-                  </span>
-
-                  <span className=" d-flex align-items-center gap-1 section__description">
-                    <h7 style={{ color: '#f9a826' }}>Velocidades:</h7>
-                    {singleCarItem.speeds}
-                  </span>
-
-                  <span className=" d-flex align-items-center gap-1 section__description">
-                    <h7 style={{ color: '#f9a826' }}>Peso:</h7>
-                    {singleCarItem.weight}
+                    {car.potencia}
                   </span>
                 </div>
 
                 <div
                   className=" d-flex align-items-center mt-3"
-                  style={{ columnGap: '2.8rem' }}
+                  style={{ columnGap: '3rem' }}
                 >
                   <span className=" d-flex align-items-center gap-1 section__description">
-                    <h7 style={{ color: '#f9a826' }}>Alto:</h7>
-                    {singleCarItem.height}
+                    <h7 style={{ color: '#f9a826' }}>Rango:</h7>
+                    {car.rango}
                   </span>
 
                   <span className=" d-flex align-items-center gap-1 section__description">
-                    <h7 style={{ color: '#f9a826' }}>Ancho:</h7>
-                    {singleCarItem.width}
+                    <h7 style={{ color: '#f9a826' }}>Capacidad de bateria:</h7>
+                    {car.capacidadBateria}
                   </span>
 
                   <span className=" d-flex align-items-center gap-1 section__description">
-                    <h7 style={{ color: '#f9a826' }}>Largo:</h7>
-                    {singleCarItem.length}
+                    <h7 style={{ color: '#f9a826' }}>Tiempo de Carga:</h7>
+                    {car.tiempoCarga}
+                  </span>
+                </div>
+
+                <div
+                  className=" d-flex align-items-center mt-3"
+                  style={{ columnGap: '3rem' }}
+                >
+                  <span className=" d-flex align-items-center gap-1 section__description">
+                    <h7 style={{ color: '#f9a826' }}>Velocidad Maxima:</h7>
+                    {car.velocidadMax}
+                  </span>
+
+                  <span className=" d-flex align-items-center gap-1 section__description">
+                    <h7 style={{ color: '#f9a826' }}>Frenos:</h7>
+                    {car.frenos}
                   </span>
                 </div>
               </div>
             </Col>
 
-            <Col  className="mt-5">
+            <Col className="mt-5">
               <div className="booking-info mt-5">
-                <h5 className="mb-4 fw-bold ">Información de Registro</h5>
-                <BookingForm />
+                <h4 className="mb-4 fw-bold ">Cotice su vehiculo ahora</h4>
+                <VirtualQuoteForm/>
               </div>
             </Col>
-
-            {/* <Col lg="5" className="mt-5">
-              <div className="payment__info mt-5">
-                <h5 className="mb-4 fw-bold ">Payment Information</h5>
-                <PaymentMethod />
-              </div>
-            </Col> */}
           </Row>
         </Container>
       </section>

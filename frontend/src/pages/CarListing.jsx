@@ -8,9 +8,9 @@ import CommonSection from '../components/UI/CommonSection';
 const CarListing = () => {
 
   const [sortOrder, setSortOrder] = useState({
-    price: null,
-    seats: null,
-    maxSpeed: null,
+    precio: null,
+    tiempoCarga: null,
+    rango: null,
   });
 
   const handleSortChange = (event, property) => {
@@ -23,22 +23,22 @@ const CarListing = () => {
   const sortedCarData = [...carData].sort((a, b) => {
     let result = 0;
 
-    if (sortOrder.price === 'low') {
-      result = a.price - b.price;
-    } else if (sortOrder.price === 'high') {
-      result = b.price - a.price;
+    if (sortOrder.precio === 'low') {
+      result = a.precio - b.precio;
+    } else if (sortOrder.precio === 'high') {
+      result = b.precio - a.precio;
     }
 
-    if (sortOrder.seats === 'low') {
-      result = a.seats - b.seats;
-    } else if (sortOrder.seats === 'high') {
-      result = b.seats - a.seats;
+    if (sortOrder.tiempoCarga === 'low') {
+      result = a.tiempoCarga - b.tiempoCarga;
+    } else if (sortOrder.tiempoCarga === 'high') {
+      result = b.tiempoCarga - a.tiempoCarga;
     }
 
-    if (sortOrder.maxSpeed === 'low') {
-      result = a.max_speed - b.max_speed;
-    } else if (sortOrder.maxSpeed === 'high') {
-      result = b.max_speed - a.max_speed;
+    if (sortOrder.rango === 'low') {
+      result = a.rango - b.rango;
+    } else if (sortOrder.rango === 'high') {
+      result = b.rango - a.rango;
     }
 
     return result;
@@ -46,7 +46,7 @@ const CarListing = () => {
 
   return (
     <Helmet title="Cars">
-      <CommonSection title="Car Listing" />
+      <CommonSection title="Lista de Carros" />
 
       <section>
         <Container>
@@ -60,7 +60,7 @@ const CarListing = () => {
 
                   <Input
                     type="select"
-                    onChange={(event) => handleSortChange(event, 'price')}
+                    onChange={(event) => handleSortChange(event, 'precio')}
                     style={{ maxWidth: '200px' }}
                   >
                     <option>Select</option>
@@ -72,12 +72,12 @@ const CarListing = () => {
               <Col lg="4" className="mb-5">
                 <div className="d-flex align-items-center gap-2">
                   <span className="d-flex align-items-center gap-2">
-                    <i className="ri-sort-asc"></i> Ordena por Asientos
+                    <i className="ri-sort-asc"></i> Ordena por Rango
                   </span>
 
                   <Input
                     type="select"
-                    onChange={(event) => handleSortChange(event, 'seats')}
+                    onChange={(event) => handleSortChange(event, 'tiempoCarga')}
                     style={{ maxWidth: '200px' }}
                   >
                     <option>Select</option>
@@ -89,12 +89,12 @@ const CarListing = () => {
               <Col lg="4" className="mb-5">
                 <div className="d-flex align-items-center gap-2">
                   <span className="d-flex align-items-center gap-2">
-                    <i className="ri-sort-asc"></i> Ordena por Velocidad Maximo
+                    <i className="ri-sort-asc"></i> Ordena por Capacidad de Carga
                   </span>
 
                   <Input
                     type="select"
-                    onChange={(event) => handleSortChange(event, 'maxSpeed')}
+                    onChange={(event) => handleSortChange(event, 'rango')}
                     style={{ maxWidth: '200px' }}
                   >
                     <option>Select</option>
