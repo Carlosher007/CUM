@@ -1,3 +1,4 @@
+import { FormikProvider } from 'formik';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import Layout from './components/Layout/Layout';
@@ -5,8 +6,10 @@ import Layout from './components/Layout/Layout';
 function App() {
   return (
     <>
-      <ToastContainer />
-      <Layout />
+      {/* <FormikProvider> */}
+        <ToastContainer />
+        <Layout />
+      {/* </FormikProvider> */}
     </>
   );
 }

@@ -1,4 +1,4 @@
-import React , {useState} from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Container, Form, FormGroup, Input, Row } from 'reactstrap';
 import Helmet from '../components/Helmet/Helmet';
@@ -26,7 +26,6 @@ const socialLinks = [
 ];
 
 const Contact = () => {
-
   const sedePrincipal = {
     direccion: 'Calle 5 # 23 - 45',
     telefono: '3013666140',
@@ -49,7 +48,7 @@ const Contact = () => {
         <Container>
           <Row>
             <Col lg="7" md="7">
-              <h6 className="fw-bold mb-4">Ponte en contacto</h6>
+              <h6 className="fw-bold mb-4">Ponte en contact</h6>
 
               <Form onSubmit={handleFormSubmit}>
                 <FormGroup className="contact__form">
@@ -78,7 +77,7 @@ const Contact = () => {
                   ></textarea>
                 </FormGroup>
 
-                <button className=" contact__btn" type="submit" >
+                <button className=" contact__btn" type="submit">
                   Enviar mensaje
                 </button>
               </Form>

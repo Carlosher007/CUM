@@ -1,30 +1,21 @@
-import React, { useEffect, useRef, useState } from 'react';
+import React, { useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Col, Container, Row } from 'reactstrap';
+import { companyData } from '../../assets/data/companyData';
+import { urls } from '../../assets/urls/urls';
 import '../../styles/header.css';
-
-const LOGIN_URL = '/login';
 
 const navLinks = [
   {
-    path: '/home',
+    path: urls.home,
     display: 'Inicio',
   },
-  // {
-  //   path: "/about",
-  //   display: "About",
-  // },
   {
-    path: '/cars',
+    path: urls.seeCars,
     display: 'Carros',
   },
-  //
-  //   {
-  //     path: "/blogs",
-  //     display: "Blog",
-  //   },
   {
-    path: '/contact',
+    path: urls.contact,
     display: 'Contacto',
   },
 ];
@@ -32,18 +23,7 @@ const navLinks = [
 const Header = () => {
   const menuRef = useRef(null);
 
-  const [searchValue, setSearchValue] = useState('');
-  const [displaySearchBox, setDisplaySearchBox] = useState(false);
-
   const toggleMenu = () => menuRef.current.classList.toggle('menu__active');
-
-  const handleNavItemClick = (item) => {
-    if (item.display === 'Cars') {
-      setDisplaySearchBox(true);
-    } else {
-      setDisplaySearchBox(false);
-    }
-  };
 
   return (
     <header className="header">
@@ -55,7 +35,7 @@ const Header = () => {
               <div className="header__top__left">
                 <span>Necesitas Ayuda?</span>
                 <span className="header__top__help">
-                  <i class="ri-customer-service-2-line"></i> 3013666180
+                  <i class="ri-customer-service-2-line"></i> {companyData.phone}
                 </span>
               </div>
             </Col>
@@ -67,7 +47,7 @@ const Header = () => {
                 </Link> */}
 
                 <Link
-                  to={LOGIN_URL}
+                  to={urls.login}
                   className=" d-flex align-items-center gap-1"
                 >
                   <i class="ri-user-line"></i> Ingresar
@@ -88,7 +68,8 @@ const Header = () => {
                   <Link to="/home" className=" d-flex align-items-center gap-2">
                     <i class="ri-car-line"></i>
                     <span>
-                      Car Universal<br /> Manager
+                      Car Universal
+                      <br /> Manager
                     </span>
                   </Link>
                 </h1>
@@ -113,8 +94,12 @@ const Header = () => {
                   <i class="ri-time-line"></i>
                 </span>
                 <div className="header__location-content">
-                  <h4>Sabado a Domingo</h4>
-                  <h6>8am - 7pm</h6>
+                  <h4>
+                    {companyData.diaInicio} a {companyData.diaFinal}
+                  </h4>
+                  <h6>
+                    {companyData.horaInicio} - {companyData.horaFinal}
+                  </h6>
                 </div>
               </div>
             </Col>
@@ -125,11 +110,13 @@ const Header = () => {
               sm="0"
               className=" d-flex align-items-center justify-content-end "
             >
-              <button className="header__btn btn ">
-                <Link to="/contact">
-                  <i class="ri-phone-line"></i> Contactanos
-                </Link>
-              </button>
+              <Link
+                className="header__btn btn"
+                to="/contact"
+                style={{ color: 'white' }}
+              >
+                <i className="ri-phone-line"></i> Contactanos
+              </Link>
             </Col>
           </Row>
         </Container>
@@ -153,31 +140,12 @@ const Header = () => {
                       navClass.isActive ? 'nav__active nav__item' : 'nav__item'
                     }
                     key={index}
-                    onClick={() => handleNavItemClick(item)}
                   >
                     {item.display}
                   </NavLink>
                 ))}
               </div>
             </div>
-
-            {/* {displaySearchBox && (
-              <div className="nav__right">
-                <div className="search__box">
-                  <input
-                    type="text"
-                    placeholder="Search"
-                    value={searchValue}
-                    onChange={(event) => setSearchValue(event.target.value)}
-                  />
-                  <span>
-                    <Link to={`/carsff/${searchValue}`}>
-                      <i class="ri-search-line"></i>
-                    </Link>
-                  </span>
-                </div>
-              </div>
-            )} */}
           </div>
         </Container>
       </div>

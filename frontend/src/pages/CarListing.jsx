@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState} from 'react';
 import { Col, Container, Input, Row } from 'reactstrap';
 import carData from '../assets/data/carData';
 import Helmet from '../components/Helmet/Helmet';
@@ -6,6 +6,7 @@ import CarItem from '../components/UI/CarItem';
 import CommonSection from '../components/UI/CommonSection';
 
 const CarListing = () => {
+
   const [sortOrder, setSortOrder] = useState({
     price: null,
     seats: null,

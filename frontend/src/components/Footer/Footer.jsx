@@ -1,32 +1,18 @@
 import React from 'react';
-
 import { Link } from 'react-router-dom';
 import { Col, Container, ListGroup, ListGroupItem, Row } from 'reactstrap';
+import { companyData } from '../../assets/data/companyData';
+import { urls } from '../../assets/urls/urls';
 import '../../styles/footer.css';
 
 const quickLinks = [
-  // {
-  //   path: "/about",
-  //   display: "About",
-  // },
-
   {
-    path: '#',
-    display: 'Privacy Policy',
+    path: urls.seeCars,
+    display: 'Carros',
   },
-
   {
-    path: '/cars',
-    display: 'Car Listing',
-  },
-  // {
-  //   path: "/blogs",
-  //   display: "Blog",
-  // },
-
-  {
-    path: '/contact',
-    display: 'Contact',
+    path: urls.contact,
+    display: 'Contacto',
   },
 ];
 
@@ -49,12 +35,7 @@ const Footer = () => {
                 </Link>
               </h1>
             </div>
-            <p className="footer__logo-content">
-              ¡Gracias por elegirnos! Somos su tienda de confianza para la
-              compra y mantenimiento de vehículos eléctricos de alta calidad y
-              tecnología. Nuestro equipo está aquí para brindarle la mejor
-              experiencia en el cuidado de su automóvil eléctrico.
-            </p>
+            <p className="footer__logo-content">{companyData.description}</p>
           </Col>
 
           <Col lg="2" md="4" sm="6">
@@ -74,13 +55,9 @@ const Footer = () => {
             <div className="mb-4">
               <h5 className="footer__link-title mb-4">Información</h5>
               <p className="office__info">Colombia</p>
-              <p className="office__info">Telefono: 3013666180</p>
+              <p className="office__info">Telefono: {companyData.phone}</p>
 
-              <p className="office__info">
-                Email: customuniversalmanager@gmail.com
-              </p>
-
-              <p className="office__info">Tiempo: 8am - 7pm</p>
+              <p className="office__info">Email: {companyData.email}</p>
             </div>
           </Col>
 
@@ -100,7 +77,7 @@ const Footer = () => {
           <Col lg="12">
             <div className="footer__bottom">
               <p className="section__description d-flex align-items-center justify-content-center gap-1 pt-4">
-                <i class="ri-copyright-line"></i>Copyright {year}, Desarrollado por CBJD
+                {year}, Desarrollado por CBJD
               </p>
             </div>
           </Col>

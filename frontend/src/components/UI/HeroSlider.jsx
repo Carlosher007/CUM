@@ -27,9 +27,9 @@ const HeroSlider = () => {
             </h4>
             <h1 className="text-light mb-4">No pierdas la oportunidad</h1>
 
-            <button className="btn reserve__btn mt-4">
-              <Link to="/cars">Cotize ahora</Link>
-            </button>
+            <Link to="/cars" className="btn reserve__btn mt-4">
+              Cotize ahora
+            </Link>
           </div>
         </Container>
       </div>
@@ -42,9 +42,9 @@ const HeroSlider = () => {
             </h4>
             <h1 className="text-light mb-4">No pierdas la oportunidad</h1>
 
-            <button className="btn reserve__btn mt-4">
-              <Link to="/cars">Cotize ahora</Link>
-            </button>
+            <Link to="/cars" className="btn reserve__btn mt-4">
+              Cotize ahora
+            </Link>
           </div>
         </Container>
       </div>
@@ -57,9 +57,9 @@ const HeroSlider = () => {
             </h4>
             <h1 className="text-light mb-4">No pierdas la oportunidad</h1>
 
-            <button className="btn reserve__btn mt-4">
-              <Link to="/cars">Cotize ahora</Link>
-            </button>
+            <Link to="/cars" className="btn reserve__btn mt-4">
+              Cotize ahora
+            </Link>
           </div>
         </Container>
       </div>
