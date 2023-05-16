@@ -42,7 +42,7 @@ INSTALLED_APPS = [
     'rest_framework',
     'coreapi',
     # my apps
-    'car_dealership'
+    'apps.vehiculo',
 ]
 
 MIDDLEWARE = [

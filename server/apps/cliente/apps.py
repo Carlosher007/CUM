@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class CarDealershipConfig(AppConfig):
+class ClienteConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
-    name = 'car_dealership'
+    name = 'apps.cliente'
