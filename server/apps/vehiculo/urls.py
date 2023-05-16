@@ -7,5 +7,5 @@ router.register(r'vehiculo', views.VehiculoView, 'vehiculo')
 
 
 urlpatterns = [
-    path('/', include(router.urls))
+    path('', include(router.urls))
 ]
