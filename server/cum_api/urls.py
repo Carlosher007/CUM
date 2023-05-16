@@ -22,6 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('api/', include('apps.vehiculo.urls')),
     path('api/', include('apps.cliente.urls')),
+    path('api/', include('apps.sucursal.urls')),
 
     path('docs/', include_docs_urls(title='CUM API'))
 ]
