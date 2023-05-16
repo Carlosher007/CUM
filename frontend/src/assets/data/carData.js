@@ -1,18 +1,10 @@
 // import all images from assets/images directory
+import img01 from '../all-images/cars-img/nissan-offer.png';
 import img03 from '../all-images/cars-img/bmw-offer.png';
-import {
-  default as img06,
-  default as img08,
-} from '../all-images/cars-img/mercedes-offer.png';
-import {
-  default as img01,
-  default as img04,
-} from '../all-images/cars-img/nissan-offer.png';
-import {
-  default as img02,
-  default as img05,
-} from '../all-images/cars-img/offer-toyota.png';
+import img05 from '../all-images/cars-img/offer-toyota.png';
 import img07 from '../all-images/cars-img/toyota-offer-2.png';
+import img08 from '../all-images/cars-img/mercedes-offer.png';
+
 const carData = [
   {
     id: 1,

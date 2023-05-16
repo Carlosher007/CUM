@@ -7,6 +7,7 @@ import Contact from '../pages/Contact';
 import Home from '../pages/Home';
 import NotFound from '../pages/NotFound';
 import PresentialQuote from '../pages/PresentialQuote';
+import Offices from '../pages/Offices'; 
 
 const Routers = () => {
   return (
@@ -18,6 +19,7 @@ const Routers = () => {
       <Route path={urls.contact} element={<Contact />} />
       <Route path="*" element={<NotFound />} />
       <Route path={urls.presentialquote} element={<PresentialQuote />} />
+      <Route path={urls.offices} element={<Offices />} />
     </Routes>
   );
 };

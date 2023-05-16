@@ -14,6 +14,10 @@ const quickLinks = [
     path: urls.contact,
     display: 'Contacto',
   },
+  {
+    path: urls.offices,
+    display: 'Sucursales',
+  }
 ];
 
 const Footer = () => {

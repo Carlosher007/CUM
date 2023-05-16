@@ -5,4 +5,5 @@ export const urls = {
   contact: '/contact',
   seeCar: '/cars/:slug',
   presentialquote: '/pquote',
+  offices: '/offices',
 }

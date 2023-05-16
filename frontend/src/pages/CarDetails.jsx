@@ -5,7 +5,6 @@ import { Col, Container, Row } from 'reactstrap';
 import carData from '../assets/data/carData';
 import Helmet from '../components/Helmet/Helmet';
 import BookingForm from '../components/UI/BookingForm';
-import PaymentMethod from '../components/UI/PaymentMethod';
 
 const CarDetails = () => {
   const { slug } = useParams();
