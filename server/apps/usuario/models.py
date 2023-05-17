@@ -3,7 +3,7 @@ from apps.sucursal.models import Sucursal
 
 # Create your models here.
 class Gerente(models.Model):
-    cedula = models.ForeignKey(Sucursal, on_delete=models.CASCADE)
+    cedula = models.OneToOneField(Sucursal, on_delete=models.CASCADE, primary_key=True, to_field='cedula_gerente')
     nombre_completo = models.CharField(max_length=50)
     celular = models.CharField(max_length=10)
     email = models.CharField(max_length=70)
@@ -13,7 +13,7 @@ class Gerente(models.Model):
         db_table = 'gerente'
 
 class JefeTaller(models.Model):
-    cedula = models.ForeignKey(Sucursal, on_delete=models.CASCADE)
+    cedula = models.OneToOneField(Sucursal, on_delete=models.CASCADE, primary_key=True, to_field='cedula_jefe_taller')
     nombre_completo = models.CharField(max_length=50)
     celular = models.CharField(max_length=10)
     email = models.CharField(max_length=70)
