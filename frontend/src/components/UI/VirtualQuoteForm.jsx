@@ -1,6 +1,5 @@
 import { useFormik } from 'formik';
 import React, { useState } from 'react';
-import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
 import officesData from '../../assets/data/officesData';
@@ -8,9 +7,7 @@ import { virtualQuoteValidation } from '../../assets/validation/VirtualQuoteVali
 import '../../styles/find-car-form.css';
 
 const PresentialQuoteFormExtend = () => {
-  const location = useLocation();
-  const formData = location.state;
-
+""
   const formik = useFormik({
     initialValues: {
       name: '',
