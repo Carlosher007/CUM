@@ -1,7 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Sucursal
-from .serializer import SucursalSerializer
+from rest_framework import viewsets
+from .models import Sucursal, Vehiculo
+from .serializer import SucursalSerializer, VehiculoSerializer
 from apps.usuario.models import Gerente, JefeTaller
 
 # Create your views here.
@@ -24,3 +25,7 @@ class SucursalAPIView(APIView):
             lista_sucursales.append(sucursal_)
 
         return Response(lista_sucursales)
+    
+class VehiculoView(viewsets.ModelViewSet):
+    serializer_class = VehiculoSerializer
+    queryset = Vehiculo.objects.all()
