@@ -48,7 +48,6 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     'apps.vehiculo',
     'apps.sucursal',
-    'apps.cliente',
     'apps.usuario',
 ]
 

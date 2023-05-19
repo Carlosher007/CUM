@@ -1,5 +1,5 @@
 from django.urls import path
-from apps.cliente.views import ClienteAPIView
+from apps.usuario.views import ClienteAPIView
 
 
 urlpatterns = [
