@@ -142,3 +142,5 @@ CORS_ALLOWED_ORIGINS = ['http://localhost:3000'] # permite que react realice pet
 REST_FRAMEWORK = {
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
 }
+
+AUTH_USER_MODEL = "usuario.Usuario"

@@ -4,11 +4,12 @@ from .models import Cliente
 from .serializers import ClienteSerializer, RegistroSerializer
 
 # Registrar usuario
-def registro(user):
+def registro(user, rol):
     data_ = {
         'username':user['cedula'],
         'email':user['email'],
-        'password':user['password']
+        'password':user['password'],
+        'rol':rol
     }
     registro_serializer = RegistroSerializer(data=data_)
     if registro_serializer.is_valid():
@@ -28,7 +29,7 @@ class ClienteAPIView(APIView):
     def post(self, request):
         cliente_serializer = ClienteSerializer(data=request.data)
         if cliente_serializer.is_valid():
-            if registro(request.data):
+            if registro(request.data, 'Cliente'):
                 cliente_serializer.save()
                 return Response(cliente_serializer.data)
             return Response({'response':'No se ha podido agregar el usuario'})
