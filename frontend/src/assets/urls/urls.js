@@ -1,12 +1,13 @@
 export const urls = {
   // Auth
   login: '/login',
-  forgetPassword: 'olvide-password',
+  forgetPassword: '/olvide-password',
   // Landing Page
   home: '/landing/home',
   seeCars: '/landing/cars',
   contact: '/landing/contact',
   seeCar: '/landing/cars/:slug',
+  seeCarI: '/landing/cars/',
   presentialquote: '/landing/pquote',
   offices: '/landing/offices',
   // Dashboard

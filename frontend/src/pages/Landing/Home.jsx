@@ -9,19 +9,17 @@ import AboutSection from '../../components/Landing/UI/AboutSection';
 import CarItem from '../../components/Landing/UI/CarItem';
 import PresentialQuoteForm from '../../components/Landing/UI/PresentialQuoteForm';
 import ServicesList from '../../components/Landing/UI/ServicesList';
-import { obtenerModo } from '../../assets/Context/ModeContext';
 
 const Home = () => {
-  console.log(obtenerModo())
   return (
     <div className="bg-white">
     
-    <Helmet title="Home" className="bg-white">
+    <Helmet title="Home" >
       {/* ============= hero section =========== */}
-      <section className="p-0 hero__slider-section bg-white">
+      <section className="p-0 hero__slider-section">
         <HeroSlider />
 
-        <div className="hero__form bg-white">
+        <div className="hero__form ">
           <Container>
             <Row className="form__row">
               <Col lg="4" md="4">

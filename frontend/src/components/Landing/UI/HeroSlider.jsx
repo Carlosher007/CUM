@@ -3,7 +3,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import Slider from 'react-slick';
 import { Container } from 'reactstrap';
-
+import { urls } from '../../../assets/urls/urls';
 import '../../../styles/hero-slider.css';
 
 const HeroSlider = () => {
@@ -27,7 +27,7 @@ const HeroSlider = () => {
             </h4>
             <h1 className="text-light mb-4">No pierdas la oportunidad</h1>
 
-            <Link to="/cars" className="btn reserve__btn mt-4">
+            <Link to={urls.seeCars} className="btn reserve__btn mt-4">
               Cotize ahora
             </Link>
           </div>
@@ -42,7 +42,7 @@ const HeroSlider = () => {
             </h4>
             <h1 className="text-light mb-4">No pierdas la oportunidad</h1>
 
-            <Link to="/cars" className="btn reserve__btn mt-4">
+            <Link to={urls.seeCars} className="btn reserve__btn mt-4">
               Cotize ahora
             </Link>
           </div>
@@ -57,7 +57,7 @@ const HeroSlider = () => {
             </h4>
             <h1 className="text-light mb-4">No pierdas la oportunidad</h1>
 
-            <Link to="/cars" className="btn reserve__btn mt-4">
+            <Link to={urls.seeCars} className="btn reserve__btn mt-4">
               Cotize ahora
             </Link>
           </div>

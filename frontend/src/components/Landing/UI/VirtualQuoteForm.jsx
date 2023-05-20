@@ -7,7 +7,6 @@ import { virtualQuoteValidation } from '../../../assets/validation/VirtualQuoteV
 import '../../../styles/find-car-form.css';
 
 const PresentialQuoteFormExtend = () => {
-""
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -42,6 +41,7 @@ const PresentialQuoteFormExtend = () => {
   const resetErrorShown = () => {
     setErrorShown(false);
   };
+
   return (
     <Form className="form" onSubmit={handleSubmit}>
       <div>
@@ -103,7 +103,7 @@ const PresentialQuoteFormExtend = () => {
           <FormGroup className="form__group ">
             <FormText>Email</FormText>
             <Input
-              type="text"
+              type="email"
               placeholder="Email"
               name="email"
               value={values.email}

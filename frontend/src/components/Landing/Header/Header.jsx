@@ -16,12 +16,12 @@ const navLinks = [
     display: 'Carros',
   },
   {
-    path: urls.contact,
-    display: 'Contacto',
-  },
-  {
     path: urls.offices,
     display: 'Sucursales',
+  },
+  {
+    path: urls.contact,
+    display: 'Contacto',
   },
 ];
 
@@ -52,7 +52,7 @@ const Header = () => {
                 </Link> */}
 
                 <Link
-                  to={urls.home2}
+                  to={urls.login}
                   className=" d-flex align-items-center gap-1"  onClick={cambiarModo('dashboard')}
                 >
                   <i class="ri-user-line"></i> Ingresar

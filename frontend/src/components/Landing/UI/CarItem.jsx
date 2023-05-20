@@ -2,6 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { Col } from 'reactstrap';
 import '../../../styles/car-item.css';
+import { urls } from '../../../assets/urls/urls';
 
 const CarItem = (props) => {
   const { imgURL, color, id, name, rango, tiempoCarga, precio } = props.item;
@@ -32,7 +33,7 @@ const CarItem = (props) => {
           </div>
 
           <div className="text-center">
-            <Link to={`/cars/${id}`}>
+            <Link to={`${urls.seeCarI}${id}`}>
               <button className=" w-50 car__item-btn car__btn-details justify-content-center">
                 Cotizar
               </button>

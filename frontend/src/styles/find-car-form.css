@@ -56,7 +56,7 @@
 
 .hero__form {
   position: absolute;
-  bottom: -300px;
+  bottom: -200px;
   z-index: 11;
   width: 100%;
 }
