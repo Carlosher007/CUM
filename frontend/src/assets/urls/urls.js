@@ -1,9 +1,17 @@
 export const urls = {
+  // Auth
   login: '/login',
-  home: '/home',
-  seeCars: '/cars',
-  contact: '/contact',
-  seeCar: '/cars/:slug',
-  presentialquote: '/pquote',
-  offices: '/offices',
-}
+  forgetPassword: 'olvide-password',
+  // Landing Page
+  home: '/landing/home',
+  seeCars: '/landing/cars',
+  contact: '/landing/contact',
+  seeCar: '/landing/cars/:slug',
+  presentialquote: '/landing/pquote',
+  offices: '/landing/offices',
+  // Dashboard
+  home2: '/dashboard/home2',
+  profile: '/dashboard/perfil',
+  chat: '/dashboard/chat',
+  tickets: '/dashboard/tickets',
+};
