@@ -1,4 +1,5 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
 import { Link } from 'react-router-dom';
 // Icons
 import { useFormik } from 'formik';
@@ -17,17 +18,28 @@ import { loginValidation } from '../../assets/validation/LoginValidation';
 const Login = () => {
   const navigate = useNavigate();
 
+  const captcha = useRef(null);
+
   const [showPassword, setShowPassword] = useState(false);
 
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
+      captchaResponse:'',
     },
     validationSchema: loginValidation,
     onSubmit: (values) => {
-      console.log(values);
-      navigate(urls.home2);
+      if(captcha.current.getValue()){
+        values.captchaResponse = captcha.current.getValue();
+        console.log(values);
+        navigate(urls.home2);
+      }else{
+        // Hacemos un notify con toast
+        toast.error('Por favor, verifica que no eres un robot', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
     },
   });
 
@@ -98,6 +110,13 @@ const Login = () => {
             {touched.password &&
               errors.password &&
               showErrorToast(errors.password)}
+          </FormGroup>
+
+          <FormGroup>
+            <ReCAPTCHA
+              ref={captcha}
+              sitekey="6Ler7yUmAAAAAJNxdK6337nhATDdZlsQAmXHhVox"
+            />
           </FormGroup>
 
           <div>
