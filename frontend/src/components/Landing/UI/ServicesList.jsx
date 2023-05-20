@@ -15,13 +15,13 @@ const ServicesList = () => {
 
 const ServiceItem = ({ item }) => (
   <Col lg="4" md="4" sm="6" className="mb-3">
-    <div className="service__item">
+    <div className="service__item ">
       <span className="mb-3 d-inline-block">
         <i class={item.icon} />
       </span>
 
       <h6>{item.title}</h6>
-      <p className="section__description">{item.desc}</p>
+      <p className="section__description text-black">{item.desc}</p>
     </div>
   </Col>
 );

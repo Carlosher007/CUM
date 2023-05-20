@@ -44,7 +44,7 @@ const PresentialQuoteForm = () => {
 
   return (
     <Form className="form" onSubmit={handleSubmit}>
-      <div>
+      <div className="text-black">
         Información Personal
         <div className="d-flex align-items-center justify-content-between flex-wrap">
           <FormGroup className="form__group">

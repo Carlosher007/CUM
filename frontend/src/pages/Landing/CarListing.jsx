@@ -50,8 +50,8 @@ const CarListing = () => {
         <section className="bg-white">
           <Container>
             <Row>
-              <div className="d-flex gap-3">
-                <Col lg="4" className="mb-5">
+              <div className="d-flex gap-3 text-black">
+                <Col lg="4" className="mb-5 ">
                   <div className="d-flex align-items-center gap-2">
                     <span className="d-flex align-items-center gap-2">
                       <i className="ri-sort-asc"></i> Ordena por Precio
