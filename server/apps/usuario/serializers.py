@@ -1,8 +1,7 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
-from .models import Cliente
+from .models import Cliente, Usuario
 
-User = get_user_model()
 
 class ClienteSerializer(serializers.ModelSerializer):
     class Meta:
@@ -11,14 +10,21 @@ class ClienteSerializer(serializers.ModelSerializer):
 
 class RegistroSerializer(serializers.ModelSerializer):
     class Meta:
-        model = User
-        fields = ['username', 'email', 'password']
+        model = Usuario
+        fields = ['username', 'email', 'password', 'rol']
+        extra_kwargs = {'password': {'write_only': True}}
 
     def save(self):
-        user = User(
+        user = Usuario(
             username=self.validated_data['username'],
             email=self.validated_data['email'],
-            password=self.validated_data['password'],
+            rol=self.validated_data['rol'],
         )
 
+        user.set_password(self.validated_data['password'])
         user.save()
+
+class UsuarioTokenSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Usuario
+        fields = ['email', 'username', 'rol']

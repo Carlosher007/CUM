@@ -1,4 +1,5 @@
 from django.db import models
+from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
 from django.contrib.auth.hashers import make_password
 from apps.sucursal.models import Sucursal
 
@@ -39,3 +40,27 @@ class Cliente(models.Model):
         # Encriptamos la contraseña
         self.password = make_password(self.password)
         super(Cliente, self).save(*args, **kwargs)
+
+class Usuario(AbstractBaseUser, PermissionsMixin):
+    ROLES = (
+        ("Gerente", "G"),
+        ("Cliente", "C"),
+        ("JefeTaller", "JT"),
+        ("Vendedor", "V"),
+    )
+
+    username = models.CharField(max_length=150, unique=True)
+    email = models.CharField(max_length=254, unique=True)
+    is_staff = models.BooleanField(null=False, default=False)
+    is_active = models.BooleanField(null=False, default=True)
+    is_superuser = models.BooleanField(null=False, default=False)
+    last_login = models.DateTimeField(null=True)
+    date_joined = models.DateTimeField(auto_now_add=True)
+    rol = models.CharField(max_length=15, choices=ROLES)
+    objects = UserManager()
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username', 'password']
+
+    class Meta:
+        db_table = 'usuario'
