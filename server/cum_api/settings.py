@@ -42,6 +42,7 @@ DEFAULT_APPS = [
 THIRD_PARTY_APPS = [
     'corsheaders',
     'rest_framework',
+    'rest_framework.authtoken',
     'coreapi',
 ]
 
