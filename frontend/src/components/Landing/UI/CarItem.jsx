@@ -5,7 +5,7 @@ import { urls } from '../../../assets/urls/urls';
 import '../../../styles/car-item.css';
 
 const CarItem = (props) => {
-  const { imgURL, color, id, modelo, year, rango, tiempoCarga, precio } =
+  const { imgURL, color, id, modelo, year, rango, tiempo_carga, precio } =
     props.item;
 
   return (
@@ -25,18 +25,18 @@ const CarItem = (props) => {
 
           <div className="car__item-info d-flex align-items-center justify-content-between mt-3 mb-4 text-black">
             <span className=" d-flex align-items-center gap-1">
-              <i class="ri-brush-2-line"></i> {color}
+              <i class="ri-brush-2-line"></i> {color || 'Sin definir'}
             </span>
             <span className=" d-flex align-items-center gap-1">
               <i class="ri-roadster-line"></i> {rango} km
             </span>
             <span className=" d-flex align-items-center gap-1">
-              <i class="ri-timer-flash-line"></i> {tiempoCarga} hr
+              <i class="ri-timer-flash-line"></i> {tiempo_carga} hr
             </span>
           </div>
 
           <div className="text-center">
-            <Link to={`${urls.seeCarI}${id}`}>
+            <Link to={`${urls.seeCarI}${modelo}`}>
               <button className=" w-50 car__item-btn car__btn-details justify-content-center text-black">
                 Cotizar
               </button>

@@ -1,47 +1,82 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import ReactPaginate from 'react-paginate';
+import { toast } from 'react-toastify';
 import { Col, Container, Input, Row } from 'reactstrap';
+import { getCars } from '../../assets/api/infoCars';
 import carData from '../../assets/data/carData';
 import Helmet from '../../components/Landing/Helmet/Helmet';
 import CarItem from '../../components/Landing/UI/CarItem';
 import CommonSection from '../../components/Landing/UI/CommonSection';
-
 const CarListing = () => {
+  const ITEMS_PER_PAGE = 7;
+
+  const [currentPage, setCurrentPage] = useState(0);
+
+  const [dataCars, setDataCars] = useState([]);
+
+  const handlePageChange = ({ selected }) => {
+    setCurrentPage(selected);
+  };
+
+  const offset = currentPage * ITEMS_PER_PAGE;
+  
   const [sortOrder, setSortOrder] = useState({
     precio: null,
     tiempoCarga: null,
     rango: null,
   });
-
+  
   const handleSortChange = (event, property) => {
     const newSortOrder = { ...sortOrder };
     newSortOrder[property] = event.target.value;
     setSortOrder(newSortOrder);
   };
 
-  const sortedCarData = [...carData].sort((a, b) => {
-    let result = 0;
+  useEffect (() => {
+    const getCarData = async () => {
+      try{
+        const { data } = await getCars();
+        setDataCars(data);
+        console.log(data);
+      }catch (error) {
+      const { data } = error.response;
+      // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+      console.log(data.error);
+      toast.error(data.error, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
+  getCarData();
+  }, []);
 
+  
+  const sortedCarData = [...dataCars].sort((a, b) => {
+    let result = 0;
+    
     if (sortOrder.precio === 'low') {
       result = a.precio - b.precio;
     } else if (sortOrder.precio === 'high') {
       result = b.precio - a.precio;
     }
-
+    
     if (sortOrder.tiempoCarga === 'low') {
       result = a.tiempoCarga - b.tiempoCarga;
     } else if (sortOrder.tiempoCarga === 'high') {
       result = b.tiempoCarga - a.tiempoCarga;
     }
-
+    
     if (sortOrder.rango === 'low') {
       result = a.rango - b.rango;
     } else if (sortOrder.rango === 'high') {
       result = b.rango - a.rango;
     }
-
+    
     return result;
   });
-
+  
+  const paginatedCarData = sortedCarData.slice(offset, offset + ITEMS_PER_PAGE);
+  
   return (
     <div className="bg-white">
       <Helmet title="Cars" className="bg-white">
@@ -106,11 +141,32 @@ const CarListing = () => {
                   </div>
                 </Col>
               </div>
-              {sortedCarData.map((item) => (
-                <CarItem item={item} key={item.id} />
+              {paginatedCarData.map((item) => (
+                <CarItem item={item} key={item.modelo} />
               ))}
             </Row>
           </Container>
+          <div className="flex justify-center items-center mt-4">
+            <ReactPaginate
+              previousLabel={
+                <i className="ri-arrow-left-circle-fill text-blue-500 text-2xl"></i>
+              }
+              nextLabel={
+                <i className="ri-arrow-right-circle-fill text-blue-500 text-2xl"></i>
+              }
+              breakLabel={
+                <i className="ri-arrow-left-right-line text-blue-500 text-2xl"></i>
+              }
+              breakClassName={'break-me'}
+              pageCount={Math.ceil(sortedCarData.length / ITEMS_PER_PAGE)}
+              marginPagesDisplayed={2}
+              pageRangeDisplayed={5}
+              onPageChange={handlePageChange}
+              containerClassName={'pagination flex gap-2'}
+              activeClassName={'active'}
+              pageClassName={'text-black'} // Agrega esta línea para cambiar el color de los números
+            />
+          </div>
         </section>
       </Helmet>
     </div>

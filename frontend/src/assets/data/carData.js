@@ -231,6 +231,7 @@ const carData = [
     descripcion:
       'Furgoneta espaciosa y versátil con capacidad de carga elevada y tecnología avanzada.',
   },
+  
 ];
 
 export default carData;

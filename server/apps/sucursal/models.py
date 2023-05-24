@@ -53,7 +53,7 @@ class Vehiculo(models.Model):
     velocidad_maxima = models.PositiveSmallIntegerField()
     frenos = models.CharField(max_length=100, choices=OPCIONES_FRENOS)
     suspension = models.CharField(max_length=100, choices=OPCIONES_SUSPENSION)
-    img_url = models.CharField(max_length=100)
+    img_url = models.CharField(max_length=500)
     precio = models.IntegerField()
     descripcion = models.TextField()
 

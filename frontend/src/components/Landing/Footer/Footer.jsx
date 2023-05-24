@@ -31,7 +31,7 @@ const Footer = () => {
             <div className="logo footer__logo">
               <h1>
                 <Link to="/home" className=" d-flex align-items-center gap-2">
-                  <i class="ri-car-line"></i>
+                  <i className="ri-car-line"></i>
                   <span>
                     Compra y Mantenimiento
                     <br /> de Carros
@@ -72,7 +72,7 @@ const Footer = () => {
               <div className="newsletter">
                 <input type="email" placeholder="Email" />
                 <span>
-                  <i class="ri-send-plane-line"></i>
+                  <i className="ri-send-plane-line"></i>
                 </span>
               </div>
             </div>

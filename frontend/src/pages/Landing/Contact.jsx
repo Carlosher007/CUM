@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { Col, Container, Form, FormGroup, Input, Row } from 'reactstrap';
 import Helmet from '../../components/Landing/Helmet/Helmet';
@@ -31,8 +31,6 @@ const Contact = () => {
     telefono: '3013666140',
     email: 'cum@gmail.com',
   };
-
-  const [formData, setFormData] = useState({});
 
   const handleFormSubmit = (event) => {
     event.preventDefault();

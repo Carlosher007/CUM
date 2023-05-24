@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import ReCAPTCHA from 'react-google-recaptcha';
 import { Link } from 'react-router-dom';
 // Icons
@@ -9,32 +9,74 @@ import {
   RiLockLine,
   RiMailLine,
 } from 'react-icons/ri';
+import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { Form, FormGroup, FormText, Input } from 'reactstrap';
+import { Form, FormGroup } from 'reactstrap';
+import { loginUser } from '../../assets/api/login.api';
+import { setToken, setUsuario } from '../../assets/redux/store/reducers';
 import { urls } from '../../assets/urls/urls';
 import { loginValidation } from '../../assets/validation/LoginValidation';
 
 const Login = () => {
   const navigate = useNavigate();
-
+  const dispatch = useDispatch();
   const captcha = useRef(null);
 
   const [showPassword, setShowPassword] = useState(false);
+
+  const handleLogin = async (values) => {
+    try {
+      const { email, password } = values;
+      const loginData = {
+        username: email,
+        password,
+      };
+      const response = await loginUser(loginData);
+      const { token, usuario, mensaje } = response.data;
+
+      // Almacenar el token y la información del usuario en el almacenamiento local
+      dispatch(setToken(token));
+      dispatch(setUsuario(usuario));
+
+      console.log(token, usuario, mensaje);
+
+      // Almacenar el token y la información del usuario en el almacenamiento local
+      localStorage.setItem('token', token);
+      localStorage.setItem('usuario', JSON.stringify(usuario));
+
+      //Luego, cuando el usuario vuelva a cargar la página o acceda a una página protegida, puedes recuperar el token y la información del usuario desde el almacenamiento local y almacenarlos en el estado de Redux utilizando las acciones setToken y setUsuario.
+
+      navigate(urls.home2);
+      // 3 Segundos despues hace un toast que diva bienvenido cliente
+      setTimeout(() => {
+        toast.success(`Bienvenido ${usuario.rol}`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }, 3000);
+    } catch (error) {
+      const { data } = error.response;
+      // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+      console.log(data.error);
+      toast.error(data.error, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
 
   const formik = useFormik({
     initialValues: {
       email: '',
       password: '',
-      captchaResponse:'',
+      captchaResponse: '',
     },
     validationSchema: loginValidation,
     onSubmit: (values) => {
-      if(captcha.current.getValue()){
+      if (captcha.current.getValue()) {
         values.captchaResponse = captcha.current.getValue();
         console.log(values);
-        navigate(urls.home2);
-      }else{
+        handleLogin(values);
+      } else {
         // Hacemos un notify con toast
         toast.error('Por favor, verifica que no eres un robot', {
           position: toast.POSITION.TOP_RIGHT,
