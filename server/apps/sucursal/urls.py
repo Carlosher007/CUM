@@ -1,6 +1,6 @@
 from django.urls import path, include
 from rest_framework import routers
-from .views import SucursalAPIView, VehiculoView
+from .api.api import SucursalAPIView, VehiculoView
 
 router = routers.DefaultRouter()
 router.register(r'vehiculo', VehiculoView, 'vehiculo')

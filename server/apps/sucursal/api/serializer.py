@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Sucursal, Vehiculo
+from ..models import Sucursal, Vehiculo
 
 class SucursalSerializer(serializers.ModelSerializer):
     class Meta:

@@ -1,7 +1,7 @@
 from django.urls import path
 from rest_framework.authtoken.views import ObtainAuthToken
 
-from apps.usuario.views import ClienteAPIView, LoginView
+from .api.api import ClienteAPIView, LoginView
 
 
 urlpatterns = [
