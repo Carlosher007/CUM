@@ -30,6 +30,7 @@ const CarDetails = () => {
       }
     };
     getCarData();
+    setCar(carData.find((item) => item.id.toString() === slug));
   }, []);
 
   return (
@@ -41,7 +42,6 @@ const CarDetails = () => {
               <Col lg="6">
                 <img src={car.imgURL} alt="" className="w-100" />
               </Col>
-
               <Col lg="6">
                 <div className="car__info">
                   <h2 className="section__title">
@@ -50,27 +50,25 @@ const CarDetails = () => {
                       ? car.color.charAt(0).toUpperCase() + car.color.slice(1)
                       : 'Sin definir'}
                   </h2>
-
                   <div className=" d-flex align-items-center gap-5 mb-4 mt-3">
                     <h6 className="rent__price fw-bold fs-4">${car.precio}</h6>
                   </div>
-
                   <p className="section__description">{car.descripcion}</p>
+                </div>
+              </Col>
+            </Row>
 
+            <Row className="justify-center">
+              <Col lg="6">
+                <div className="car__info">
                   <div
-                    className=" d-flex align-items-center mt-3"
-                    style={{ columnGap: '0rem' }}
+                    className=" d-flex  mt-3 justify-evenly"
+                    // style={{ columnGap: '3rem' }}
                   >
                     <span className=" d-flex align-items-center gap-1 section__description">
                       <h7 style={{ color: '#f9a826' }}>Motor:</h7>
                       {car.motor}
                     </span>
-                  </div>
-
-                  <div
-                    className=" d-flex align-items-center mt-3"
-                    style={{ columnGap: '4rem' }}
-                  >
                     <span className=" d-flex align-items-center gap-1 section__description">
                       <h7 style={{ color: '#f9a826' }}>Suspension:</h7>
                       {car.suspension}
@@ -78,8 +76,8 @@ const CarDetails = () => {
                   </div>
 
                   <div
-                    className=" d-flex align-items-center mt-3"
-                    style={{ columnGap: '3rem' }}
+                    className=" d-flex  mt-3 justify-evenly"
+                    // style={{ columnGap: '3rem' }}
                   >
                     <span className=" d-flex align-items-center gap-1 section__description">
                       <h7 style={{ color: '#f9a826' }}>Carroceria:</h7>
@@ -98,8 +96,8 @@ const CarDetails = () => {
                   </div>
 
                   <div
-                    className=" d-flex align-items-center mt-3"
-                    style={{ columnGap: '3rem' }}
+                    className=" d-flex  mt-3 justify-evenly"
+                    // style={{ columnGap: '3rem' }}
                   >
                     <span className=" d-flex align-items-center gap-1 section__description">
                       <h7 style={{ color: '#f9a826' }}>Rango:</h7>
@@ -120,8 +118,8 @@ const CarDetails = () => {
                   </div>
 
                   <div
-                    className=" d-flex align-items-center mt-3"
-                    style={{ columnGap: '3rem' }}
+                    className=" d-flex  mt-3 justify-evenly"
+                    // style={{ columnGap: '3rem' }}
                   >
                     <span className=" d-flex align-items-center gap-1 section__description">
                       <h7 style={{ color: '#f9a826' }}>Velocidad Maxima:</h7>
@@ -135,7 +133,8 @@ const CarDetails = () => {
                   </div>
                 </div>
               </Col>
-
+            </Row>
+            <Row>
               <Col className="mt-5">
                 <div className="booking-info mt-5">
                   <h4 className="mb-4 fw-bold ">Cotice su vehiculo ahora</h4>

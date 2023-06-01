@@ -36,7 +36,7 @@ const CarItem = (props) => {
           </div>
 
           <div className="text-center">
-            <Link to={`${urls.seeCarI}${modelo}`}>
+            <Link to={`${urls.seeCarI}${id}`}>
               <button className=" w-50 car__item-btn car__btn-details justify-content-center text-black">
                 Cotizar
               </button>

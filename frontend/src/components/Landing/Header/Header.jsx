@@ -1,7 +1,6 @@
 import React, { useRef } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import { Col, Container, Row } from 'reactstrap';
-import { cambiarModo } from '../../../assets/Context/ModeContext';
 import { companyData } from '../../../assets/data/companyData';
 import { urls } from '../../../assets/urls/urls';
 import '../../../styles/header.css';
@@ -54,7 +53,6 @@ const Header = () => {
                 <Link
                   to={urls.login}
                   className=" d-flex align-items-center gap-1"
-                  onClick={cambiarModo('dashboard')}
                 >
                   <i class="ri-user-line"></i> Ingresar
                 </Link>

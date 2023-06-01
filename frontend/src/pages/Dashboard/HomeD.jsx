@@ -5,9 +5,18 @@ import { RiArrowLeftSLine, RiArrowRightSLine } from "react-icons/ri";
 import { Menu, MenuItem, MenuButton } from "@szhsin/react-menu";
 import "@szhsin/react-menu/dist/index.css";
 import "@szhsin/react-menu/dist/transitions/slide.css";
-import { obtenerModo } from "../../assets/Context/ModeContext";
+import { useSelector } from 'react-redux';
+
+
+
+
+
 
 const Home = () => {
+  const usuario = useSelector(state => state.app.usuario);
+  const token = useSelector(state => state.app.token);
+  console.log('usuario ',usuario)
+  console.log('token ', token);
   return (
     <div>
       <div className="flex items-center justify-between mb-10">

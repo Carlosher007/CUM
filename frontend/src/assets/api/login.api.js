@@ -5,3 +5,4 @@ const loginApi = axios.create({
 });
 
 export const loginUser = (credentials) => loginApi.post('login/', credentials);
+export const verificationEmail = (credentials) => loginApi.post('verification-email/', credentials);

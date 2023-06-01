@@ -51,7 +51,7 @@ const CarListing = () => {
   }, []);
 
   
-  const sortedCarData = [...dataCars].sort((a, b) => {
+  const sortedCarData = [...carData].sort((a, b) => {
     let result = 0;
     
     if (sortOrder.precio === 'low') {
@@ -141,7 +141,7 @@ const CarListing = () => {
                   </div>
                 </Col>
               </div>
-              {paginatedCarData.map((item) => (
+              {sortedCarData.map((item) => (
                 <CarItem item={item} key={item.modelo} />
               ))}
             </Row>
