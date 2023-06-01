@@ -1,11 +1,11 @@
 from django.urls import path, include
 from rest_framework import routers
-from .api.api import VehiculoView#, SucursalAPIView
+from .api.api import VehicleApiView, SucursalApiView
 
 router = routers.DefaultRouter()
-router.register(r'vehiculo', VehiculoView, 'vehiculo')
+router.register(r'vehicle', VehicleApiView, 'vehicle')
+router.register(r'sucursal', SucursalApiView, 'sucursal')
 
 urlpatterns = [
-    #path('sucursal/', SucursalAPIView.as_view()),
     path('', include(router.urls)),
 ]

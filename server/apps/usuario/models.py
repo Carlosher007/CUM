@@ -20,6 +20,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     cellphone = models.CharField(max_length=10, unique=True)
     full_name = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
+    sucursal = models.ForeignKey(Sucursal, on_delete=models.CASCADE, null=True, blank=True)
 
     is_staff = models.BooleanField(null=False, default=False)
     is_active = models.BooleanField(null=False, default=True)
