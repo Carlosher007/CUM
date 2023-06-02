@@ -1,3 +1,4 @@
+
 import React, { useEffect, useState } from 'react';
 
 import { CirclePicker } from 'react-color';
@@ -163,7 +164,10 @@ const CarDetails = () => {
               <Col className="mt-5">
                 <div className="booking-info mt-5">
                   <h4 className="mb-4 fw-bold ">Cotice su vehiculo ahora</h4>
-                  <VirtualQuoteForm slug={slug} selectedColor={selectedColor} />
+                  <VirtualQuoteForm
+               slug={slug}
+  selectedColor={selectedColor}
+                  />
                 </div>
               </Col>
             </Row>
@@ -175,3 +179,5 @@ const CarDetails = () => {
 };
 
 export default CarDetails;
+
+

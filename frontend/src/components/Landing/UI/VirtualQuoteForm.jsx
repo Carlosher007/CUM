@@ -1,25 +1,29 @@
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
 import officesData from '../../../assets/data/officesData';
 import { virtualQuoteValidation } from '../../../assets/validation/VirtualQuoteValidation';
 import '../../../styles/find-car-form.css';
 
-const PresentialQuoteFormExtend = () => {
+const VirtualQuoteForm = ({ slug, selectedColor }) => {
+  useEffect(() => {
+    formik.setFieldValue('color', selectedColor); // Actualiza el valor en formik cuando selectedColor cambie
+  }, [selectedColor]);
+
   const formik = useFormik({
     initialValues: {
       name: '',
-      date: '',
-      time: '',
       city: '',
       cc: '',
       phone: '',
       email: '',
       address: '',
       password: '',
+      idCar: slug,
+      color: selectedColor,
     },
-    validationSchema: virtualQuoteValidation,
+    // validationSchema: virtualQuoteValidation,
     onSubmit: (values) => {
       console.log(values);
     },
@@ -161,4 +165,4 @@ const PresentialQuoteFormExtend = () => {
   );
 };
 
-export default PresentialQuoteFormExtend;
+export default VirtualQuoteForm;
