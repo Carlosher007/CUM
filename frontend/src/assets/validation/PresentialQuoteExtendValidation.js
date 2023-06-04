@@ -8,26 +8,7 @@ export const presentialQuoteExtendValidation = yup.object().shape({
     .min(new Date(), 'La fecha debe ser igual o posterior a hoy'),
   time: yup
     .string()
-    .required('La hora es obligatoria')
-    .test(
-      'time-validation',
-      'La hora debe ser posterior a la hora actual',
-      function (value) {
-        const currentTime = new Date().toLocaleTimeString([], {
-          hour: '2-digit',
-          minute: '2-digit',
-          hour12: false,
-        });
-
-        if (!value) {
-          return false;
-        }
-
-        const isTimeValid = value >= currentTime;
-
-        return isTimeValid;
-      }
-    ),
+    .required('La hora es obligatoria'),
   city: yup.string().required('La sucursal es obligatoria'),
   cc: yup
     .string()

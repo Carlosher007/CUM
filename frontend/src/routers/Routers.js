@@ -17,6 +17,7 @@ import NotFound from '../pages/Landing/NotFound';
 import Offices from '../pages/Landing/Offices';
 import PresentialQuote from '../pages/Landing/PresentialQuote';
 
+
 const Routers = () => {
   return (
     <Routes>
@@ -26,6 +27,7 @@ const Routers = () => {
       <Route path="/" element={<Navigate to="/landing/home" />} />
 
       <Route path="/landing" element={<Layout />}>
+        <Route path="/landing" element={<Navigate to={urls.home} />} />
         <Route path={urls.home} element={<Home />} />
         <Route path={urls.seeCars} element={<CarListing />} />
         <Route path={urls.seeCar} element={<CarDetails />} />
@@ -35,6 +37,7 @@ const Routers = () => {
       </Route>
 
       <Route path="/dashboard" element={<LayoutAdmin />}>
+        <Route path="/dashboard" element={<Navigate to={urls.home2} />} />
         <Route path={urls.home2} element={<HomeD />} />
         <Route path={urls.profile} element={<Profile />} />
         <Route path={urls.chat} element={<Chat />} />

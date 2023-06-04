@@ -5,6 +5,7 @@ import { companyData } from '../../../assets/data/companyData';
 import { urls } from '../../../assets/urls/urls';
 import '../../../styles/header.css';
 
+
 const navLinks = [
   {
     path: urls.home,
@@ -69,7 +70,7 @@ const Header = () => {
             <Col lg="4" md="3" sm="4">
               <div className="logo">
                 <h1>
-                  <Link to="/home" className=" d-flex align-items-center gap-2">
+                  <Link to={urls.home} className=" d-flex align-items-center gap-2">
                     <i class="ri-car-line"></i>
                     <span>
                       Car Universal

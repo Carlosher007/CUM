@@ -8,6 +8,8 @@ import CarItem from '../../components/Landing/UI/CarItem';
 import HeroSlider from '../../components/Landing/UI/HeroSlider';
 import PresentialQuoteForm from '../../components/Landing/UI/PresentialQuoteForm';
 import ServicesList from '../../components/Landing/UI/ServicesList';
+// import '../../styles/landing.css';
+import "bootstrap/dist/css/bootstrap.min.css";
 
 const Home = () => {
   const [dataCars, setDataCars] = useState([]);
@@ -27,7 +29,7 @@ const Home = () => {
     getCarData();
   }, []);
   return (
-    <div className="bg-white">
+    <div className="bg-white ">
       <Helmet title="Home">
         {/* ============= hero section =========== */}
         <section className="p-0 hero__slider-section">
