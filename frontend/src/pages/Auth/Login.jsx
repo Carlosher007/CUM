@@ -137,10 +137,10 @@ const Login = () => {
         <h1 className="text-3xl text-center uppercase font-bold tracking-[5px] text-white mb-8">
           Iniciar <span className="text-primary">sesión</span>
         </h1>
-        {!emailVerificationStep && (
+        {!emailVerificationStep ? (
           <Form className="mb-8" onSubmit={handleSubmit}>
             <FormGroup>
-              <div className="relative mb-4">
+              <div className="mb-4 relative">
                 <RiMailLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
                 <input
                   type="email"
@@ -156,7 +156,7 @@ const Login = () => {
             </FormGroup>
 
             <FormGroup>
-              <div className="relative mb-8">
+              <div className="mb-8 relative">
                 <RiLockLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -203,11 +203,10 @@ const Login = () => {
               </FormGroup>
             </div>
           </Form>
-        )}
-        {emailVerificationStep && (
+        ) : (
           <>
             <FormGroup>
-              <div className="relative mb-4">
+              <div className="mb-4 relative">
                 <RiMailLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
                 <input
                   type="text"
@@ -233,7 +232,7 @@ const Login = () => {
         )}
         <div className="flex flex-col items-center gap-4">
           <span className="flex items-center gap-2">
-            ¿Deseas regrear?{' '}
+            ¿Deseas regresar?{' '}
             <Link
               to={urls.home}
               className="text-primary hover:text-gray-100 transition-colors"

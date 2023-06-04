@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-
 import { CirclePicker } from 'react-color';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -24,6 +23,7 @@ const CarDetails = () => {
   const handleColorChange = (color) => {
     setSelectedColor(color.hex.toUpperCase());
   };
+
   useEffect(() => {
     const getCarData = async () => {
       try {
@@ -48,10 +48,10 @@ const CarDetails = () => {
         <section>
           <Container>
             <Row>
-              <Col lg="6">
+              <Col col="lg-6">
                 <img src={car.imgURL} alt="" className="w-100" />
               </Col>
-              <Col lg="6">
+              <Col col="lg-6">
                 <div className="car__info">
                   <h2 className="section__title">
                     {car.modelo}: {car.year} -{' '}
@@ -61,8 +61,10 @@ const CarDetails = () => {
                       : 'Sin definir'}
                   </h2>
 
-                  <div className=" d-flex align-items-center gap-5 mb-4 mt-3">
-                    <h6 className="rent__price fw-bold fs-4">${car.precio}</h6>
+                  <div className="d-flex items-center gap-5 mb-4 mt-3">
+                    <h6 className="rent__price font-bold text-lg">
+                      ${car.precio}
+                    </h6>
                   </div>
                   <p className="section__description">{car.descripcion}</p>
                   <div>
@@ -83,75 +85,61 @@ const CarDetails = () => {
             </Row>
 
             <Row className="justify-center">
-              <Col lg="6">
+              <Col col="lg-6">
                 <div className="car__info">
-                  <div
-                    className=" d-flex  mt-3 justify-evenly"
-                    // style={{ columnGap: '3rem' }}
-                  >
-                    <span className=" d-flex align-items-center gap-1 section__description">
-                      <h7 style={{ color: '#f9a826' }}>Motor:</h7>
+                  <div className="d-flex mt-3 justify-between">
+                    <span className="d-flex items-center gap-1 section__description">
+                      <h7 className="text-orange-500">Motor:</h7>
                       {car.motor}
                     </span>
-                    <span className=" d-flex align-items-center gap-1 section__description">
-                      <h7 style={{ color: '#f9a826' }}>Suspension:</h7>
+                    <span className="d-flex items-center gap-1 section__description">
+                      <h7 className="text-orange-500">Suspension:</h7>
                       {car.suspension}
                     </span>
                   </div>
 
-                  <div
-                    className=" d-flex  mt-3 justify-evenly"
-                    // style={{ columnGap: '3rem' }}
-                  >
-                    <span className=" d-flex align-items-center gap-1 section__description">
-                      <h7 style={{ color: '#f9a826' }}>Carroceria:</h7>
+                  <div className="d-flex mt-3 justify-between">
+                    <span className="d-flex items-center gap-1 section__description">
+                      <h7 className="text-orange-500">Carroceria:</h7>
                       {car.carroceria}
                     </span>
 
-                    <span className=" d-flex align-items-center gap-1 section__description">
-                      <h7 style={{ color: '#f9a826' }}>Puertas:</h7>
+                    <span className="d-flex items-center gap-1 section__description">
+                      <h7 className="text-orange-500">Puertas:</h7>
                       {car.puertas}
                     </span>
 
-                    <span className=" d-flex align-items-center gap-1 section__description">
-                      <h7 style={{ color: '#f9a826' }}>Potencia:</h7>
+                    <span className="d-flex items-center gap-1 section__description">
+                      <h7 className="text-orange-500">Potencia:</h7>
                       {car.potencia}
                     </span>
                   </div>
 
-                  <div
-                    className=" d-flex  mt-3 justify-evenly"
-                    // style={{ columnGap: '3rem' }}
-                  >
-                    <span className=" d-flex align-items-center gap-1 section__description">
-                      <h7 style={{ color: '#f9a826' }}>Rango:</h7>
+                  <div className="d-flex mt-3 justify-between">
+                    <span className="d-flex items-center gap-1 section__description">
+                      <h7 className="text-orange-500">Rango:</h7>
                       {car.rango}
                     </span>
 
-                    <span className=" d-flex align-items-center gap-1 section__description">
-                      <h7 style={{ color: '#f9a826' }}>
-                        Capacidad de bateria:
-                      </h7>
+                    <span className="d-flex items-center gap-1 section__description">
+                      <h7 className="text-orange-500">Capacidad de bateria:</h7>
                       {car.capacidad_bateria}
                     </span>
 
-                    <span className=" d-flex align-items-center gap-1 section__description">
-                      <h7 style={{ color: '#f9a826' }}>Tiempo de Carga:</h7>
+                    <span className="d-flex items-center gap-1 section__description">
+                      <h7 className="text-orange-500">Tiempo de Carga:</h7>
                       {car.tiempo_carga}
                     </span>
                   </div>
 
-                  <div
-                    className=" d-flex  mt-3 justify-evenly"
-                    // style={{ columnGap: '3rem' }}
-                  >
-                    <span className=" d-flex align-items-center gap-1 section__description">
-                      <h7 style={{ color: '#f9a826' }}>Velocidad Maxima:</h7>
+                  <div className="d-flex mt-3 justify-between">
+                    <span className="d-flex items-center gap-1 section__description">
+                      <h7 className="text-orange-500">Velocidad Maxima:</h7>
                       {car.velocidad_maxima}
                     </span>
 
-                    <span className=" d-flex align-items-center gap-1 section__description">
-                      <h7 style={{ color: '#f9a826' }}>Frenos:</h7>
+                    <span className="d-flex items-center gap-1 section__description">
+                      <h7 className="text-orange-500">Frenos:</h7>
                       {car.frenos}
                     </span>
                   </div>
@@ -162,7 +150,7 @@ const CarDetails = () => {
             <Row>
               <Col className="mt-5">
                 <div className="booking-info mt-5">
-                  <h4 className="mb-4 fw-bold ">Cotice su vehiculo ahora</h4>
+                  <h4 className="mb-4 font-bold">Cotice su vehiculo ahora</h4>
                   <VirtualQuoteForm slug={slug} selectedColor={selectedColor} />
                 </div>
               </Col>

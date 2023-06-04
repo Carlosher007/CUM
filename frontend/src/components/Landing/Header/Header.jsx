@@ -33,29 +33,27 @@ const Header = () => {
   return (
     <header className="header bg-white">
       {/* ============ header top ============ */}
-      <div className="header__top ">
+      <div className="header__top">
         <Container>
           <Row>
             <Col lg="6" md="6" sm="6">
               <div className="header__top__left">
                 <span>Necesitas Ayuda?</span>
                 <span className="header__top__help">
-                  <i class="ri-customer-service-2-line"></i> {companyData.phone}
+                  <i className="ri-customer-service-2-line"></i>{' '}
+                  {companyData.phone}
                 </span>
               </div>
             </Col>
 
             <Col lg="6" md="6" sm="6">
-              <div className="header__top__right d-flex align-items-center justify-content-end gap-3">
-                {/* <Link to="#" className=" d-flex align-items-center gap-1">
-                  <i class="ri-login-circle-line"></i> Login
+              <div className="header__top__right flex items-center justify-end gap-3">
+                {/* <Link to="#" className="flex items-center gap-1">
+                  <i className="ri-login-circle-line"></i> Login
                 </Link> */}
 
-                <Link
-                  to={urls.login}
-                  className=" d-flex align-items-center gap-1"
-                >
-                  <i class="ri-user-line"></i> Ingresar
+                <Link to={urls.login} className="flex items-center gap-1">
+                  <i className="ri-user-line"></i> Ingresar
                 </Link>
               </div>
             </Col>
@@ -70,8 +68,8 @@ const Header = () => {
             <Col lg="4" md="3" sm="4">
               <div className="logo">
                 <h1>
-                  <Link to={urls.home} className=" d-flex align-items-center gap-2">
-                    <i class="ri-car-line"></i>
+                  <Link to={urls.home} className="flex items-center gap-2">
+                    <i className="ri-car-line"></i>
                     <span>
                       Car Universal
                       <br /> Manager
@@ -82,21 +80,21 @@ const Header = () => {
             </Col>
 
             <Col lg="3" md="3" sm="4">
-              <div className="header__location d-flex align-items-center gap-2">
+              <div className="header__location flex items-center gap-2">
                 <span>
-                  <i class="ri-earth-line"></i>
+                  <i className="ri-earth-line"></i>
                 </span>
                 <div className="header__location-content">
                   <h4>Colombia</h4>
-                  <h6>Multiples sedes en el país</h6>
+                  <h6>Múltiples sedes en el país</h6>
                 </div>
               </div>
             </Col>
 
             <Col lg="3" md="3" sm="4">
-              <div className="header__location d-flex align-items-center gap-2">
+              <div className="header__location flex items-center gap-2">
                 <span>
-                  <i class="ri-time-line"></i>
+                  <i className="ri-time-line"></i>
                 </span>
                 <div className="header__location-content">
                   <h4>
@@ -109,12 +107,7 @@ const Header = () => {
               </div>
             </Col>
 
-            <Col
-              lg="2"
-              md="3"
-              sm="0"
-              className=" d-flex align-items-center justify-content-end "
-            >
+            <Col lg="2" md="3" sm="0" className="flex items-center justify-end">
               <Link
                 className="header__btn btn"
                 to={urls.contact}
@@ -131,9 +124,9 @@ const Header = () => {
 
       <div className="main__navbar">
         <Container>
-          <div className="navigation__wrapper d-flex align-items-center justify-content-between">
+          <div className="navigation__wrapper flex items-center justify-between">
             <span className="mobile__menu">
-              <i class="ri-menu-line" onClick={toggleMenu}></i>
+              <i className="ri-menu-line" onClick={toggleMenu}></i>
             </span>
 
             <div className="navigation" ref={menuRef} onClick={toggleMenu}>

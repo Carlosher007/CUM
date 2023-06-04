@@ -101,9 +101,9 @@ const CarListing = () => {
           <Container>
             <Row>
               <Col lg="4" className="mb-5">
-                <div className="d-flex align-items-center gap-2">
+                <div className="flex items-center gap-2">
                   <InputGroup>
-                    <InputGroupText addonType="prepend">
+                    <InputGroupText>
                       <BsSearch />
                     </InputGroupText>
                     <Input
@@ -116,10 +116,10 @@ const CarListing = () => {
               </Col>
             </Row>
             <Row>
-              <div className="d-flex gap-3 text-black">
+              <div className="flex gap-3 text-black">
                 <Col lg="4" className="mb-5 ">
-                  <div className="d-flex align-items-center gap-2">
-                    <span className="d-flex align-items-center gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="flex items-center gap-2">
                       <i className="ri-sort-asc"></i> Ordena por Precio
                     </span>
 
@@ -135,8 +135,8 @@ const CarListing = () => {
                   </div>
                 </Col>
                 <Col lg="4" className="mb-5">
-                  <div className="d-flex align-items-center gap-2">
-                    <span className="d-flex align-items-center gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="flex items-center gap-2">
                       <i className="ri-sort-asc"></i> Ordena por Rango
                     </span>
 
@@ -154,8 +154,8 @@ const CarListing = () => {
                   </div>
                 </Col>
                 <Col lg="4" className="mb-5">
-                  <div className="d-flex align-items-center gap-2">
-                    <span className="d-flex align-items-center gap-2">
+                  <div className="flex items-center gap-2">
+                    <span className="flex items-center gap-2">
                       <i className="ri-sort-asc"></i> Ordena por Capacidad de
                       Carga
                     </span>
