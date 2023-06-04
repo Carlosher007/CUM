@@ -6,7 +6,7 @@ from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from ..models import User
-from .serializers import UserTokenSerializer, UserSerializer, UserVerificationCodeSerializer
+from .serializers import ValidateUserSerializer, UserSerializer, UserVerificationCodeSerializer
 from ..views import generate_verification_code
 
 # class UserAPIView(APIView):
@@ -35,17 +35,17 @@ class LoginView(ObtainAuthToken):
             user = login_serializer.validated_data['user']
             if user.is_active:
                 token, created = Token.objects.get_or_create(user=user)
-                user_token_serializer = UserTokenSerializer(user)
-                if created:
+                user_serializer = UserSerializer(user)
+                if not created:
                     return Response({
                         'token':token.key,
-                        'usuario':user_token_serializer.data, 
+                        'usuario':user_serializer.data, 
                         'mensaje':'Inicio de sesion exitoso'
                     }, status=status.HTTP_201_CREATED)
                 else:
                     token.delete()
                     return Response({
-                        'error':'Ya ha inciado sesion con este usuario'
+                        'error':'No se ha validado el usuario antes'
                     }, status=status.HTTP_409_CONFLICT)
             else:
                 return Response({'error':'Este usuario no puede iniciar sesion'},
@@ -53,7 +53,6 @@ class LoginView(ObtainAuthToken):
         else:
             return Response({'error':'Nombre de usuario o contraseña incorrectos'},
                             status=status.HTTP_400_BAD_REQUEST)
-        return Response({'message':'Response'}, status=status.HTTP_200_OK)
 
 class EmailVerificationCodeView(APIView):
 
@@ -80,4 +79,30 @@ class EmailVerificationCodeView(APIView):
                                status=status.HTTP_400_BAD_REQUEST)
         else:
             return Response({'error':'Email invalido'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        
+class ValidateUserView(ObtainAuthToken):
+    
+    def post(self, request, *args, **kwargs):
+        login_serializer = self.serializer_class(data=request.data, context={'request':request})
+        if login_serializer.is_valid():
+            user = login_serializer.validated_data['user']
+            if user.is_active:
+                token, created = Token.objects.get_or_create(user=user)
+                user_token_serializer = ValidateUserSerializer(user)
+                if created:
+                    return Response({
+                        'user':user_token_serializer.data, 
+                        'message':'Usuario valido'
+                    }, status=status.HTTP_202_ACCEPTED)
+                else:
+                    token.delete()
+                    return Response({
+                        'error':'Ya ha inciado sesion con este usuario'
+                    }, status=status.HTTP_409_CONFLICT)
+            else:
+                return Response({'error':'Este usuario no puede iniciar sesion'},
+                                status=status.HTTP_401_UNAUTHORIZED)
+        else:
+            return Response({'error':'Nombre de usuario o contraseña incorrectos'},
                             status=status.HTTP_400_BAD_REQUEST)

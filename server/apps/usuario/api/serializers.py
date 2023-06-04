@@ -22,7 +22,7 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(self.validated_data['password'])
         user.save()
 
-class UserTokenSerializer(serializers.ModelSerializer):
+class ValidateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email', 'username', 'rol']
