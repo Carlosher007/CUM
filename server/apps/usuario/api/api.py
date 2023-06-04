@@ -1,3 +1,4 @@
+from django.core.mail import send_mail
 from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
@@ -5,7 +6,8 @@ from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from ..models import User
-from .serializers import UserTokenSerializer, UserSerializer
+from .serializers import UserTokenSerializer, UserSerializer, UserVerificationCodeSerializer
+from ..views import generate_verification_code
 
 # class UserAPIView(APIView):
 
@@ -52,3 +54,30 @@ class LoginView(ObtainAuthToken):
             return Response({'error':'Nombre de usuario o contraseña incorrectos'},
                             status=status.HTTP_400_BAD_REQUEST)
         return Response({'message':'Response'}, status=status.HTTP_200_OK)
+
+class EmailVerificationCodeView(APIView):
+
+    def get(self, request):
+        user_verification_code_serializer = UserVerificationCodeSerializer(data=request.data)
+        if user_verification_code_serializer.is_valid():
+            email = user_verification_code_serializer.validated_data['email']
+            code = generate_verification_code()
+            try:
+                send_mail(
+                    'Código de verificación',
+                    f'Tu código de verificación es: {code}',
+                    'settings.EMAIL_HOST_USER',
+                    [email],
+                    fail_silently=False,
+                )
+                return Response({
+                    'message':'Codigo de verificacion enviado con exito',
+                    'code':code,
+                    'email':email
+                }, status=status.HTTP_200_OK)
+            except:
+                return Response({'error':'No se logro enviar el email'},
+                               status=status.HTTP_400_BAD_REQUEST)
+        else:
+            return Response({'error':'Email invalido'},
+                            status=status.HTTP_400_BAD_REQUEST)

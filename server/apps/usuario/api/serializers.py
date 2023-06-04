@@ -26,3 +26,8 @@ class UserTokenSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
         fields = ['email', 'username', 'rol']
+
+class UserVerificationCodeSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['email']
