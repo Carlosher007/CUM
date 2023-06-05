@@ -8,20 +8,17 @@ import {
   RiLockLine,
   RiMailLine,
 } from 'react-icons/ri';
-import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup } from 'reactstrap';
 import Cookies from 'universal-cookie';
 import { loginUser, verificationEmail } from '../../assets/api/login.api';
-import { setToken, setUsuario } from '../../assets/redux/store/reducers';
 import { urls } from '../../assets/urls/urls';
 import { loginValidation } from '../../assets/validation/LoginValidation';
 
 const Login = () => {
   const cookies = new Cookies();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const captcha = useRef(null);
 
   const [showPassword, setShowPassword] = useState(false);

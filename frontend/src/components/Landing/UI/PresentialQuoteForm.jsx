@@ -105,8 +105,6 @@ const PresentialQuoteForm = () => {
           <FormGroup className="form__group">
             <button
               className="btn find__car-btn"
-              type="submit"
-              onClick={resetErrorShown}
             >
               Seguir
             </button>

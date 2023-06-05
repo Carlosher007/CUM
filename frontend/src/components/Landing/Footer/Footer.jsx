@@ -23,15 +23,15 @@ const Footer = () => {
   const date = new Date();
   const year = date.getFullYear();
   return (
-    <footer className="footer">
+    <footer className="footer" style={{ backgroundColor: '#00D6' }}>
       <Container>
         <Row>
           <Col lg="6" md="4" sm="12">
             <div className="logo footer__logo">
               <h1>
-                <Link to="/home" className="flex items-center gap-2">
+                <Link to={urls.home} className="flex items-center gap-2">
                   <i className="ri-car-line"></i>
-                  <span>
+                  <span className="text-white">
                     Compra y Mantenimiento
                     <br /> de Carros
                   </span>
@@ -43,7 +43,7 @@ const Footer = () => {
 
           <Col lg="2" md="4" sm="6">
             <div className="mb-4">
-              <h5 className="footer__link-title">Links Rápidos</h5>
+              <h5 className="footer__link-title text-white">Links Rápidos</h5>
               <ListGroup>
                 {quickLinks.map((item, index) => (
                   <ListGroupItem key={index} className="p-0 mt-3 quick__link">
@@ -56,7 +56,7 @@ const Footer = () => {
 
           <Col lg="3" md="4" sm="6">
             <div className="mb-4">
-              <h5 className="footer__link-title mb-4">Información</h5>
+              <h5 className="footer__link-title mb-4 text-white">Información</h5>
               <p className="office__info">Colombia</p>
               <p className="office__info">Teléfono: {companyData.phone}</p>
               <p className="office__info">Email: {companyData.email}</p>
