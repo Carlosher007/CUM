@@ -1,6 +1,7 @@
 from django.db.models import Subquery, F
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.decorators import action
 from rest_framework import viewsets
 from ..models import Sucursal, Vehicle
 from .serializer import SucursalSerializer, VehicleSerializer
@@ -31,7 +32,8 @@ class SucursalApiView(viewsets.ModelViewSet):
     serializer_class = SucursalSerializer
     queryset = Sucursal.objects.all()
 
-    def list(self, request):
+    @action(detail=False, methods=['GET'], url_path='sucursals-staff')
+    def get_sucursals_staff(self, request):
         sucursales = Sucursal.objects.all()
         sucursales_response = []
         for sucursal in sucursales:
