@@ -1,7 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
 from django.contrib.auth.hashers import make_password
-from apps.sucursal.models import Sucursal
 
 # Create your models here.
 
@@ -20,7 +19,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     cellphone = models.CharField(max_length=10, unique=True)
     full_name = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
-    sucursal = models.ForeignKey(Sucursal, on_delete=models.CASCADE, null=True, blank=True)
+    sucursal = models.ForeignKey('sucursal.Sucursal', on_delete=models.CASCADE, null=True, blank=True, related_name='user_rel')
 
     is_staff = models.BooleanField(null=False, default=False)
     is_active = models.BooleanField(null=False, default=True)
