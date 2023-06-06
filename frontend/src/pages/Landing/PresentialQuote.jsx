@@ -6,20 +6,20 @@ import PresentialQuoteFormExtend from '../../components/Landing/UI/PresentialQuo
 const PresentialQuote = () => {
   return (
     <div className="bg-white">
-    <Helmet>
-      <section>
-        <Container>
-          <Row>
-            <div className="booking-info mt-5">
-              <h5 className="mb-4 fw-bold ">
-                Registra tus datos para la cotización presencial
-              </h5>
-              <PresentialQuoteFormExtend />
-            </div>
-          </Row>
-        </Container>
-      </section>
-    </Helmet>
+      <Helmet>
+        <section>
+          <Container>
+            <Row>
+              <div className="booking-info mt-5">
+                <h5 className="mb-4 fw-bold ">
+                  Registra tus datos para la cotización presencial
+                </h5>
+                <PresentialQuoteFormExtend />
+              </div>
+            </Row>
+          </Container>
+        </section>
+      </Helmet>
     </div>
   );
 };

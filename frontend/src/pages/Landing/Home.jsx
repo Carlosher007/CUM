@@ -8,6 +8,7 @@ import CarItem from '../../components/Landing/UI/CarItem';
 import HeroSlider from '../../components/Landing/UI/HeroSlider';
 import PresentialQuoteForm from '../../components/Landing/UI/PresentialQuoteForm';
 import ServicesList from '../../components/Landing/UI/ServicesList';
+// import '../../styles/landing.css';
 
 const Home = () => {
   const [dataCars, setDataCars] = useState([]);
@@ -26,13 +27,13 @@ const Home = () => {
     };
     getCarData();
   }, []);
+
   return (
-    <div className="bg-white">
+    <div className="bg-white ">
       <Helmet title="Home">
         {/* ============= hero section =========== */}
         <section className="p-0 hero__slider-section">
           <HeroSlider />
-
           <div className="hero__form ">
             <Container>
               <Row className="form__row">
@@ -56,7 +57,7 @@ const Home = () => {
           <Container>
             <Row>
               <Col lg="12" className="mb-5 text-center">
-                <h2 className="section__title">Nuestros Servicios</h2>
+                <h2 className="font-bold">Nuestros Servicios</h2>
               </Col>
               <ServicesList />
             </Row>
@@ -68,7 +69,7 @@ const Home = () => {
             <Row>
               <Col lg="12" className="text-center mb-5">
                 {/* <h6 className="section__subtitle">Come with</h6> */}
-                <h2 className="section__title">Mejores Ofertas</h2>
+                <h2 className="font-bold">Mejores Ofertas</h2>
               </Col>
 
               {dataCars.slice(0, 6).map((item) => (

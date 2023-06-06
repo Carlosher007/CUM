@@ -8,18 +8,17 @@ import {
   RiLockLine,
   RiMailLine,
 } from 'react-icons/ri';
-import { useDispatch } from 'react-redux';
 import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup } from 'reactstrap';
+import Cookies from 'universal-cookie';
 import { loginUser, verificationEmail } from '../../assets/api/login.api';
-import { setToken, setUsuario } from '../../assets/redux/store/reducers';
 import { urls } from '../../assets/urls/urls';
 import { loginValidation } from '../../assets/validation/LoginValidation';
 
 const Login = () => {
+  const cookies = new Cookies();
   const navigate = useNavigate();
-  const dispatch = useDispatch();
   const captcha = useRef(null);
 
   const [showPassword, setShowPassword] = useState(false);
@@ -42,15 +41,15 @@ const Login = () => {
     }
   };
 
-    const verifyEmail = (code) => {
-      if (code === verificationCode) {
-        navigate(urls.home2);
-      } else {
-        toast.error('Código de verificación incorrecto', {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      }
-    };
+  const verifyEmail = (code) => {
+    if (code === verificationCode) {
+      navigate(urls.home2);
+    } else {
+      toast.error('Código de verificación incorrecto', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    }
+  };
 
   const handleLogin = async (values) => {
     try {
@@ -62,13 +61,17 @@ const Login = () => {
       const response = await loginUser(loginData);
       const { token, usuario } = response.data;
 
-      // Almacenar el token y la información del usuario en Redux
-      dispatch(setToken(token));
-      dispatch(setUsuario(usuario));
-
-      //Almacenar el token y la información en el local storage
-      localStorage.setItem('token', token);
-      localStorage.setItem('usuario', JSON.stringify(usuario));
+      //Almacenar el token y el usuario
+      cookies.set('token', token, { path: '/' });
+      cookies.set('id', usuario.id, { path: '/' });
+      cookies.set('username', usuario.username, { path: '/' });
+      cookies.set('rol', usuario.rol, { path: '/' });
+      cookies.set('email', usuario.email, { path: '/' });
+      cookies.set('cellphone', usuario.cellphone, { path: '/' });
+      cookies.set('full_name', usuario.full_name, { path: '/' });
+      cookies.set('address', usuario.address, { path: '/' });
+      cookies.set('sucursal', usuario.sucursal, { path: '/' });
+      cookies.set('is_superuser', usuario.is_superuser, { path: '/' });
 
       // Enviar código de verificación al correo electrónico del usuario
       sendVerificationCodeToEmail(email);
@@ -131,10 +134,10 @@ const Login = () => {
         <h1 className="text-3xl text-center uppercase font-bold tracking-[5px] text-white mb-8">
           Iniciar <span className="text-primary">sesión</span>
         </h1>
-        {!emailVerificationStep && (
+        {!emailVerificationStep ? (
           <Form className="mb-8" onSubmit={handleSubmit}>
             <FormGroup>
-              <div className="relative mb-4">
+              <div className="mb-4 relative">
                 <RiMailLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
                 <input
                   type="email"
@@ -150,7 +153,7 @@ const Login = () => {
             </FormGroup>
 
             <FormGroup>
-              <div className="relative mb-8">
+              <div className="mb-8 relative">
                 <RiLockLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -197,11 +200,10 @@ const Login = () => {
               </FormGroup>
             </div>
           </Form>
-        )}
-        {emailVerificationStep && (
+        ) : (
           <>
             <FormGroup>
-              <div className="relative mb-4">
+              <div className="mb-4 relative">
                 <RiMailLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
                 <input
                   type="text"
@@ -227,7 +229,7 @@ const Login = () => {
         )}
         <div className="flex flex-col items-center gap-4">
           <span className="flex items-center gap-2">
-            ¿Deseas regrear?{' '}
+            ¿Deseas regresar?{' '}
             <Link
               to={urls.home}
               className="text-primary hover:text-gray-100 transition-colors"

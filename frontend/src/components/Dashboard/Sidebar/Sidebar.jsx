@@ -13,7 +13,6 @@ import {
 } from "react-icons/ri";
 
 const Sidebar = () => {
-  console.log("owsow")
   const [showMenu, setShowMenu] = useState(false);
   const [showSubmenu, setShowSubmenu] = useState(false);
   return (

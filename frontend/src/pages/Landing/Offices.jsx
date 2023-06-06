@@ -7,17 +7,16 @@ import OfficesList from '../../components/Landing/UI/OfficesList';
 const Offices = () => {
   return (
     <div className="bg-white">
-
-    <Helmet title="Sucursales">
-      <CommonSection title="Sucursales" />
-      <section>
-        <Container>
-          <Row>
-            <OfficesList />
-          </Row>
-        </Container>
-      </section>
-    </Helmet>
+      <Helmet title="Sucursales">
+        <CommonSection title="Sucursales" />
+        <section>
+          <Container>
+            <Row>
+              <OfficesList />
+            </Row>
+          </Container>
+        </section>
+      </Helmet>
     </div>
   );
 };
