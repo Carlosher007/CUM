@@ -1,4 +1,6 @@
 from django.db import models
+from apps.usuario.models import User
+from apps.usuario.api.serializers import UserSerializer
 
 # Create your models here.
 class Sucursal(models.Model):
@@ -8,6 +10,11 @@ class Sucursal(models.Model):
 
     class Meta:
         db_table = 'sucursal'
+
+    def staff(self):
+        staff = User.objects.filter(sucursal=self.id).exclude(rol='Cliente')
+        user_serializer = UserSerializer(staff, many=True)
+        return user_serializer.data
 
 class Vehicle(models.Model):
     BODYWORK_CHOICES = (

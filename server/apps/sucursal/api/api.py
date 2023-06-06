@@ -1,9 +1,9 @@
+from django.db.models import Subquery, F
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import viewsets
 from ..models import Sucursal, Vehicle
 from .serializer import SucursalSerializer, VehicleSerializer
-from apps.usuario.models import User
 
 # Create your views here.
 # class SucursalAPIView(APIView):
@@ -26,9 +26,19 @@ from apps.usuario.models import User
 
 #         return Response(lista_sucursales)
 
+
 class SucursalApiView(viewsets.ModelViewSet):
     serializer_class = SucursalSerializer
     queryset = Sucursal.objects.all()
+
+    def list(self, request):
+        sucursales = Sucursal.objects.all()
+        sucursales_response = []
+        for sucursal in sucursales:
+            sucursal_ = SucursalSerializer(sucursal).data
+            sucursal_['staff'] = sucursal.staff()
+            sucursales_response.append(sucursal_)
+        return Response(sucursales_response)
     
 class VehicleApiView(viewsets.ModelViewSet):
     serializer_class = VehicleSerializer
