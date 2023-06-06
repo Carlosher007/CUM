@@ -1,13 +1,8 @@
-import React, { useState } from 'react';
+import React from 'react';
 // Icons
 import {
-  RiEdit2Line,
-  RiShieldCheckLine,
   RiErrorWarningLine,
 } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
-import { Switch } from '@headlessui/react';
-import { urls } from '../../../assets/urls/urls';
 const InactivedCount = () => {
   return (
     <div className="bg-secondary-100 p-8 rounded-xl mb-8">
@@ -23,7 +18,7 @@ const InactivedCount = () => {
           </h5>
           <p className="text-gray-500">
             Esto eliminara tu cuenta de forma permanente, así que solo hazlo si realmente lo ves necesario
-          </p>
+          </p>3
         </div>
       </div>
       <form className="flex items-center gap-4">

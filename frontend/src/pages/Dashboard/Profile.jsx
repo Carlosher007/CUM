@@ -1,8 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { usersData } from '../../assets/data/usersData';
-import ChangePasswordEmail from '../../components/Dashboard/UI/ChangePasswordEmail';
-import InactivedCount from '../../components/Dashboard/UI/InactivedCount';
 import MiPerfil from '../../components/Dashboard/UI/MiPerfil';
+// import InactivedCount from '../../components/Dashboard/UI/InactivedCount';
+// import ChangePasswordEmail from '../../components/Dashboard/UI/ChangePasswordEmail';
 
 const Profile = () => {
   const idUser = '1';
