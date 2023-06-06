@@ -1,24 +1,21 @@
+import { Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { CirclePicker } from 'react-color';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Col, Container, Row } from 'reactstrap';
-import { getCar } from '../../assets/api/infoCars';
-import {
-  codeToColorName,
-  colorNameToCode,
-} from '../../assets/color/colorUtils';
+import { getCar } from '../../assets/api/cars';
+import { codeToColorName, colorOptions } from '../../assets/color/colorUtils';
 import carData from '../../assets/data/carData';
 import Helmet from '../../components/Landing/Helmet/Helmet';
 import VirtualQuoteForm from '../../components/Landing/UI/VirtualQuoteForm';
+import { DatePicker } from 'antd';
 
 const CarDetails = () => {
-  const { slug } = useParams();
+  const { id } = useParams();
 
   const [car, setCar] = useState({});
-  const colorOptions = ['#FF0000', '#0000FF', '#BF930D', '#000000', '#FFFF00'];
   const [selectedColor, setSelectedColor] = useState(colorOptions[0]);
-  const [quoteFormColor, setQuoteFormColor] = useState(selectedColor);
 
   const handleColorChange = (color) => {
     setSelectedColor(color.hex.toUpperCase());
@@ -27,34 +24,37 @@ const CarDetails = () => {
   useEffect(() => {
     const getCarData = async () => {
       try {
-        const { data } = await getCar(slug);
+        const { data } = await getCar(id);
         setCar(data);
+        console.log(data)
       } catch (error) {
-        const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        console.log(data.error);
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        if (error.response) {
+          const { data } = error.response;
+          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
     };
     getCarData();
-    setCar(carData.find((item) => item.id.toString() === slug));
   }, []);
 
   return (
     <div className="bg-white">
-      <Helmet title={car.carName}>
+      <Helmet>
         <section>
           <Container>
             <Row>
               <Col col="lg-6">
-                <img src={car.imgURL} alt="" className="w-100" />
+                <img src={car.img_url} alt="" className="w-100" />
               </Col>
               <Col col="lg-6">
                 <div className="car__info">
                   <h2 className="section__title">
-                    {car.modelo}: {car.year} -{' '}
+                    {car.model}: {car.year}
+                  </h2>
+                  <h2 className="mt-3">
                     {selectedColor
                       ? codeToColorName(selectedColor).charAt(0).toUpperCase() +
                         codeToColorName(selectedColor).slice(1)
@@ -63,10 +63,9 @@ const CarDetails = () => {
 
                   <div className="d-flex items-center gap-5 mb-4 mt-3">
                     <h6 className="rent__price font-bold text-lg">
-                      ${car.precio}
+                      ${car.price}
                     </h6>
                   </div>
-                  <p className="section__description">{car.descripcion}</p>
                   <div>
                     <div className="my-4">
                       <div className="color__options">
@@ -84,76 +83,84 @@ const CarDetails = () => {
               </Col>
             </Row>
 
-            <Row className="justify-center">
-              <Col col="lg-6">
-                <div className="car__info">
-                  <div className="d-flex mt-3 justify-between">
-                    <span className="d-flex items-center gap-1 section__description">
-                      <h7 className="text-orange-500">Motor:</h7>
-                      {car.motor}
-                    </span>
-                    <span className="d-flex items-center gap-1 section__description">
-                      <h7 className="text-orange-500">Suspension:</h7>
-                      {car.suspension}
-                    </span>
-                  </div>
-
-                  <div className="d-flex mt-3 justify-between">
-                    <span className="d-flex items-center gap-1 section__description">
-                      <h7 className="text-orange-500">Carroceria:</h7>
-                      {car.carroceria}
-                    </span>
-
-                    <span className="d-flex items-center gap-1 section__description">
-                      <h7 className="text-orange-500">Puertas:</h7>
-                      {car.puertas}
-                    </span>
-
-                    <span className="d-flex items-center gap-1 section__description">
-                      <h7 className="text-orange-500">Potencia:</h7>
-                      {car.potencia}
-                    </span>
-                  </div>
-
-                  <div className="d-flex mt-3 justify-between">
-                    <span className="d-flex items-center gap-1 section__description">
-                      <h7 className="text-orange-500">Rango:</h7>
-                      {car.rango}
-                    </span>
-
-                    <span className="d-flex items-center gap-1 section__description">
-                      <h7 className="text-orange-500">Capacidad de bateria:</h7>
-                      {car.capacidad_bateria}
-                    </span>
-
-                    <span className="d-flex items-center gap-1 section__description">
-                      <h7 className="text-orange-500">Tiempo de Carga:</h7>
-                      {car.tiempo_carga}
-                    </span>
-                  </div>
-
-                  <div className="d-flex mt-3 justify-between">
-                    <span className="d-flex items-center gap-1 section__description">
-                      <h7 className="text-orange-500">Velocidad Maxima:</h7>
-                      {car.velocidad_maxima}
-                    </span>
-
-                    <span className="d-flex items-center gap-1 section__description">
-                      <h7 className="text-orange-500">Frenos:</h7>
-                      {car.frenos}
-                    </span>
-                  </div>
-                </div>
-              </Col>
+            <Row>
+              {/* Description */}
+              <div className="mt-4">
+                <p className="section__description">{car.description}</p>
+              </div>
             </Row>
 
             <Row>
-              <Col className="mt-5">
-                <div className="booking-info mt-5">
-                  <h4 className="mb-4 font-bold">Cotice su vehiculo ahora</h4>
-                  <VirtualQuoteForm slug={slug} selectedColor={selectedColor} />
-                </div>
-              </Col>
+              <div className="bg-gray-100 w-full max-w-2xl p-8 rounded-lg shadow-md">
+                <h2 className="text-2xl font-bold mb-4">Detalles del carro</h2>
+                <table className="w-full text-black">
+                  <tbody>
+                    <tr className="hover:bg-gray-200">
+                      <td className="font-bold pr-4 py-2">Modelo:</td>
+                      <td className="py-2">{car.model}</td>
+                    </tr>
+                    <tr className="hover:bg-gray-200">
+                      <td className="font-bold pr-4 py-2">Año:</td>
+                      <td className="py-2">{car.year}</td>
+                    </tr>
+                    <tr className="hover:bg-gray-200">
+                      <td className="font-bold pr-4 py-2">Marca:</td>
+                      <td className="py-2">{car.brand}</td>
+                    </tr>
+                    <tr className="hover:bg-gray-200">
+                      <td className="font-bold pr-4 py-2">Carrocería:</td>
+                      <td className="py-2">{car.bodywork}</td>
+                    </tr>
+                    <tr className="hover:bg-gray-200">
+                      <td className="font-bold pr-4 py-2">Puertas:</td>
+                      <td className="py-2">{car.doors}</td>
+                    </tr>
+                    <tr className="hover:bg-gray-200">
+                      <td className="font-bold pr-4 py-2">Motor:</td>
+                      <td className="py-2">{car.motor}</td>
+                    </tr>
+                    <tr className="hover:bg-gray-200">
+                      <td className="font-bold pr-4 py-2">Potencia:</td>
+                      <td className="py-2">{car.potency}</td>
+                    </tr>
+                    <tr className="hover:bg-gray-200">
+                      <td className="font-bold pr-4 py-2">Autonomía:</td>
+                      <td className="py-2">{car.range}</td>
+                    </tr>
+                    <tr className="hover:bg-gray-200">
+                      <td className="font-bold pr-4 py-2">
+                        Capacidad de la batería:
+                      </td>
+                      <td className="py-2">{car.battery_capacity}</td>
+                    </tr>
+                    <tr className="hover:bg-gray-200">
+                      <td className="font-bold pr-4 py-2">Tiempo de carga:</td>
+                      <td className="py-2">{car.charging_time}</td>
+                    </tr>
+                    <tr className="hover:bg-gray-200">
+                      <td className="font-bold pr-4 py-2">Velocidad maxima:</td>
+                      <td className="py-2">{car.top_speed}</td>
+                    </tr>
+                    <tr className="hover:bg-gray-200">
+                      <td className="font-bold pr-4 py-2">Frenos:</td>
+                      <td className="py-2">{car.brakes}</td>
+                    </tr>
+                    <tr className="hover:bg-gray-200">
+                      <td className="font-bold pr-4 py-2">Suspension:</td>
+                      <td className="py-2">{car.suspension}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </Row>
+
+            <Row>
+              <div className="bg-gray-100 w-full max-w-2xl rounded-lg shadow-md mt-5">
+                  <div className="booking-info mt-5">
+                    <h4 className=" font-bold">Cotice su vehiculo ahora</h4>
+                    <VirtualQuoteForm slug={id} selectedColor={selectedColor} />
+                  </div>
+              </div>
             </Row>
           </Container>
         </section>

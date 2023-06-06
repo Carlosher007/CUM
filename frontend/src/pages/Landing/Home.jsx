@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Col, Container, Row } from 'reactstrap';
-import { getCars } from '../../assets/api/infoCars';
+import { getCars } from '../../assets/api/cars';
 import carData from '../../assets/data/carData';
 import Helmet from '../../components/Landing/Helmet/Helmet';
 import AboutSection from '../../components/Landing/UI/AboutSection';
