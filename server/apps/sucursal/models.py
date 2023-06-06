@@ -3,19 +3,6 @@ from apps.usuario.models import User
 from apps.usuario.api.serializers import UserSerializer
 
 # Create your models here.
-class Sucursal(models.Model):
-    city = models.CharField(max_length=40)
-    address = models.CharField(max_length=100)
-    cellphone = models.CharField(max_length=13)
-
-    class Meta:
-        db_table = 'sucursal'
-
-    def staff(self):
-        staff = User.objects.filter(sucursal=self.id).exclude(rol='Cliente')
-        user_serializer = UserSerializer(staff, many=True)
-        return user_serializer.data
-
 class Vehicle(models.Model):
     BODYWORK_CHOICES = (
         ("SEDAN", "Sedan"),
@@ -60,7 +47,41 @@ class Vehicle(models.Model):
     img_url = models.CharField(max_length=500)
     price = models.IntegerField()
     description = models.TextField()
-    sucursal = models.ManyToManyField(Sucursal)
 
     class Meta:
         db_table = 'vehicle'
+
+class Sucursal(models.Model):
+    city = models.CharField(max_length=40)
+    address = models.CharField(max_length=100)
+    cellphone = models.CharField(max_length=13)
+    vehicles = models.ManyToManyField(
+        Vehicle,
+        through='VehicleSucursal',
+        blank=True,
+    )
+
+    class Meta:
+        db_table = 'sucursal'
+
+    def staff(self):
+        staff = User.objects.filter(sucursal=self.id).exclude(rol='Cliente')
+        user_serializer = UserSerializer(staff, many=True)
+        return user_serializer.data
+
+class VehicleSucursal(models.Model):
+    vehicle = models.ForeignKey(
+        Vehicle,
+        on_delete=models.CASCADE,
+        blank=True, null=True
+    )
+    sucursal = models.ForeignKey(
+        Sucursal,
+        on_delete=models.CASCADE,
+        blank=True, null=True
+    )
+    quantity = models.IntegerField(default=0)
+    color = models.CharField(max_length=100)
+
+    class Meta:
+        db_table = 'vehicle_sucursal'
