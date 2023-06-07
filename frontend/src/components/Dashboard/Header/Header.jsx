@@ -21,7 +21,7 @@ const Header = () => {
             <MenuButton className="relative hover:bg-secondary-100 p-2 rounded-lg transition-colors">
               <RiNotification3Line />
               <span className="absolute -top-0.5 right-0 bg-primary py-0.5 px-[5px] box-content text-black rounded-full text-[8px] font-bold">
-                2
+                3
               </span>
             </MenuButton>
           }

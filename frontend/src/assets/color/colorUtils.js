@@ -31,3 +31,6 @@ export const codeToColorName = (colorCode) => {
       return '';
   }
 };
+
+
+export const colorOptions = ['#FF0000', '#0000FF', '#BF930D', '#000000', '#FFFF00'];

@@ -11,10 +11,24 @@ import {
   RiMenu3Line,
   RiCloseLine,
 } from "react-icons/ri";
+import { urls } from "../../../assets/urls/urls";
 
 const Sidebar = () => {
   const [showMenu, setShowMenu] = useState(false);
   const [showSubmenu, setShowSubmenu] = useState(false);
+
+  const navLinks = [
+    {
+      path: [urls.profile],
+      display: 'Profile',
+      role: ['anyone'],
+    },
+    {
+      path: urls.seeCarsD ,
+      display: 'Ver Carros',
+      role: ['gerente','vendedor','cliente'],
+    },
+  ];
   return (
     <>
       <div
@@ -24,7 +38,9 @@ const Sidebar = () => {
       >
         <div>
           <h1 className="text-center text-2xl font-bold text-white mb-10">
-            Admin<span className="text-primary text-4xl">.</span>
+            <Link to= {urls.home2} >
+            Dashboard<span className="text-primary text-4xl">.</span>
+            </Link>
           </h1>
           <ul>
             <li>

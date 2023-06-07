@@ -23,7 +23,7 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
       idCar: slug,
       color: selectedColor,
     },
-    // validationSchema: virtualQuoteValidation,
+    validationSchema: virtualQuoteValidation,
     onSubmit: (values) => {
       console.log(values);
     },
@@ -47,7 +47,7 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
   };
 
   return (
-    <Form className="form" onSubmit={handleSubmit}>
+    <Form className="bg-transparent form" onSubmit={handleSubmit}>
       <div>
         <h6 className="fw-bold text-black">Información Personal</h6>
         <div className="d-flex align-items-center justify-content-between flex-wrap">
