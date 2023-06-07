@@ -91,13 +91,13 @@ class ValidateUserView(ObtainAuthToken):
             if user.is_active:
                 token, created = Token.objects.get_or_create(user=user)
                 user_token_serializer = ValidateUserSerializer(user)
+                token.delete()
                 if created:
                     return Response({
                         'user':user_token_serializer.data, 
                         'message':'Usuario valido'
                     }, status=status.HTTP_202_ACCEPTED)
                 else:
-                    token.delete()
                     return Response({
                         'error':'Ya ha inciado sesion con este usuario'
                     }, status=status.HTTP_409_CONFLICT)
