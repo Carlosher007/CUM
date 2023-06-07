@@ -1,10 +1,9 @@
-from django.db.models import Subquery, F
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
-from rest_framework import viewsets
-from ..models import Sucursal, Vehicle
-from .serializer import SucursalSerializer, VehicleSerializer
+from rest_framework import viewsets, status
+from ..models import Sucursal, Vehicle, VehicleSucursal
+from .serializer import SucursalSerializer, VehicleSerializer, SucursalVehiclesSerializer
 
 # Create your views here.
 # class SucursalAPIView(APIView):
@@ -40,7 +39,14 @@ class SucursalApiView(viewsets.ModelViewSet):
             sucursal_ = SucursalSerializer(sucursal).data
             sucursal_['staff'] = sucursal.staff()
             sucursales_response.append(sucursal_)
-        return Response(sucursales_response)
+        return Response(sucursales_response, status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['GET'], url_path='sucursal-vehicles')
+    def get_sucursal_vehicles(self, request, pk:int):
+        sucursal_vehicles = VehicleSucursal.objects.filter(sucursal=pk)
+        sucursal_vehicles_serializer = SucursalVehiclesSerializer(sucursal_vehicles, many=True)
+        return Response(sucursal_vehicles_serializer.data,
+                        status=status.HTTP_200_OK)
     
 class VehicleApiView(viewsets.ModelViewSet):
     serializer_class = VehicleSerializer
