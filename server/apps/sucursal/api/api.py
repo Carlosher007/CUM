@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework import viewsets, status
 from ..models import Sucursal, Vehicle, VehicleSucursal
-from .serializer import SucursalSerializer, VehicleSerializer, SucursalVehiclesSerializer
+from .serializer import SucursalSerializer, VehicleSerializer, SucursalVehiclesSerializer, VehicleSucursalsSerializer
 
 # Create your views here.
 # class SucursalAPIView(APIView):
@@ -51,3 +51,13 @@ class SucursalApiView(viewsets.ModelViewSet):
 class VehicleApiView(viewsets.ModelViewSet):
     serializer_class = VehicleSerializer
     queryset = Vehicle.objects.all()
+
+    @action(detail=True, methods=['GET'], url_path='vehicle-sucursals')
+    def get_vehicle_sucursals(self, request, pk:int):
+        vehicle_sucursals = VehicleSucursal.objects.filter(
+            vehicle=pk, 
+            quantity__gt=0
+            ).order_by('sucursal').distinct('sucursal')
+        vehicle_sucursals_serializer = VehicleSucursalsSerializer(vehicle_sucursals, many=True)
+        return Response(vehicle_sucursals_serializer.data,
+                        status=status.HTTP_200_OK)
