@@ -1,15 +1,34 @@
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup, Input } from 'reactstrap';
-import officesData from '../../../assets/data/officesData';
+import { getSucursals } from '../../../assets/api/sucursal.api';
 import { urls } from '../../../assets/urls/urls';
 import { presentialQuoteValidation } from '../../../assets/validation/PresentialQuoteValidation';
 import '../../../styles/find-car-form.css';
 
 const PresentialQuoteForm = () => {
   const navigate = useNavigate();
+
+  const [sucursals, setSucursals] = useState([]);
+
+  useEffect(() => {
+    const getSucursalsData = async () => {
+      try {
+        const { data } = await getSucursals();
+        setSucursals(data);
+      } catch (error) {
+        if (error) {
+          const { data } = error.response;
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
+    };
+    getSucursalsData();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -92,7 +111,7 @@ const PresentialQuoteForm = () => {
               invalid={touched.city && !!errors.city}
             >
               <option value="">Seleccione una ciudad</option>
-              {officesData.map((office) => (
+              {sucursals.map((office) => (
                 <option value={office.city} key={office.id}>
                   {office.city}
                 </option>
@@ -103,11 +122,7 @@ const PresentialQuoteForm = () => {
         </div>
         <div className="d-flex align-items-center justify-content-end flex-wrap">
           <FormGroup className="form__group">
-            <button
-              className="btn find__car-btn"
-            >
-              Seguir
-            </button>
+            <button className="btn find__car-btn">Seguir</button>
           </FormGroup>
         </div>
       </div>

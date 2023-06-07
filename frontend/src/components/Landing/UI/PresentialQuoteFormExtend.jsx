@@ -1,15 +1,34 @@
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
-import officesData from '../../../assets/data/officesData';
+import { getSucursals } from '../../../assets/api/sucursal.api';
 import { presentialQuoteExtendValidation } from '../../../assets/validation/PresentialQuoteExtendValidation';
 import '../../../styles/find-car-form.css';
 
 const PresentialQuoteFormExtend = () => {
   const location = useLocation();
   const formData = location.state;
+  const [sucursals, setSucursals] = useState([]);
+
+  useEffect(() => {
+    const getSucursalsData = async () => {
+      try {
+        const { data } = await getSucursals();
+        setSucursals(data);
+        console.log(data);
+      } catch (error) {
+        if (error) {
+          const { data } = error.response;
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
+    };
+    getSucursalsData();
+  }, []);
 
   const formik = useFormik({
     initialValues: {
@@ -98,9 +117,7 @@ const PresentialQuoteFormExtend = () => {
               onChange={handleChange}
               invalid={touched.cc && !!errors.cc}
             />
-            {touched.cc &&
-              errors.cc &&
-              showErrorToast(errors.cc)}
+            {touched.cc && errors.cc && showErrorToast(errors.cc)}
           </FormGroup>
         </div>
         <h6 className="mt-4 fw-bold text-black">Acceso a la Plataforma</h6>
@@ -168,7 +185,7 @@ const PresentialQuoteFormExtend = () => {
               invalid={touched.city && !!errors.city}
             >
               <option value="">Seleccione una ciudad</option>
-              {officesData.map((office) => (
+              {sucursals.map((office) => (
                 <option value={office.city} key={office.id}>
                   {office.city}
                 </option>

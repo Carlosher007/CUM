@@ -3,14 +3,29 @@ import { usersData } from '../../assets/data/usersData';
 import MiPerfil from '../../components/Dashboard/UI/MiPerfil';
 // import InactivedCount from '../../components/Dashboard/UI/InactivedCount';
 // import ChangePasswordEmail from '../../components/Dashboard/UI/ChangePasswordEmail';
+import { toast } from 'react-toastify';
+import { getUser } from '../../assets/api/user.api';
 
 const Profile = () => {
-  const idUser = '1';
+  const idUser = '12332';
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     const userData = usersData.find((userData) => userData.id === idUser);
     setUser(userData);
+    const getUserData = async () => {
+      try {
+        const {data} = await getUser(idUser)
+        console.log(data)
+      } catch (error) {
+        const { data } = error.response;
+        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    };
+    getUserData();
   }, []);
 
   return (

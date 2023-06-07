@@ -12,7 +12,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup } from 'reactstrap';
 import Cookies from 'universal-cookie';
-import { loginUser, verificationEmail } from '../../assets/api/login.api';
+import { login, sendEmail, validateUser } from '../../assets/api/login.api';
 import { urls } from '../../assets/urls/urls';
 import { loginValidation } from '../../assets/validation/LoginValidation';
 
@@ -26,24 +26,52 @@ const Login = () => {
   const [codeUser, setCodeUser] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
 
+  const [usernameG, setUsernameG] = useState('');
+  const [passwordG, setPasswordG] = useState('');
+
   const sendVerificationCodeToEmail = async (email) => {
     try {
-      const body = { email: email };
-      const response = await verificationEmail(body);
-      console.log(response);
+      const response = await sendEmail(email);
       const { code } = response.data;
       setVerificationCode(code);
     } catch (error) {
-      const { data } = error.response;
-      toast.error(data.error, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+      if (error.response) {
+        const { data } = error.response;
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
     }
   };
 
-  const verifyEmail = (code) => {
+  const verifyEmail = async (code) => {
+    console.log(code);
+    console.log(verificationCode);
     if (code === verificationCode) {
+      const loginData = {
+        username: usernameG,
+        password: passwordG,
+      };
+      const { data } = await login(loginData);
+      console.log(data);
+      //Almacenar el token y el usuario
+      cookies.set('token', data.token, { path: '/' });
+      cookies.set('id', data.usuario.id, { path: '/' });
+      cookies.set('rol', data.usuario.rol, { path: '/' });
+      cookies.set('email', data.usuario.email, { path: '/' });
+      cookies.set('full_name', data.usuario.full_name, { path: '/' });
+      cookies.set('address', data.usuario.address, { path: '/' });
+      cookies.set('sucursal', data.usuario.sucursal, { path: '/' });
+      cookies.set('is_superuser', data.usuario.is_superuser, { path: '/' });
+      // Navegar al dashboard
       navigate(urls.home2);
+      // Toast despues de 4 segundos dando mensaje de vienvenida al client
+      setTimeout(() => {
+        const fullName = cookies.get('full_name');
+        toast.success(`¡Bienvenido, ${fullName}!`, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }, 2000);
     } else {
       toast.error('Código de verificación incorrecto', {
         position: toast.POSITION.TOP_RIGHT,
@@ -58,20 +86,11 @@ const Login = () => {
         username: email,
         password,
       };
-      const response = await loginUser(loginData);
-      const { token, usuario } = response.data;
 
-      //Almacenar el token y el usuario
-      cookies.set('token', token, { path: '/' });
-      cookies.set('id', usuario.id, { path: '/' });
-      cookies.set('username', usuario.username, { path: '/' });
-      cookies.set('rol', usuario.rol, { path: '/' });
-      cookies.set('email', usuario.email, { path: '/' });
-      cookies.set('cellphone', usuario.cellphone, { path: '/' });
-      cookies.set('full_name', usuario.full_name, { path: '/' });
-      cookies.set('address', usuario.address, { path: '/' });
-      cookies.set('sucursal', usuario.sucursal, { path: '/' });
-      cookies.set('is_superuser', usuario.is_superuser, { path: '/' });
+      await validateUser(loginData);
+
+      setUsernameG(email);
+      setPasswordG(password);
 
       // Enviar código de verificación al correo electrónico del usuario
       sendVerificationCodeToEmail(email);
@@ -101,7 +120,6 @@ const Login = () => {
     onSubmit: (values) => {
       if (captcha.current.getValue()) {
         values.captchaResponse = captcha.current.getValue();
-        console.log(values);
         handleLogin(values);
       } else {
         toast.error('Por favor, verifica que no eres un robot', {
@@ -199,6 +217,17 @@ const Login = () => {
                 </button>
               </FormGroup>
             </div>
+            <div className="flex flex-col items-center gap-4">
+              <span className="flex items-center gap-2">
+                ¿Deseas regresar?{' '}
+                <Link
+                  to={urls.home}
+                  className="text-primary hover:text-gray-100 transition-colors"
+                >
+                  Volver
+                </Link>
+              </span>
+            </div>
           </Form>
         ) : (
           <>
@@ -219,25 +248,25 @@ const Login = () => {
                 <button
                   type="submit"
                   className="bg-primary text-black uppercase font-bold text-sm w-full py-3 px-4 rounded-lg"
-                  onClick={() => verifyEmail(verificationCode)}
+                  onClick={() => verifyEmail(codeUser)}
                 >
                   Confirmar Correo
                 </button>
               </FormGroup>
             </div>
+            <div className="flex flex-col items-center gap-4">
+              <span className="flex items-center gap-2">
+                ¿Deseas regresar?{' '}
+                <Link
+                  to={urls.login}
+                  className="text-primary hover:text-gray-100 transition-colors"
+                >
+                  Volver
+                </Link>
+              </span>
+            </div>
           </>
         )}
-        <div className="flex flex-col items-center gap-4">
-          <span className="flex items-center gap-2">
-            ¿Deseas regresar?{' '}
-            <Link
-              to={urls.home}
-              className="text-primary hover:text-gray-100 transition-colors"
-            >
-              Volver
-            </Link>
-          </span>
-        </div>
       </div>
     </div>
   );

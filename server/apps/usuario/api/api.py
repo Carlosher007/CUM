@@ -59,9 +59,8 @@ class LoginView(ObtainAuthToken):
 class EmailVerificationCodeView(APIView):
 
     def get(self, request):
-        user_verification_code_serializer = UserVerificationCodeSerializer(data=request.data)
-        if user_verification_code_serializer.is_valid():
-            email = user_verification_code_serializer.validated_data['email']
+        email = request.query_params.get('email')
+        if email:
             code = generate_verification_code()
             try:
                 send_mail(

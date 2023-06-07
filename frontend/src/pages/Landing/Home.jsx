@@ -8,6 +8,7 @@ import CarItem from '../../components/Landing/UI/CarItem';
 import HeroSlider from '../../components/Landing/UI/HeroSlider';
 import PresentialQuoteForm from '../../components/Landing/UI/PresentialQuoteForm';
 import ServicesList from '../../components/Landing/UI/ServicesList';
+import { toast } from 'react-toastify';
 // import '../../styles/landing.css';
 
 const Home = () => {
@@ -18,11 +19,13 @@ const Home = () => {
       try {
         const { data } = await getCars();
         setDataCars(data);
-        console.log(data);
       } catch (error) {
-        const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        console.log(data.error);
+        if (error) {
+          const { data } = error.response;
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
     };
     getCarData();

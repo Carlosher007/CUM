@@ -9,19 +9,14 @@ const CarItem = (props) => {
   const {
     model,
     year,
-    baterry_capacity,
+    battery_capacity,
     charging_time,
     top_speed,
     img_url,
     price,
-    sucursal,
+    doors,
     id,
   } = props.item;
-
-  console.log(id);
-
-  //Sacar el length de sucursal el cual es una lista
-  const sucursal_length = sucursal.length;
 
   return (
     <Col lg="4" md="4" sm="6" className="mb-5">
@@ -44,7 +39,7 @@ const CarItem = (props) => {
                 <i>
                   <FaCarBattery />
                 </i>
-                {baterry_capacity} kWh
+                {battery_capacity} kWh
               </span>
               <span className=" d-flex align-items-center gap-1">
                 <i class="ri-battery-2-charge-fill"></i> {charging_time} hr
@@ -55,7 +50,7 @@ const CarItem = (props) => {
                 <i class="ri-speed-fill"></i> {top_speed} km/h
               </span>
               <span className=" d-flex align-items-center gap-1">
-                <i class="ri-hotel-fill"></i> {sucursal_length}
+                <i class="ri-door-fill"></i> {doors} 
               </span>
             </div>
           </div>
