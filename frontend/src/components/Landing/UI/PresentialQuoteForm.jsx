@@ -122,7 +122,13 @@ const PresentialQuoteForm = () => {
         </div>
         <div className="d-flex align-items-center justify-content-end flex-wrap">
           <FormGroup className="form__group">
-            <button className="btn find__car-btn">Seguir</button>
+            <button
+              className="btn find__car-btn"
+              type="submit"
+              onClick={resetErrorShown}
+            >
+              Seguir
+            </button>
           </FormGroup>
         </div>
       </div>

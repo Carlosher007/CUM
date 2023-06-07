@@ -41,5 +41,5 @@ export const presentialQuoteValidation = yup.object().shape({
         return selectedTime >= startTime && selectedTime <= endTime;
       }
     ),
-  city: yup.string().required('La sucursal es obligatoria'),
+  // city: yup.string().required('La sucursal es obligatoria'),
 });
