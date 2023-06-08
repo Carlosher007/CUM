@@ -4,7 +4,7 @@ from ..models import Sucursal, Vehicle, VehicleSucursal
 class SucursalSerializer(serializers.ModelSerializer):
     class Meta:
         model = Sucursal
-        fields = '__all__'
+        exclude = ['vehicles']
 
 class VehicleSerializer(serializers.ModelSerializer):
     class Meta:
