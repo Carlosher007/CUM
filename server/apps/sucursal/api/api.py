@@ -3,7 +3,7 @@ from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework import viewsets, status
 from ..models import Sucursal, Vehicle, VehicleSucursal
-from .serializer import SucursalSerializer, VehicleSerializer, SucursalVehiclesSerializer, VehicleSucursalsSerializer
+from .serializer import SucursalSerializer, VehicleSerializer, SucursalVehiclesSerializer, VehicleSucursalsSerializer, SucursalsStaffSerializer
 
 # Create your views here.
 # class SucursalAPIView(APIView):
@@ -36,7 +36,7 @@ class SucursalApiView(viewsets.ModelViewSet):
         sucursales = Sucursal.objects.all()
         sucursales_response = []
         for sucursal in sucursales:
-            sucursal_ = SucursalSerializer(sucursal).data
+            sucursal_ = SucursalsStaffSerializer(sucursal).data
             sucursal_['staff'] = sucursal.staff()
             sucursales_response.append(sucursal_)
         return Response(sucursales_response, status=status.HTTP_200_OK)
