@@ -14,6 +14,8 @@ import Home from '../pages/Landing/Home';
 import NotFound from '../pages/Landing/NotFound';
 import Offices from '../pages/Landing/Offices';
 import PresentialQuote from '../pages/Landing/PresentialQuote';
+import CarListingD from '../pages/Dashboard/CarListingD';
+import CarDetailsD from '../pages/Dashboard/CarDetailsD';
 
 const Routers = () => {
   return (
@@ -37,6 +39,8 @@ const Routers = () => {
         <Route path="/dashboard" element={<Navigate to={urls.home2} />} />
         <Route path={urls.home2} element={<HomeD />} />
         <Route path={urls.profile} element={<Profile />} />
+        <Route path={urls.seeCarsD} element={<CarListingD />} />
+        <Route path={urls.seeCarD} element={<CarDetailsD />} />
       </Route>
     </Routes>
   );

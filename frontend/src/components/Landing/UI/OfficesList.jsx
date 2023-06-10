@@ -1,13 +1,34 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { Col } from 'reactstrap';
 import img01 from '../../../assets/all-images/drive.jpg';
+import { getSucursalsStaff } from '../../../assets/api/sucursal.api';
 import officesData from '../../../assets/data/officesData';
 import '../../../styles/blog-item.css';
 
 const OfficesList = () => {
+  const [sucursals, setSucursals] = useState([]);
+
+  useEffect(() => {
+    const getSucursalsData = async () => {
+      try {
+        const { data } = await getSucursalsStaff();
+        setSucursals(data);
+      } catch (error) {
+        if (error.response) {
+          const { data } = error.response;
+          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
+    };
+    getSucursalsData();
+  }, []);
   return (
     <>
-      {officesData.map((item) => (
+      {sucursals.map((item) => (
         <OfficeItem item={item} key={item.id} />
       ))}
     </>
@@ -15,7 +36,10 @@ const OfficesList = () => {
 };
 
 const OfficeItem = ({ item }) => {
-  const { managerName, workshopChiefName, city, address, phone } = item;
+  const { city, address, cellphone, vehicles, staff } = item;
+
+  const lengthVehicles = vehicles.length;
+  const lengthStaff = staff.length;
 
   return (
     <Col lg="4" md="6" sm="6" className="mb-5">
@@ -29,24 +53,25 @@ const OfficeItem = ({ item }) => {
 
           <div className="blog__time pt-3 mt-3 d-flex align-items-center justify-content-between">
             <span className="blog__author">
-              <i class="ri-user-2-line"></i> {managerName}
+              <i className="ri-user-2-line"></i> # Personal: {lengthStaff}
             </span>
 
             <div className=" d-flex align-items-center gap-3">
-              <span className=" d-flex align-items-center gap-1 section__description">
-                <i class="ri-message-3-line"></i> {phone}
+              <span className=" blog__author">
+                <i className="ri-message-3-line"></i> {cellphone}
               </span>
             </div>
           </div>
 
           <div className="blog__time pt-3 mt-3 d-flex align-items-center justify-content-between">
             <span className="blog__author">
-              <i class="ri-user-settings-line"></i> {workshopChiefName}
+              <i className="ri-user-settings-line"></i> # Vehiculos:{' '}
+              {lengthVehicles}
             </span>
 
             <div className=" d-flex align-items-center gap-3">
-              <span className=" d-flex align-items-center gap-1 section__description">
-                <i class="ri-building-4-line"></i> {address}
+              <span className="blog__author">
+                <i className="ri-building-4-line"></i> {address}
               </span>
             </div>
           </div>

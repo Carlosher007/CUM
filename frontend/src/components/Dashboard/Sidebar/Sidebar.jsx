@@ -1,118 +1,125 @@
-import React, { useState } from "react";
-import { Link } from "react-router-dom";
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 // Icons
 import {
-  RiBarChart2Line,
-  RiEarthLine,
-  RiCustomerService2Line,
-  RiCalendarTodoLine,
-  RiLogoutCircleRLine,
   RiArrowRightSLine,
-  RiMenu3Line,
+  RiBarChart2Line,
   RiCloseLine,
-} from "react-icons/ri";
-import { urls } from "../../../assets/urls/urls";
+  RiEarthLine,
+  RiLogoutCircleRLine,
+  RiMenu3Line,
+} from 'react-icons/ri';
+import Cookies from 'universal-cookie';
+import { urls } from '../../../assets/urls/urls';
 
 const Sidebar = () => {
+  const cookies = new Cookies();
+  const userRole = cookies.get('role');
+
   const [showMenu, setShowMenu] = useState(false);
-  const [showSubmenu, setShowSubmenu] = useState(false);
 
   const navLinks = [
+    // {
+    //   path: urls.seeCarsD,
+    //   display: 'Ver Carros',
+    //   role: ['Gerente', 'Vendedor', 'Cliente'],
+    // },
     {
-      path: [urls.profile],
-      display: 'Profile',
-      role: ['anyone'],
+      display: 'Sobre mí',
+      role: ['Anyone'],
+      sublinks: [
+        {
+          path: urls.profile,
+          display: 'Perfil',
+          role: ['Anyone'],
+        },
+      ],
     },
     {
-      path: urls.seeCarsD ,
-      display: 'Ver Carros',
-      role: ['gerente','vendedor','cliente'],
+      display: 'Cotizar',
+      role: ['Anyone'],
+      sublinks: [
+        {
+          path: urls.seeCarsD,
+          display: 'Ver Carros',
+          role: ['Anyone'],
+        },
+      ],
     },
   ];
+
+  const filteredNavLinks = navLinks.filter(
+    (link) => link.role.includes(userRole) || link.role.includes('Anyone')
+  );
+
+  const [subMenuStates, setSubMenuStates] = useState(
+    new Array(filteredNavLinks.length).fill(false)
+  );
+
+  const toggleSubMenu = (index) => {
+    const newSubMenuStates = [...subMenuStates];
+    newSubMenuStates[index] = !newSubMenuStates[index];
+    setSubMenuStates(newSubMenuStates);
+  };
+
   return (
     <>
       <div
         className={`xl:h-[100vh] overflow-y-scroll fixed xl:static w-[80%] md:w-[40%] lg:w-[30%] xl:w-auto h-full top-0 bg-secondary-100 p-4 flex flex-col justify-between z-50 ${
-          showMenu ? "left-0" : "-left-full"
+          showMenu ? 'left-0' : '-left-full'
         } transition-all`}
       >
         <div>
           <h1 className="text-center text-2xl font-bold text-white mb-10">
-            <Link to= {urls.home2} >
-            Dashboard<span className="text-primary text-4xl">.</span>
+            <Link to={urls.home2}>
+              Dashboard<span className="text-primary text-4xl">.</span>
             </Link>
           </h1>
           <ul>
-            <li>
-              <Link
-                to="/dashboard/home2"
-                className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
-              >
-                <RiBarChart2Line className="text-primary" /> Analíticas
-              </Link>
-            </li>
-            <li>
-              <button
-                onClick={() => setShowSubmenu(!showSubmenu)}
-                className="w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
-              >
-                <span className="flex items-center gap-4">
-                  <RiEarthLine className="text-primary" /> Redes sociales
-                </span>
-                <RiArrowRightSLine
-                  className={`mt-1 ${
-                    showSubmenu && "rotate-90"
-                  } transition-all`}
-                />
-              </button>
-              <ul
-                className={` ${
-                  showSubmenu ? "h-[130px]" : "h-0"
-                } overflow-y-hidden transition-all`}
-              >
-                <li>
+            {filteredNavLinks.map((link, index) => (
+              <li key={index}>
+                {link.sublinks ? (
+                  <>
+                    <button
+                      onClick={() => toggleSubMenu(index)}
+                      className="w-full flex items-center justify-between py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
+                    >
+                      <span className="flex items-center gap-4">
+                        <RiEarthLine className="text-primary" /> {link.display}
+                      </span>
+                      <RiArrowRightSLine
+                        className={`mt-1 ${
+                          subMenuStates[index] && 'rotate-90'
+                        } transition-all`}
+                      />
+                    </button>
+                    <ul
+                      className={`${
+                        subMenuStates[index] ? 'h-auto' : 'h-0'
+                      } overflow-y-hidden transition-all`}
+                    >
+                      {link.sublinks.map((sublink, subIndex) => (
+                        <li key={subIndex}>
+                          <Link
+                            to={sublink.path}
+                            className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors"
+                          >
+                            {sublink.display}
+                          </Link>
+                        </li>
+                      ))}
+                    </ul>
+                  </>
+                ) : (
                   <Link
-                    to="/dashboard/home2"
-                    className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-primary before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors"
+                    to={link.path}
+                    className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
                   >
-                    Post red social
+                    <RiBarChart2Line className="text-primary" /> {link.display}
                   </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/dashboard/home2"
-                    className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors"
-                  >
-                    Estadisticas
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    to="/dashboard/home2"
-                    className="py-2 px-4 border-l border-gray-500 ml-6 block relative before:w-3 before:h-3 before:absolute before:bg-gray-500 before:rounded-full before:-left-[6.5px] before:top-1/2 before:-translate-y-1/2 before:border-4 before:border-secondary-100 hover:text-white transition-colors"
-                  >
-                    Perfiles
-                  </Link>
-                </li>
-              </ul>
-            </li>
-            <li>
-              <Link
-                to="/tickets"
-                className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
-              >
-                <RiCustomerService2Line className="text-primary" /> Soporte
-                técnico
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/dashboard/home2"
-                className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
-              >
-                <RiCalendarTodoLine className="text-primary" /> Calendario
-              </Link>
-            </li>
+                )}
+              </li>
+            ))}
           </ul>
         </div>
         <nav>

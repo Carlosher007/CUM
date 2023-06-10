@@ -4,10 +4,10 @@ import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
 import { getSucursals } from '../../../assets/api/sucursal.api';
 import { virtualQuoteValidation } from '../../../assets/validation/VirtualQuoteValidation';
-import '../../../styles/find-car-form.css';
 
-const VirtualQuoteForm = ({ slug, selectedColor }) => {
+const VirtualQuoteFormD = ({ slug, selectedColor }) => {
   const [sucursals, setSucursals] = useState([]);
+
   useEffect(() => {
     formik.setFieldValue('color', selectedColor); // Actualiza el valor en formik cuando selectedColor cambie
   }, [selectedColor]);
@@ -41,7 +41,7 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
       idCar: slug,
       color: selectedColor,
     },
-    validationSchema: virtualQuoteValidation,
+    // validationSchema: virtualQuoteValidation,
     onSubmit: (values) => {
       console.log(values);
     },
@@ -65,13 +65,18 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
   };
 
   return (
-    <Form className="bg-transparent form" onSubmit={handleSubmit}>
-      <div>
-        <h6 className="fw-bold text-black">Información Personal</h6>
-        <div className="d-flex align-items-center justify-content-between flex-wrap">
-          <FormGroup className="form__group">
+    <Form
+      style={{ backgroundColor: 'transparent' }}
+      className="form"
+      onSubmit={handleSubmit}
+    >
+      <h6 className="font-bold mb-2">Datos Personales</h6>
+      <div className="flex flex-wrap items-center justify-between">
+        <div className="w-full sm:w-1/2 ">
+          <FormGroup className="w-full">
             <FormText>Nombre</FormText>
             <Input
+              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
               type="text"
               placeholder="Nombre"
               name="name"
@@ -81,10 +86,11 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
             />
             {touched.name && errors.name && showErrorToast(errors.name)}
           </FormGroup>
-          <FormGroup className="form__group">
+          <FormGroup className="w-full">
             <FormText>Telefono</FormText>
             <Input
               type="text"
+              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
               placeholder="Telefono"
               name="phone"
               value={values.phone}
@@ -93,10 +99,13 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
             />
             {touched.phone && errors.phone && showErrorToast(errors.phone)}
           </FormGroup>
-          <FormGroup className="form__group">
+        </div>
+        <div className="w-full sm:w-1/2 mt-4 sm:mt-0 space-x-2">
+          <FormGroup className="w-full ml-2">
             <FormText>Dirección</FormText>
             <Input
               type="text"
+              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
               placeholder="Direccion"
               name="address"
               value={values.address}
@@ -107,10 +116,11 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
               errors.address &&
               showErrorToast(errors.address)}
           </FormGroup>
-          <FormGroup className="form__group">
+          <FormGroup className="w-full ml-2">
             <FormText>Cedula</FormText>
             <Input
               type="text"
+              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
               placeholder="Cedula"
               name="cc"
               value={values.cc}
@@ -120,11 +130,15 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
             {touched.cc && errors.cc && showErrorToast(errors.cc)}
           </FormGroup>
         </div>
-        <h6 className="mt-4 fw-bold text-black">Acceso a la Plataforma</h6>
-        <div className="d-flex align-items-center justify-content-between flex-wrap">
-          <FormGroup className="form__group ">
+      </div>
+
+      <h6 className="font-bold mt-5">Datos para la Plataforma</h6>
+      <div className="flex flex-wrap items-center justify-between">
+        <div className="w-full sm:w-1/2 ">
+          <FormGroup className="w-full">
             <FormText>Email</FormText>
             <Input
+              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
               type="email"
               placeholder="Email"
               name="email"
@@ -134,26 +148,33 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
             />
             {touched.email && errors.email && showErrorToast(errors.email)}
           </FormGroup>
-          <FormGroup className="form__group">
+        </div>
+        <div className="w-full sm:w-1/2 mt-4 sm:mt-0 space-x-2">
+          <FormGroup className="w-full ml-2">
             <FormText>Contraseña</FormText>
             <Input
               type="password"
+              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
               placeholder="Contraseña"
               name="password"
               value={values.password}
               onChange={handleChange}
               invalid={touched.password && !!errors.password}
+              autoComplete="off"
             />
             {touched.password &&
               errors.password &&
               showErrorToast(errors.password)}
           </FormGroup>
-          <FormGroup className="select__group">
+        </div>
+        <div className="w-full sm:w-1/2 mt-4 sm:mt-0 space-x-2">
+          <FormGroup className="w-full ml-2">
             <FormText>Sucursal</FormText>
             <Input
               type="select"
               name="city"
               value={values.city}
+              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
               onChange={handleChange}
               invalid={touched.city && !!errors.city}
             >
@@ -167,20 +188,20 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
             {touched.city && errors.city && showErrorToast(errors.city)}
           </FormGroup>
         </div>
-        <div className="d-flex align-items-center justify-content-center flex-wrap mt-4">
-          <FormGroup className="form__group">
-            <button
-              className="btn find__car-btn"
-              type="submit"
-              onClick={resetErrorShown}
-            >
-              Enviar
-            </button>
-          </FormGroup>
-        </div>
+      </div>
+      <div className="flex items-center justify-center flex-wrap mt-4">
+        <FormGroup className="w-1/4">
+          <button
+            className="btn find__car-btn"
+            type="submit"
+            onClick={resetErrorShown}
+          >
+            Enviar
+          </button>
+        </FormGroup>
       </div>
     </Form>
   );
 };
 
-export default VirtualQuoteForm;
+export default VirtualQuoteFormD;

@@ -1,4 +1,3 @@
-import { Table } from 'antd';
 import React, { useEffect, useState } from 'react';
 import { CirclePicker } from 'react-color';
 import { useParams } from 'react-router-dom';
@@ -6,10 +5,8 @@ import { toast } from 'react-toastify';
 import { Col, Container, Row } from 'reactstrap';
 import { getCar } from '../../assets/api/cars';
 import { codeToColorName, colorOptions } from '../../assets/color/colorUtils';
-import carData from '../../assets/data/carData';
 import Helmet from '../../components/Landing/Helmet/Helmet';
 import VirtualQuoteForm from '../../components/Landing/UI/VirtualQuoteForm';
-import { DatePicker } from 'antd';
 
 const CarDetails = () => {
   const { id } = useParams();

@@ -1,22 +1,24 @@
 import React, { useEffect, useState } from 'react';
-import { usersData } from '../../assets/data/usersData';
 import MiPerfil from '../../components/Dashboard/UI/MiPerfil';
 // import InactivedCount from '../../components/Dashboard/UI/InactivedCount';
 // import ChangePasswordEmail from '../../components/Dashboard/UI/ChangePasswordEmail';
 import { toast } from 'react-toastify';
+import Cookies from 'universal-cookie';
 import { getUser } from '../../assets/api/user.api';
 
 const Profile = () => {
-  const idUser = '12332';
+  const cookies = new Cookies();
+  const idUser = cookies.get('id');
+
+  // const idUser = '12332';
   const [user, setUser] = useState(null);
 
   useEffect(() => {
-    const userData = usersData.find((userData) => userData.id === idUser);
-    setUser(userData);
     const getUserData = async () => {
       try {
-        const {data} = await getUser(idUser)
-        console.log(data)
+        const { data } = await getUser(idUser);
+        console.log(data);
+        setUser(data)
       } catch (error) {
         const { data } = error.response;
         // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda

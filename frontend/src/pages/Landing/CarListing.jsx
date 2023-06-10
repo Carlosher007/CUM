@@ -11,7 +11,6 @@ import {
   Row,
 } from 'reactstrap';
 import { getCars } from '../../assets/api/cars';
-import carData from '../../assets/data/carData';
 import Helmet from '../../components/Landing/Helmet/Helmet';
 import CarItem from '../../components/Landing/UI/CarItem';
 import CommonSection from '../../components/Landing/UI/CommonSection';
@@ -24,8 +23,6 @@ const CarListing = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [sortOrder, setSortOrder] = useState({
     price: null,
-    charging_time: null,
-    range: null,
   });
 
   const handlePageChange = ({ selected }) => {

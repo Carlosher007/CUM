@@ -5,3 +5,5 @@ const loginApi = axios.create({
 });
 
 export const getSucursals = () => loginApi.get('sucursal/')
+export const getSucursalsStaff = () => loginApi.get('sucursal/sucursals-staff/');
+export const getSucursal = (id) => loginApi.get(`sucursal/${id}`)
