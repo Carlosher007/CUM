@@ -23,7 +23,7 @@ Tiempo de carga en horas
 const carData = [
   {
     id: 1,
-    modelo: 'EcoPower',
+    model: 'EcoPower',
     year: 2020,
     marca: 'CUM',
     carrocesria: 'Sedan',
@@ -43,7 +43,7 @@ const carData = [
   },
   {
     id: 2,
-    modelo: 'CityRide',
+    model: 'CityRide',
     year: 2022,
     marca: 'CUM',
     carroceria: 'Hatchback',
@@ -65,7 +65,7 @@ const carData = [
   // Agrega aquí más objetos de carro con diferentes datos
   {
     id: 3,
-    modelo: 'EcoSUV',
+    model: 'EcoSUV',
     year: 2021,
     marca: 'CUM',
     carroceria: 'SUV',
@@ -86,7 +86,7 @@ const carData = [
   },
   {
     id: 4,
-    modelo: 'UrbanX',
+    model: 'UrbanX',
     year: 2023,
     marca: 'CUM',
     carroceria: 'Crossover',
@@ -107,7 +107,7 @@ const carData = [
   },
   {
     id: 5,
-    modelo: 'CargoMax',
+    model: 'CargoMax',
     year: 2022,
     marca: 'CUM',
     carroceria: 'Furgoneta',
@@ -128,7 +128,7 @@ const carData = [
   },
   {
     id: 6,
-    modelo: 'SportyGT',
+    model: 'SportyGT',
     year: 2023,
     marca: 'CUM',
     carroceria: 'Sedan',
@@ -149,7 +149,7 @@ const carData = [
   },
   {
     id: 7,
-    modelo: 'UrbanFun',
+    model: 'UrbanFun',
     year: 2022,
     marca: 'CUM',
     carroceria: 'Hatchback',
@@ -170,7 +170,7 @@ const carData = [
   },
   {
     id: 8,
-    modelo: 'PowerMax',
+    model: 'PowerMax',
     year: 2023,
     marca: 'CUM',
     carroceria: 'SUV',
@@ -191,7 +191,7 @@ const carData = [
   },
   {
     id: 9,
-    modelo: 'CompactCity',
+    model: 'CompactCity',
     year: 2021,
     marca: 'CUM',
     carroceria: 'Crossover',
@@ -212,7 +212,7 @@ const carData = [
   },
   {
     id: 10,
-    modelo: 'CargoPro',
+    model: 'CargoPro',
     year: 2022,
     marca: 'CUM',
     carroceria: 'Furgoneta',

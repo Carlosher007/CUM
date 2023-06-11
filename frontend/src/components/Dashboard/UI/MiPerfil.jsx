@@ -1,14 +1,14 @@
 import { useFormik } from 'formik';
+import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import officesData from '../../../assets/data/officesData';
 import { profileValidation } from '../../../assets/validation/ProfileValidation';
 
 const MiPerfil = ({ user }) => {
   const formik = useFormik({
     initialValues: {
-      name: user.name,
-      phone: user.phone,
+      full_name: user.full_name,
+      cellphone: user.cellphone,
       address: user.address,
     },
     validationSchema: profileValidation,
@@ -49,11 +49,11 @@ const MiPerfil = ({ user }) => {
               type="text"
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
               placeholder="Nombre(s)"
-              name="name"
-              value={values.name}
+              name="full_name"
+              value={values.full_name}
               onChange={handleChange}
             />
-            {touched.name && errors.name && showErrorToast(errors.name)}
+            {touched.full_name && errors.full_name && showErrorToast(errors.full_name)}
           </div>
         </div>
         {/* EMAIL */}
@@ -72,7 +72,7 @@ const MiPerfil = ({ user }) => {
             />
           </div>
         </div>
-        {/* ROLE */}
+        {/* ROL */}
         <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
           <div className="w-full md:w-1/4">
             <p>
@@ -83,7 +83,7 @@ const MiPerfil = ({ user }) => {
             <input
               type="text"
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder={user.role}
+              placeholder={user.rol}
               readOnly={true}
             />
           </div>
@@ -114,11 +114,13 @@ const MiPerfil = ({ user }) => {
               type="text"
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
               placeholder="Celular"
-              name="phone"
-              value={values.phone}
+              name="cellphone"
+              value={values.cellphone}
               onChange={handleChange}
             />
-            {touched.phone && errors.phone && showErrorToast(errors.phone)}
+            {touched.cellphone &&
+              errors.cellphone &&
+              showErrorToast(errors.cellphone)}
           </div>
         </div>
         {/* DIRECCION */}
@@ -170,7 +172,9 @@ const MiPerfil = ({ user }) => {
             <input
               type="text"
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder={user.date_joined}
+              placeholder={moment(user.date_joined.substring(0, 10)).format(
+                'DD/MM/YYYY'
+              )}
               readOnly={true}
             />
           </div>

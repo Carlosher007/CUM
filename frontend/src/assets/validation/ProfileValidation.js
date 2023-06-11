@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 export const profileValidation = yup.object().shape({
-  phone: yup
+  cellphone: yup
     .string()
     .matches(
       /^\d{8,10}$/,

@@ -8,8 +8,8 @@ export const colorNameToCode = (colorName) => {
       return '#BF930D';
     case 'negro':
       return '#000000';
-    case 'amarillo':
-      return '#FFFF00';
+    case 'gris':
+      return '#AAADAC';
     default:
       return '';
   }
@@ -25,12 +25,12 @@ export const codeToColorName = (colorCode) => {
       return 'negro';
     case '#BF930D':
       return 'dorado';
-    case '#FFFF00':
-      return 'amarillo';
+    case '#AAADAC':
+      return 'gris';
     default:
       return '';
   }
 };
 
 
-export const colorOptions = ['#FF0000', '#0000FF', '#BF930D', '#000000', '#FFFF00'];
+export const colorOptions = ['#FF0000', '#0000FF', '#BF930D', '#000000', '#AAADAC'];

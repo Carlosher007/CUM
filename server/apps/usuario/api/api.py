@@ -106,10 +106,9 @@ class ValidateUserView(ObtainAuthToken):
 class Logout(APIView):
     
     def get(self, request, *args, **kwargs):
-        token = request.GET.get('token')
-        print(token)
+        token = request.query_params.get('token')
         token = Token.objects.filter(key = token).first()
-
+        print(token)
         if token:
             user = token.user
 
