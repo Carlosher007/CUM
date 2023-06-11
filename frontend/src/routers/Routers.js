@@ -17,7 +17,9 @@ import PresentialQuote from '../pages/Landing/PresentialQuote';
 import CarListingD from '../pages/Dashboard/CarListingD';
 import CarDetailsD from '../pages/Dashboard/CarDetailsD';
 import PresentialQuoteD from '../pages/Dashboard/PresentialQuoteD';
-
+import AllUsers from '../pages/Dashboard/AllUsers';
+import EditUser from '../components/Dashboard/UI/EditUser';
+import NewUser from '../pages/Dashboard/NewUser';
 const Routers = () => {
   return (
     <Routes>
@@ -43,6 +45,9 @@ const Routers = () => {
         <Route path={urls.seeCarsD} element={<CarListingD />} />
         <Route path={urls.seeCarD} element={<CarDetailsD />} />
         <Route path={urls.presentialquoteD} element={<PresentialQuoteD />} />
+        <Route path={urls.allUsers} element={<AllUsers />} />
+        <Route path={urls.editUser} element={<EditUser />} />
+        <Route path={urls.newUser} element={<NewUser />} />
       </Route>
     </Routes>
   );

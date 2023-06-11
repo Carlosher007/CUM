@@ -1,17 +1,21 @@
 import { useFormik } from 'formik';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { profileValidation } from '../../../assets/validation/ProfileValidation';
+import { getSucursals } from '../../assets/api/sucursal.api';
+import { createProfileValidation } from '../../assets/validation/CreateProfileValidation';
 
-const MiPerfil = ({ user }) => {
+const NewUser = () => {
   const formik = useFormik({
     initialValues: {
-      full_name: user.full_name,
-      cellphone: user.cellphone,
-      address: user.address,
+      email: '',
+      rol: '',
+      cellphone: '',
+      sucursal: '',
+      full_name: '',
+      address: '',
     },
-    validationSchema: profileValidation,
+    validationSchema: createProfileValidation,
     onSubmit: (values) => {
       console.log(values);
     },
@@ -20,6 +24,13 @@ const MiPerfil = ({ user }) => {
   const { handleSubmit, handleChange, values, touched, errors } = formik;
 
   const [errorShown, setErrorShown] = useState(false);
+  const [rols, setRols] = useState([
+    'Gerente',
+    'Vendedor',
+    'Cliente',
+    'JefeTaller',
+  ]);
+  const [sucursals, setSucursals] = useState([]);
 
   const showErrorToast = (message) => {
     if (!errorShown) {
@@ -30,13 +41,18 @@ const MiPerfil = ({ user }) => {
     }
   };
 
-  const resetErrorShown = () => {
-    setErrorShown(false);
-  };
+
+  useEffect(() => {
+    const getSucursalsData = async () => {
+      const { data } = await getSucursals();
+      setSucursals(data);
+    };
+    getSucursalsData();
+  }, []);
 
   return (
     <div className="bg-secondary-100 p-8 rounded-xl mb-8">
-      <h1 className="text-xl text-gray-100">Profile</h1>
+      <h1 className="text-xl text-gray-100">Nuevo Usuario</h1>
       <hr className="my-8 border-gray-500/30" />
       <form>
         {/* FULL NAME */}
@@ -69,9 +85,12 @@ const MiPerfil = ({ user }) => {
             <input
               type="text"
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder={user.email}
-              readOnly={true}
+              placeholder="Email"
+              name="email"
+              value={values.email}
+              onChange={handleChange}
             />
+            {touched.email && errors.email && showErrorToast(errors.email)}
           </div>
         </div>
         {/* ROL */}
@@ -82,12 +101,20 @@ const MiPerfil = ({ user }) => {
             </p>
           </div>
           <div className="flex-1">
-            <input
-              type="text"
+            <select
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder={user.rol}
-              readOnly={true}
-            />
+              name="rol"
+              value={values.rol}
+              onChange={handleChange}
+            >
+              <option value="">Seleccione un rol</option>
+              {rols.map((rol) => (
+                <option value={rol} key={rol}>
+                  {rol}
+                </option>
+              ))}
+            </select>
+            {touched.rol && errors.rol && showErrorToast(errors.rol)}
           </div>
         </div>{' '}
         {/* SUCURSAL */}
@@ -98,12 +125,22 @@ const MiPerfil = ({ user }) => {
             </p>
           </div>
           <div className="flex-1">
-            <input
-              type="text"
+            <select
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder={user.sucursal}
-              readOnly={true}
-            ></input>
+              name="sucursal"
+              value={values.sucursal}
+              onChange={handleChange}
+            >
+              <option value="">Seleccione una sucursal</option>
+              {sucursals.map((office) => (
+                <option value={office.city} key={office.id}>
+                  {office.city}
+                </option>
+              ))}
+            </select>
+            {touched.sucursal &&
+              errors.sucursal &&
+              showErrorToast(errors.sucursal)}
           </div>
         </div>
         {/* phone */}
@@ -144,41 +181,6 @@ const MiPerfil = ({ user }) => {
               showErrorToast(errors.address)}
           </div>
         </div>
-        {/* IS SUPERUSER */}
-        <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-          <div className="w-full md:w-1/4">
-            <p>
-              Super Usuario <span className="text-red-500">*</span>
-            </p>
-          </div>
-          <div className="flex-1">
-            {user.is_superuser ? (
-              <span className="py-1 px-2 bg-green-500/10 text-green-500 rounded-lg">
-                Si
-              </span>
-            ) : (
-              <span className="py-1 px-2 bg-red-500/10 text-red-500 rounded-lg">
-                No
-              </span>
-            )}
-          </div>
-        </div>
-        {/* Datwe Joined */}
-        <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-          <div className="w-full md:w-1/4">
-            <p>
-              Fecha en la que se unio <span className="text-red-500">*</span>
-            </p>
-          </div>
-          <div className="flex-1">
-            <input
-              type="text"
-              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder={moment(user.date_joined).format('DD/MM/YYYY')}
-              readOnly={true}
-            />
-          </div>
-        </div>
       </form>
       <hr className="my-8 border-gray-500/30" />
       <div className="flex justify-end">
@@ -187,7 +189,6 @@ const MiPerfil = ({ user }) => {
           className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
           onClick={() => {
             handleSubmit(); // Primera función
-            resetErrorShown(); // Segunda función
           }}
         >
           Guardar
@@ -197,4 +198,4 @@ const MiPerfil = ({ user }) => {
   );
 };
 
-export default MiPerfil;
+export default NewUser;

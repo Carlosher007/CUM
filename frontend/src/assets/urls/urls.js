@@ -14,5 +14,8 @@ export const urls = {
   profile: '/dashboard/perfil',
   seeCarsD: '/dashboard/cars',
   seeCarD: '/dashboard/cars/:id',
-  presentialquoteD: '/dashboard/pquote'
+  presentialquoteD: '/dashboard/pquote',
+  allUsers: '/dashboard/all-users',
+  editUser: '/dashboard/edit-user/:id',
+  newUser: '/dashboard/new-user'
 };

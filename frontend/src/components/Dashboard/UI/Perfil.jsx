@@ -2,22 +2,52 @@ import { useFormik } from 'formik';
 import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
-import { profileValidation } from '../../../assets/validation/ProfileValidation';
+import { getSucursals } from '../../../assets/api/sucursal.api';
+import { editProfileValidation } from '../../../assets/validation/EditProfileValidation';
 
-const MiPerfil = ({ user }) => {
+const Perfil = ({ user }) => {
   const formik = useFormik({
     initialValues: {
-      full_name: user.full_name,
-      cellphone: user.cellphone,
-      address: user.address,
+      full_name: '',
+      cellphone: '',
+      address: '',
+      email: '',
+      rol: '',
+      sucursal: '',
     },
-    validationSchema: profileValidation,
+    validationSchema: editProfileValidation,
     onSubmit: (values) => {
       console.log(values);
     },
   });
 
   const { handleSubmit, handleChange, values, touched, errors } = formik;
+  const [sucursals, setSucursals] = useState([]);
+  const [rols, setRols] = useState([
+    'Gerente',
+    'Vendedor',
+    'Cliente',
+    'JefeTaller',
+  ]);
+
+  useEffect(() => {
+    formik.setValues({
+      full_name: user.full_name,
+      cellphone: user.cellphone,
+      address: user.address,
+      email: user.email,
+      rol: user.rol,
+      sucursal: user.sucursal,
+    });
+  }, [user]);
+
+  useEffect(() => {
+    const getSucursalsData = async () => {
+      const { data } = await getSucursals();
+      setSucursals(data);
+    };
+    getSucursalsData();
+  }, []);
 
   const [errorShown, setErrorShown] = useState(false);
 
@@ -48,7 +78,6 @@ const MiPerfil = ({ user }) => {
             <input
               type="text"
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder="Nombre(s)"
               name="full_name"
               value={values.full_name}
               onChange={handleChange}
@@ -69,9 +98,11 @@ const MiPerfil = ({ user }) => {
             <input
               type="text"
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder={user.email}
-              readOnly={true}
+              name="email"
+              value={values.email}
+              onChange={handleChange}
             />
+            {touched.email && errors.email && showErrorToast(errors.email)}
           </div>
         </div>
         {/* ROL */}
@@ -82,12 +113,19 @@ const MiPerfil = ({ user }) => {
             </p>
           </div>
           <div className="flex-1">
-            <input
-              type="text"
+            <select
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder={user.rol}
-              readOnly={true}
-            />
+              name="rol"
+              value={values.rol}
+              onChange={handleChange}
+            >
+              {rols.map((rol) => (
+                <option value={rol} key={rol}>
+                  {rol}
+                </option>
+              ))}
+            </select>
+            {touched.rol && errors.rol && showErrorToast(errors.rol)}
           </div>
         </div>{' '}
         {/* SUCURSAL */}
@@ -98,12 +136,21 @@ const MiPerfil = ({ user }) => {
             </p>
           </div>
           <div className="flex-1">
-            <input
-              type="text"
+            <select
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder={user.sucursal}
-              readOnly={true}
-            ></input>
+              name="sucursal"
+              value={values.sucursal}
+              onChange={handleChange}
+            >
+              {sucursals.map((office) => (
+                <option value={office.city} key={office.id}>
+                  {office.city}
+                </option>
+              ))}
+            </select>
+            {touched.sucursal &&
+              errors.sucursal &&
+              showErrorToast(errors.sucursal)}
           </div>
         </div>
         {/* phone */}
@@ -115,7 +162,6 @@ const MiPerfil = ({ user }) => {
             <input
               type="text"
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder="Celular"
               name="cellphone"
               value={values.cellphone}
               onChange={handleChange}
@@ -134,7 +180,6 @@ const MiPerfil = ({ user }) => {
             <input
               type="text"
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder="Dirección"
               name="address"
               value={values.address}
               onChange={handleChange}
@@ -197,4 +242,4 @@ const MiPerfil = ({ user }) => {
   );
 };
 
-export default MiPerfil;
+export default Perfil;

@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 // Icons
 import {
   RiArrowRightSLine,
@@ -11,10 +12,35 @@ import {
 } from 'react-icons/ri';
 import Cookies from 'universal-cookie';
 import { urls } from '../../../assets/urls/urls';
+import { logout } from '../../../assets/api/login.api';
 
 const Sidebar = () => {
   const cookies = new Cookies();
   const userRole = cookies.get('role');
+  const token = cookies.get('token');
+
+  const handleLogout = async () => {
+    try {
+      const response = await logout(token);
+      const { data } = response;
+      console.log(data);
+      cookies.remove('token');
+      cookies.remove('id');
+      cookies.remove('rol');
+      cookies.remove('email');
+      cookies.remove('full_name');
+      cookies.remove('address');
+      cookies.remove('sucursal');
+      cookies.remove('is_superuser');
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
+  };
 
   const [showMenu, setShowMenu] = useState(false);
 
@@ -50,6 +76,17 @@ const Sidebar = () => {
         {
           path: urls.presentialquoteD,
           display: 'Cotizar Presencialmente',
+          role: ['Anyone'],
+        },
+      ],
+    },
+    {
+      display: 'Sucursal',
+      role: ['Anyone'],
+      sublinks: [
+        {
+          path: urls.allUsers,
+          display: 'Usuarios',
           role: ['Anyone'],
         },
       ],
@@ -156,8 +193,9 @@ const Sidebar = () => {
         </div>
         <nav>
           <Link
-            to="/dashboard/home2"
+            to={urls.home}
             className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
+            onClick={handleLogout}
           >
             <RiLogoutCircleRLine className="text-primary" /> Cerrar sesión
           </Link>
