@@ -44,6 +44,11 @@ const Sidebar = () => {
           display: 'Ver Carros',
           role: ['Anyone'],
         },
+         {
+          path: urls.presentialquoteD,
+          display: 'Cotizar Presencialmente',
+          role: ['Anyone'],
+        },
       ],
     },
   ];

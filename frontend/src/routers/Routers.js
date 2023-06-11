@@ -16,6 +16,7 @@ import Offices from '../pages/Landing/Offices';
 import PresentialQuote from '../pages/Landing/PresentialQuote';
 import CarListingD from '../pages/Dashboard/CarListingD';
 import CarDetailsD from '../pages/Dashboard/CarDetailsD';
+import PresentialQuoteD from '../pages/Dashboard/PresentialQuoteD';
 
 const Routers = () => {
   return (
@@ -41,6 +42,7 @@ const Routers = () => {
         <Route path={urls.profile} element={<Profile />} />
         <Route path={urls.seeCarsD} element={<CarListingD />} />
         <Route path={urls.seeCarD} element={<CarDetailsD />} />
+        <Route path={urls.presentialquoteD} element={<PresentialQuoteD />} />
       </Route>
     </Routes>
   );

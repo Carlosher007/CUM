@@ -13,5 +13,6 @@ export const urls = {
   home2: '/dashboard/home2',
   profile: '/dashboard/perfil',
   seeCarsD: '/dashboard/cars',
-  seeCarD: '/dashboard/cars/:id'
+  seeCarD: '/dashboard/cars/:id',
+  presentialquoteD: '/dashboard/pquote'
 };
