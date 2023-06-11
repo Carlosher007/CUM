@@ -10,7 +10,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from ..models import User
 from .serializers import ValidateUserSerializer, UserSerializer, UserVerificationCodeSerializer
 from ..views import generate_verification_code
-
+from django.utils import timezone
 # class UserAPIView(APIView):
 
 #     def get(self, request):
@@ -112,7 +112,7 @@ class Logout(APIView):
         if token:
             user = token.user
 
-            all_sessions = Session.objects.filter(expire_date__gte = datetime.now())
+            all_sessions = Session.objects.filter(expire_date__gte = timezone.now())
             if all_sessions.exists():
                 for session in all_sessions:
                     session_data = session.get_decoded()
