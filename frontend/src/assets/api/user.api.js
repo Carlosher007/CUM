@@ -8,4 +8,5 @@ export const getUsers = () => loginApi.get('user/');
 
 export const getUser = (id) => loginApi.get(`user/${id}`);
 
+export const deleteUser = (id) => loginApi.delete(`user/${id}`);
 

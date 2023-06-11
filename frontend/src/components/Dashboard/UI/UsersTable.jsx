@@ -1,10 +1,10 @@
 import { Menu, MenuButton, MenuItem } from '@szhsin/react-menu';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { deleteUser } from '../../../assets/api/user.api';
 import { urls } from '../../../assets/urls/urls';
 
 const UsersTable = ({ data }) => {
-
   console.log(data);
 
   function convertToDate(dateString) {
@@ -12,6 +12,16 @@ const UsersTable = ({ data }) => {
     const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
     return new Date(formattedDate);
   }
+
+  const handleDeleteUser = async (id) => {
+    try {
+      await deleteUser(id);
+      console.log('Usuario eliminado');
+      // Aquí puedes actualizar la lista de usuarios llamando a la función que obtiene los usuarios nuevamente
+    } catch (error) {
+      console.log('Error al eliminar el usuario', error);
+    }
+  };
 
   const renderStatus = (rol) => {
     if (rol === 'Gerente') {
@@ -58,7 +68,7 @@ const UsersTable = ({ data }) => {
   const truncateEmail = (email) => {
     if (windowWidth >= 786 && windowWidth <= 1060) {
       const atIndex = email.indexOf('@');
-      return email.substring(0, atIndex+4) + '...';
+      return email.substring(0, atIndex + 4) + '...';
     }
     return email;
   };
@@ -132,12 +142,12 @@ const UsersTable = ({ data }) => {
                     </Link>
                   </MenuItem>
                   <MenuItem className="p-0 hover:bg-transparent">
-                    <Link
-                      to="/perfil"
+                    <span
                       className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1"
+                      onClick={() => handleDeleteUser(item.id)}
                     >
-                      Información
-                    </Link>
+                      Eliminar
+                    </span>
                   </MenuItem>
                 </Menu>
               </div>
