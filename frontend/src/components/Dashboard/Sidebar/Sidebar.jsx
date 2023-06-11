@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Link } from 'react-router-dom';
 // Icons
 import {
@@ -17,6 +17,9 @@ const Sidebar = () => {
   const userRole = cookies.get('role');
 
   const [showMenu, setShowMenu] = useState(false);
+
+  const sidebarRef = useRef();
+  const buttonRef = useRef();
 
   const navLinks = [
     // {
@@ -44,7 +47,7 @@ const Sidebar = () => {
           display: 'Ver Carros',
           role: ['Anyone'],
         },
-         {
+        {
           path: urls.presentialquoteD,
           display: 'Cotizar Presencialmente',
           role: ['Anyone'],
@@ -67,9 +70,33 @@ const Sidebar = () => {
     setSubMenuStates(newSubMenuStates);
   };
 
+  useEffect(() => {
+    const handleCloseSidebar = () => {
+      setShowMenu(false);
+      setSubMenuStates(new Array(filteredNavLinks.length).fill(false));
+    };
+
+    const handleClickOutside = (event) => {
+      if (
+        sidebarRef.current &&
+        !sidebarRef.current.contains(event.target) &&
+        !buttonRef.current.contains(event.target)
+      ) {
+        handleCloseSidebar();
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
   return (
     <>
       <div
+        ref={sidebarRef}
         className={`xl:h-[100vh] overflow-y-scroll fixed xl:static w-[80%] md:w-[40%] lg:w-[30%] xl:w-auto h-full top-0 bg-secondary-100 p-4 flex flex-col justify-between z-50 ${
           showMenu ? 'left-0' : '-left-full'
         } transition-all`}
@@ -137,7 +164,11 @@ const Sidebar = () => {
         </nav>
       </div>
       <button
-        onClick={() => setShowMenu(!showMenu)}
+        ref={buttonRef}
+        onClick={(event) => {
+          event.stopPropagation();
+          setShowMenu(!showMenu);
+        }}
         className="xl:hidden fixed bottom-4 right-4 bg-primary text-black p-3 rounded-full z-50"
       >
         {showMenu ? <RiCloseLine /> : <RiMenu3Line />}

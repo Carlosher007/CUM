@@ -25,12 +25,14 @@ const Login = () => {
   const [emailVerificationStep, setEmailVerificationStep] = useState(false);
   const [codeUser, setCodeUser] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
+  const showCaptcha = false;
 
   const [usernameG, setUsernameG] = useState('');
   const [passwordG, setPasswordG] = useState('');
 
   const sendVerificationCodeToEmail = async (email) => {
     try {
+      console.log(email)
       const response = await sendEmail(email);
       const { code } = response.data;
       setVerificationCode(code);
@@ -44,9 +46,26 @@ const Login = () => {
     }
   };
 
+  const handleResendEmail = async () => {
+    try {
+      // Volver a enviar el código de verificación al correo electrónico del usuario
+      await sendVerificationCodeToEmail(values.email);
+
+      // Mostrar notificación para indicar que se ha enviado el correo nuevamente
+      toast.success('Se ha enviado el correo de verificación nuevamente', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
+  };
+
   const verifyEmail = async (code) => {
-    console.log(code);
-    console.log(verificationCode);
     if (code === verificationCode) {
       const loginData = {
         username: usernameG,
@@ -87,14 +106,13 @@ const Login = () => {
         password,
       };
 
-      await validateUser(loginData);
-
+      const response = await validateUser(loginData);
+      console.log(response);
       setUsernameG(email);
       setPasswordG(password);
 
       // Enviar código de verificación al correo electrónico del usuario
       sendVerificationCodeToEmail(email);
-
       //Activar la verificación de email en el frontend
       setEmailVerificationStep(true);
 
@@ -118,13 +136,17 @@ const Login = () => {
     },
     validationSchema: loginValidation,
     onSubmit: (values) => {
-      if (captcha.current.getValue()) {
-        values.captchaResponse = captcha.current.getValue();
-        handleLogin(values);
+      if (showCaptcha) {
+        if (captcha.current.getValue()) {
+          values.captchaResponse = captcha.current.getValue();
+          handleLogin(values);
+        } else {
+          toast.error('Por favor, verifica que no eres un robot', {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       } else {
-        toast.error('Por favor, verifica que no eres un robot', {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        handleLogin(values);
       }
     },
   });
@@ -146,6 +168,10 @@ const Login = () => {
     setErrorShown(false);
   };
 
+  const handleClick = () => {
+    setEmailVerificationStep(false);
+  };
+
   return (
     <div className="min-h-screen flex items-center justify-center p-4">
       <div className="bg-secondary-100 p-8 rounded-xl shadow-2xl w-auto lg:w-[450px]">
@@ -164,7 +190,7 @@ const Login = () => {
                   name="email"
                   value={values.email}
                   onChange={handleChange}
-                  invalid={touched.email && !!errors.email}
+                  invalid={touched.email && !!errors.email ? 'true' : 'false'}
                 />
               </div>
               {touched.email && errors.email && showErrorToast(errors.email)}
@@ -180,7 +206,9 @@ const Login = () => {
                   name="password"
                   value={values.password}
                   onChange={handleChange}
-                  invalid={touched.password && !!errors.password}
+                  invalid={
+                    touched.password && !!errors.password ? 'true' : 'false'
+                  }
                 />
                 {showPassword ? (
                   <RiEyeOffLine
@@ -200,10 +228,9 @@ const Login = () => {
             </FormGroup>
 
             <FormGroup>
-              <ReCAPTCHA
-                ref={captcha}
-                sitekey="6Ler7yUmAAAAAJNxdK6337nhATDdZlsQAmXHhVox"
-              />
+              {showCaptcha && (
+                <ReCAPTCHA sitekey="6Ler7yUmAAAAAJNxdK6337nhATDdZlsQAmXHhVox" />
+              )}
             </FormGroup>
 
             <div>
@@ -259,11 +286,22 @@ const Login = () => {
                 ¿Deseas regresar?{' '}
                 <Link
                   to={urls.login}
-                  className="text-primary hover:text-gray-100 transition-colors"
+                  className="text-primar
+                  y hover:text-gray-100 transition-colors"
+                  onClick={handleClick}
                 >
-                  Volver
+                  <span className="text-primary hover:text-gray-100 transition-colors">
+                    Volver
+                  </span>
                 </Link>
               </span>
+              <button
+                type="button"
+                className="text-primary hover:text-gray-100 transition-colors"
+                onClick={() => sendVerificationCodeToEmail(usernameG)}
+              >
+                Enviar correo nuevamente
+              </button>
             </div>
           </>
         )}

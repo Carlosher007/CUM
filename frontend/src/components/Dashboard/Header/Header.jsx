@@ -11,7 +11,9 @@ import {
   RiThumbUpLine,
 } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
+import { logout } from '../../../assets/api/login.api';
 import notificationsData from '../../../assets/data/notificationsData';
 import { urls } from '../../../assets/urls/urls';
 import NotificationItem from '../UI/NotificationItem';
@@ -20,6 +22,31 @@ const Header = () => {
   const cookies = new Cookies();
   const full_name = cookies.get('full_name');
   const email = cookies.get('email');
+  const rol = cookies.get('rol');
+  const token = cookies.get('token');
+
+  const handleLogout = async () => {
+    try {
+      const response = await logout(token);
+      const { data } = response;
+      console.log(data);
+      cookies.remove('token');
+      cookies.remove('id');
+      cookies.remove('rol');
+      cookies.remove('email');
+      cookies.remove('full_name');
+      cookies.remove('address');
+      cookies.remove('sucursal');
+      cookies.remove('is_superuser');
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
+  };
 
   function convertToDate(dateString) {
     const parts = dateString.split('/');
@@ -35,8 +62,7 @@ const Header = () => {
             <MenuButton className="relative hover:bg-secondary-100 p-2 rounded-lg transition-colors">
               <RiNotification3Line />
               <span className="absolute -top-0.5 right-0 bg-primary py-0.5 px-[5px] box-content text-black rounded-full text-[8px] font-bold">
-                {/* {notificationsData.length} */}
-                2
+                {/* {notificationsData.length} */}2
               </span>
             </MenuButton>
           }
@@ -76,7 +102,9 @@ const Header = () => {
                 src="https://img.freepik.com/foto-gratis/feliz-optimista-guapo-gerente-ventas-latina-apuntando-lado-mirando-camara_1262-12679.jpg"
                 className="w-6 h-6 object-cover rounded-full"
               />
-              <span>{full_name}</span>
+              <span>
+                {full_name}: <strong>{rol} </strong>{' '}
+              </span>
               <RiArrowDownSLine />
             </MenuButton>
           }
@@ -112,8 +140,9 @@ const Header = () => {
           </MenuItem>
           <MenuItem className="p-0 hover:bg-transparent">
             <Link
-              to="/cerrar-sesion"
+              to={urls.home}
               className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 py-2 px-6 flex-1"
+              onClick={handleLogout}
             >
               <RiLogoutCircleRLine /> Cerrar sesión
             </Link>
