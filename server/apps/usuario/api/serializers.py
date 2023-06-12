@@ -7,7 +7,6 @@ class UserSerializer(serializers.ModelSerializer):
         model = User
         fields = [
             'id', 
-            'username', 
             'email', 
             'rol', 
             'cellphone', 
@@ -16,7 +15,7 @@ class UserSerializer(serializers.ModelSerializer):
             'password',
             'sucursal'
             ]
-        extra_kwargs = {'password': {'write_only': True},
+        extra_kwargs = {'password': {'write_only': True, 'required': False},
                         'sucursal': {'required': True}}
 
 class ValidateUserSerializer(serializers.ModelSerializer):

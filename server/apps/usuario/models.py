@@ -14,7 +14,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
 
     id = models.CharField(max_length=10, primary_key=True)
-    username = models.CharField(max_length=150, unique=True)
     email = models.CharField(max_length=254, unique=True)
     rol = models.CharField(max_length=15, choices=ROLES)
     cellphone = models.CharField(max_length=10)
@@ -22,6 +21,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     address = models.CharField(max_length=100)
     sucursal = models.ForeignKey('sucursal.Sucursal', on_delete=models.CASCADE, null=True, blank=True, related_name='user_rel')
 
+    username = models.CharField(max_length=150, unique=True)
     is_staff = models.BooleanField(null=False, default=False)
     is_active = models.BooleanField(null=False, default=True)
     is_superuser = models.BooleanField(null=False, default=False)
@@ -37,4 +37,5 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def save(self, *args, **kwargs):
         self.password = make_password(self.password)
+        self.username = self.email
         return super(User, self).save(*args, **kwargs)
