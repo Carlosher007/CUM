@@ -70,6 +70,14 @@ class Sucursal(models.Model):
         return user_serializer.data
 
 class VehicleSucursal(models.Model):
+    COLOR_CHOICES = (
+        ("#FF0000", "Rojo"),
+        ("#0000FF", "Azul"),
+        ("#BF930D", "Amarillo"),
+        ("#000000", "Negro"),
+        ("#AAADAC", "Gris"),
+    )
+
     vehicle = models.ForeignKey(
         Vehicle,
         on_delete=models.CASCADE,
@@ -81,7 +89,8 @@ class VehicleSucursal(models.Model):
         blank=True, null=True
     )
     quantity = models.IntegerField(default=0)
-    color = models.CharField(max_length=100)
+    color = models.CharField(max_length=100, choices=COLOR_CHOICES)
 
     class Meta:
         db_table = 'vehicle_sucursal'
+        unique_together = [['vehicle', 'sucursal', 'color']]
