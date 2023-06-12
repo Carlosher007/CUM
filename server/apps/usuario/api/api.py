@@ -29,6 +29,30 @@ from django.utils import timezone
 class UserAPIView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+
+    def create(self, request):
+        password = generate_verification_code()
+        request.data['password'] = password
+
+        user_serializer = UserSerializer(data=request.data)
+        if user_serializer.is_valid():
+            email = user_serializer.validated_data['email']
+            try:
+                send_mail(
+                    'Contraseña',
+                    f'Tu contraseña es: {password}',
+                    'settings.EMAIL_HOST_USER',
+                    [email],
+                    fail_silently=False,
+                )
+                user_serializer.save()
+                return Response(user_serializer.data,
+                                status=status.HTTP_201_CREATED)
+            except:
+                return Response({'error':'No se logro enviar el email con la contraseña'},
+                               status=status.HTTP_400_BAD_REQUEST)
+        return Response(user_serializer.errors,
+                        status=status.HTTP_400_BAD_REQUEST)
         
 class LoginView(ObtainAuthToken):
     
