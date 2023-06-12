@@ -32,7 +32,7 @@ const Login = () => {
 
   const sendVerificationCodeToEmail = async (email) => {
     try {
-      console.log(email)
+      console.log(email);
       const response = await sendEmail(email);
       const { code } = response.data;
       setVerificationCode(code);
@@ -74,14 +74,47 @@ const Login = () => {
       const { data } = await login(loginData);
       console.log(data);
       //Almacenar el token y el usuario
-      cookies.set('token', data.token, { path: '/' });
-      cookies.set('id', data.usuario.id, { path: '/' });
-      cookies.set('rol', data.usuario.rol, { path: '/' });
-      cookies.set('email', data.usuario.email, { path: '/' });
-      cookies.set('full_name', data.usuario.full_name, { path: '/' });
-      cookies.set('address', data.usuario.address, { path: '/' });
-      cookies.set('sucursal', data.usuario.sucursal, { path: '/' });
-      cookies.set('is_superuser', data.usuario.is_superuser, { path: '/' });
+      cookies.set('token', data.token, {
+        path: '/',
+        sameSite: 'None',
+        secure: true,
+      });
+      cookies.set('id', data.usuario.id, {
+        path: '/',
+        sameSite: 'None',
+        secure: true,
+      });
+      cookies.set('rol', data.usuario.rol, {
+        path: '/',
+        sameSite: 'None',
+        secure: true,
+      });
+      cookies.set('email', data.usuario.email, {
+        path: '/',
+        sameSite: 'None',
+        secure: true,
+      });
+      cookies.set('full_name', data.usuario.full_name, {
+        path: '/',
+        sameSite: 'None',
+        secure: true,
+      });
+      cookies.set('address', data.usuario.address, {
+        path: '/',
+        sameSite: 'None',
+        secure: true,
+      });
+      cookies.set('sucursal', data.usuario.sucursal, {
+        path: '/',
+        sameSite: 'None',
+        secure: true,
+      });
+      cookies.set('is_superuser', data.usuario.is_superuser, {
+        path: '/',
+        sameSite: 'None',
+        secure: true,
+      });
+
       // Navegar al dashboard
       navigate(urls.home2);
       // Toast despues de 4 segundos dando mensaje de vienvenida al client

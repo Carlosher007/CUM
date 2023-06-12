@@ -1,19 +1,41 @@
 import { useFormik } from 'formik';
-import moment from 'moment';
+import moment, { isDuration } from 'moment';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
+import Cookies from 'universal-cookie';
+import { getSucursal } from '../../../assets/api/sucursal.api';
+import { updateMyProfile } from '../../../assets/api/user.api.js';
 import { profileValidation } from '../../../assets/validation/ProfileValidation';
-import {updateMyProfile} from '../../../assets/api/user.api.js'
-
 
 const MiPerfil = ({ user }) => {
+  const cookies = new Cookies();
+  const idSucursal = cookies.get('sucursal');
+  const [city, setCity] = useState(null);
 
+  useEffect(() => {
+    const getCitySucursal = async () => {
+      try {
+        const { data } = await getSucursal(idSucursal);
+        setCity(data.city);
+      } catch (error) {
+        if (error) {
+          const { data } = error.response;
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
+    };
+    getCitySucursal();
+  }, []);
 
   const updateProfile = async () => {
-    console.log(user.id)
+    console.log(user.id);
     try {
-      const {data} = await updateMyProfile(user.id, values)
-      console.log(data)
+      const { data } = await updateMyProfile(user.id, values);
+      toast.success('Usuario actualizado con exito', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
@@ -33,7 +55,7 @@ const MiPerfil = ({ user }) => {
     },
     validationSchema: profileValidation,
     onSubmit: (values) => {
-      updateProfile()
+      updateProfile();
     },
   });
 
@@ -121,7 +143,7 @@ const MiPerfil = ({ user }) => {
             <input
               type="text"
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder={user.sucursal}
+              placeholder={city}
               readOnly={true}
             ></input>
           </div>

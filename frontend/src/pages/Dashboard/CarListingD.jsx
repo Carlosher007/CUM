@@ -20,8 +20,7 @@ const CarListingD = () => {
   const ITEMS_PER_PAGE = 5;
 
   const cookies = new Cookies();
-  // const idSucursal = cookies.get('sucursal');
-  const idSucursal = '1';
+  const idSucursal = cookies.get('sucursal');
   const [citySucursal, setCitySucursal] = useState();
   const [currentPage, setCurrentPage] = useState(0);
   const [dataCars, setDataCars] = useState([]);

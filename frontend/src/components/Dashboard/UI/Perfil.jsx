@@ -22,7 +22,9 @@ const Perfil = ({ user }) => {
   });
 
   const { handleSubmit, handleChange, values, touched, errors } = formik;
+
   const [sucursals, setSucursals] = useState([]);
+
   const [rols, setRols] = useState([
     'Gerente',
     'Vendedor',
@@ -43,8 +45,17 @@ const Perfil = ({ user }) => {
 
   useEffect(() => {
     const getSucursalsData = async () => {
-      const { data } = await getSucursals();
-      setSucursals(data);
+      try {
+        const { data } = await getSucursals();
+        setSucursals(data);
+      } catch (error) {
+        if (error) {
+          const { data } = error.response;
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     };
     getSucursalsData();
   }, []);
