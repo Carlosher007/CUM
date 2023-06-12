@@ -5,6 +5,5 @@ const loginApi = axios.create({
 });
 
 export const getCars = () => loginApi.get('vehicle/');
-
 export const getCar = (id) => loginApi.get(`vehicle/${id}`);
-
+export const newCar = (body) => loginApi.post('vehicle/',body)

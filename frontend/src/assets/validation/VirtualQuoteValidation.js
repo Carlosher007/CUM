@@ -5,18 +5,10 @@ export const virtualQuoteValidation = yup.object().shape({
   city: yup.string().required('La sucursal es obligatoria'),
   cc: yup
     .string()
-    .required('El número de cédula es obligatorio')
-    .matches(
-      /^\d{6,10}$/,
-      'El número de cédula debe tener entre 6 y 10 dígitos'
-    ),
+    .required('El número de cédula es obligatorio'),
   phone: yup
     .string()
-    .required('El número de teléfono es obligatorio')
-    .matches(
-      /^\d{8,10}$/,
-      'El número de teléfono debe tener entre 8 y 10 dígitos'
-    ),
+    .required('El número de teléfono es obligatorio'),
   email: yup
     .string()
     .email('El correo electrónico no es válido')

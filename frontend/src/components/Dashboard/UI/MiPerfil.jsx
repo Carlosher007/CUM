@@ -3,8 +3,28 @@ import moment from 'moment';
 import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import { profileValidation } from '../../../assets/validation/ProfileValidation';
+import {updateMyProfile} from '../../../assets/api/user.api.js'
+
 
 const MiPerfil = ({ user }) => {
+
+
+  const updateProfile = async () => {
+    console.log(user.id)
+    try {
+      const {data} = await updateMyProfile(user.id, values)
+      console.log(data)
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       full_name: user.full_name,
@@ -13,7 +33,7 @@ const MiPerfil = ({ user }) => {
     },
     validationSchema: profileValidation,
     onSubmit: (values) => {
-      console.log(values);
+      updateProfile()
     },
   });
 
@@ -36,7 +56,7 @@ const MiPerfil = ({ user }) => {
 
   return (
     <div className="bg-secondary-100 p-8 rounded-xl mb-8">
-      <h1 className="text-xl text-gray-100">Profile</h1>
+      <h1 className="text-xl text-gray-100">Perfil</h1>
       <hr className="my-8 border-gray-500/30" />
       <form>
         {/* FULL NAME */}
