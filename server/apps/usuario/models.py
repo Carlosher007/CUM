@@ -1,3 +1,4 @@
+from typing import Iterable, Optional
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, UserManager, PermissionsMixin
 from django.contrib.auth.hashers import make_password
@@ -33,3 +34,7 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     class Meta:
         db_table = 'user'
+
+    def save(self, *args, **kwargs):
+        self.password = make_password(self.password)
+        return super(User, self).save(*args, **kwargs)
