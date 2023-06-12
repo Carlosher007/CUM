@@ -2,8 +2,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework import viewsets, status
-from ..models import Sucursal, Vehicle, VehicleSucursal
-from .serializer import SucursalSerializer, VehicleSerializer, SucursalVehiclesSerializer, VehicleSucursalsSerializer, SucursalsStaffSerializer
+from ..models import Sucursal, Vehicle, VehicleSucursal, User
+from .serializer import (SucursalSerializer, VehicleSerializer, 
+                         SucursalVehiclesSerializer, VehicleSucursalsSerializer, 
+                         SucursalsStaffSerializer)
+from apps.usuario.api.serializers import UserSerializer
 
 # Create your views here.
 # class SucursalAPIView(APIView):
@@ -47,6 +50,18 @@ class SucursalApiView(viewsets.ModelViewSet):
         sucursal_vehicles_serializer = SucursalVehiclesSerializer(sucursal_vehicles, many=True)
         return Response(sucursal_vehicles_serializer.data,
                         status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['GET'], url_path='sucursal-users')
+    def get_sucursal_users(self, request, pk:int):
+        try:
+            sucursal = Sucursal.objects.get(pk=pk)
+            sucursal_users = User.objects.filter(sucursal=pk)
+            user_serializer = UserSerializer(sucursal_users, many=True)
+            return Response(user_serializer.data,
+                        status=status.HTTP_200_OK)
+        except:
+            return Response({'error':'La sucursal dada no existe'},
+                            status=status.HTTP_400_BAD_REQUEST)
     
 class VehicleApiView(viewsets.ModelViewSet):
     serializer_class = VehicleSerializer
