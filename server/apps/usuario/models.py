@@ -16,7 +16,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     username = models.CharField(max_length=150, unique=True)
     email = models.CharField(max_length=254, unique=True)
     rol = models.CharField(max_length=15, choices=ROLES)
-    cellphone = models.CharField(max_length=10, unique=True)
+    cellphone = models.CharField(max_length=10)
     full_name = models.CharField(max_length=100)
     address = models.CharField(max_length=100)
     sucursal = models.ForeignKey('sucursal.Sucursal', on_delete=models.CASCADE, null=True, blank=True, related_name='user_rel')

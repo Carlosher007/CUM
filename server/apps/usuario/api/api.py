@@ -3,12 +3,14 @@ from django.core.mail import send_mail
 from django.contrib.sessions.models import Session
 from rest_framework import status
 from rest_framework.response import Response
+from rest_framework.decorators import action
 from rest_framework.views import APIView
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
 from ..models import User
-from .serializers import ValidateUserSerializer, UserSerializer, UserVerificationCodeSerializer
+from apps.sucursal.models import Sucursal
+from .serializers import ValidateUserSerializer, UserSerializer, UserVerificationCodeSerializer, UpdateUserSerializer
 from ..views import generate_verification_code
 from django.utils import timezone
 # class UserAPIView(APIView):
@@ -28,7 +30,30 @@ from django.utils import timezone
 class UserAPIView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
-    
+
+    @action(detail=True, methods=['POST'], url_path='update')
+    def update_user(self, request, pk:str):
+        try:
+            user = User.objects.get(pk=pk)
+            update_user_serializer = UpdateUserSerializer(data=request.data, context={'request':request})
+            if update_user_serializer.is_valid():
+                sucursal = Sucursal.objects.get(pk=update_user_serializer.data['sucursal'])
+
+                user.full_name = update_user_serializer.data['full_name']
+                user.sucursal = sucursal
+                user.cellphone = update_user_serializer.data['cellphone']
+                user.save()
+
+                user_serializer = self.serializer_class(user)
+                return Response(user_serializer.data, 
+                                status=status.HTTP_200_OK)
+            else:
+                return Response(update_user_serializer.errors,
+                                status=status.HTTP_400_BAD_REQUEST)
+        except:
+            return Response({'error':'El usuario no existe'},
+                            status=status.HTTP_400_BAD_REQUEST)
+        
 class LoginView(ObtainAuthToken):
     
     def post(self, request, *args, **kwargs):

@@ -33,6 +33,11 @@ class UserSerializer(serializers.ModelSerializer):
         user.set_password(self.validated_data['password'])
         user.save()
 
+class UpdateUserSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ['full_name', 'sucursal', 'cellphone']
+
 class ValidateUserSerializer(serializers.ModelSerializer):
     class Meta:
         model = User
