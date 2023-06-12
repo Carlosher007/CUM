@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
@@ -5,7 +6,7 @@ from rest_framework import viewsets, status
 from ..models import Sucursal, Vehicle, VehicleSucursal, User
 from .serializer import (SucursalSerializer, VehicleSerializer, 
                          SucursalVehiclesSerializer, VehicleSucursalsSerializer, 
-                         SucursalsStaffSerializer)
+                         SucursalsStaffSerializer, VehicleSucursalSerializer)
 from apps.usuario.api.serializers import UserSerializer
 
 # Create your views here.
@@ -76,3 +77,7 @@ class VehicleApiView(viewsets.ModelViewSet):
         vehicle_sucursals_serializer = VehicleSucursalsSerializer(vehicle_sucursals, many=True)
         return Response(vehicle_sucursals_serializer.data,
                         status=status.HTTP_200_OK)
+    
+class VehicleSucursalApiView(viewsets.ModelViewSet):
+    serializer_class = VehicleSucursalSerializer
+    queryset = VehicleSucursal.objects.all()

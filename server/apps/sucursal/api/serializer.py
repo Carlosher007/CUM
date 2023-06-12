@@ -25,3 +25,8 @@ class VehicleSucursalsSerializer(serializers.ModelSerializer):
     class Meta:
         model = VehicleSucursal
         fields = ['sucursal']
+
+class VehicleSucursalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VehicleSucursal
+        fields = ['sucursal', 'vehicle', 'color', 'quantity']
