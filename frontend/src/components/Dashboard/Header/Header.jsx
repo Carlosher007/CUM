@@ -1,6 +1,7 @@
 import { Menu, MenuButton, MenuItem } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
+import { all } from 'axios';
 import React from 'react';
 import {
   RiArrowDownSLine,
@@ -25,19 +26,19 @@ const Header = () => {
   const rol = cookies.get('rol');
   const token = cookies.get('token');
 
+  const deleteCookies = () => {
+    Object.keys(cookies.getAll()).forEach((cookieName) => {
+      cookies.remove(cookieName, { path: '/' });
+    });
+  };
+
   const handleLogout = async () => {
     try {
       const response = await logout(token);
       const { data } = response;
+      deleteCookies();
+      console.log('Se borro las cookies');
       console.log(data);
-      cookies.remove('token');
-      cookies.remove('id');
-      cookies.remove('rol');
-      cookies.remove('email');
-      cookies.remove('full_name');
-      cookies.remove('address');
-      cookies.remove('sucursal');
-      cookies.remove('is_superuser');
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
@@ -140,9 +141,11 @@ const Header = () => {
           </MenuItem>
           <MenuItem className="p-0 hover:bg-transparent">
             <Link
-              to={urls.home}
+            to={urls.home}
               className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 py-2 px-6 flex-1"
-              onClick={handleLogout}
+              onClick={() => {
+                handleLogout();
+              }}
             >
               <RiLogoutCircleRLine /> Cerrar sesión
             </Link>

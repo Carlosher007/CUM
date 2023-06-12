@@ -11,13 +11,14 @@ import {
   RiMenu3Line,
 } from 'react-icons/ri';
 import Cookies from 'universal-cookie';
-import { urls } from '../../../assets/urls/urls';
 import { logout } from '../../../assets/api/login.api';
+import { urls } from '../../../assets/urls/urls';
 
 const Sidebar = () => {
   const cookies = new Cookies();
-  const userRole = cookies.get('role');
+  const userRole = cookies.get('rol');
   const token = cookies.get('token');
+  console.log(userRole);
 
   const handleLogout = async () => {
     try {
@@ -97,21 +98,47 @@ const Sidebar = () => {
       ],
     },
     {
-      display: 'Carros',
+      display: 'Vehiculos',
       role: ['Anyone'],
       sublinks: [
         {
+          path: urls.seeCarsD,
+          display: 'Ver vehiculos de la empresa',
+          role: ['Anyone'],
+        },
+        {
           path: urls.newVehicle,
-          display: 'Añadir ',
+          display: 'Añadir un vehiculo a la empresa',
+          role: ['Anyone'],
+        },
+        {
+          path: urls.seeCarsD,
+          display: 'Ver vehiculos de la sucursal',
+          role: ['Anyone'],
+        },
+        {
+          path: urls.seeCarsD,
+          display: 'Añadir vehiculos a la sucursal',
           role: ['Anyone'],
         },
       ],
     },
   ];
 
-  const filteredNavLinks = navLinks.filter(
-    (link) => link.role.includes(userRole) || link.role.includes('Anyone')
-  );
+  const filteredNavLinks = navLinks.filter((link) => {
+    if (link.role.includes(userRole) || link.role.includes('Anyone')) {
+      if (link.sublinks) {
+        const filteredSublinks = link.sublinks.filter((sublink) => {
+          return (
+            sublink.role.includes(userRole) || sublink.role.includes('Anyone')
+          );
+        });
+        link.sublinks = filteredSublinks;
+      }
+      return true;
+    }
+    return false;
+  });
 
   const [subMenuStates, setSubMenuStates] = useState(
     new Array(filteredNavLinks.length).fill(false)
