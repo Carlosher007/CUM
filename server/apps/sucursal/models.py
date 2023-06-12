@@ -19,7 +19,7 @@ class Vehicle(models.Model):
     )
 
     BRAKES_CHOICES = (
-        ("D4X4", "Frenos de Disco en las Cuatro Ruedas"),
+        ("D4x4", "Frenos de Disco en las Cuatro Ruedas"),
         ("D4x2", "Frenos de Tambor en las Ruedas Traseras"),
         ("EBA", "Emergency Brake Assist"),
         ("ABS", "Antiblockiersystem"),
