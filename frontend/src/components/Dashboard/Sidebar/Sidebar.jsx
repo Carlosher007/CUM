@@ -89,6 +89,22 @@ const Sidebar = () => {
           display: 'Usuarios',
           role: ['Anyone'],
         },
+        {
+          path: urls.newSucursal,
+          display: 'Crear Sucursal',
+          role: ['Anyone'],
+        },
+      ],
+    },
+    {
+      display: 'Carros',
+      role: ['Anyone'],
+      sublinks: [
+        {
+          path: urls.newVehicle,
+          display: 'Añadir ',
+          role: ['Anyone'],
+        },
       ],
     },
   ];

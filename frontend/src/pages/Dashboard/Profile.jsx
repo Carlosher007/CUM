@@ -4,21 +4,25 @@ import MiPerfil from '../../components/Dashboard/UI/MiPerfil';
 // import ChangePasswordEmail from '../../components/Dashboard/UI/ChangePasswordEmail';
 import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
+import { getSucursal } from '../../assets/api/sucursal.api';
 import { getUser } from '../../assets/api/user.api';
+import MiSucursal from '../../components/Dashboard/UI/MiSucursal';
 
 const Profile = () => {
   const cookies = new Cookies();
   const idUser = cookies.get('id');
+  const idSucursal = cookies.get('sucursal');
 
   // const idUser = '12332';
   const [user, setUser] = useState(null);
+  const [sucursal, setSucursal] = useState(null);
 
   useEffect(() => {
     const getUserData = async () => {
       try {
         const { data } = await getUser(idUser);
         console.log(data);
-        setUser(data)
+        setUser(data);
       } catch (error) {
         const { data } = error.response;
         // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
@@ -28,12 +32,30 @@ const Profile = () => {
       }
     };
     getUserData();
+
+    const getSucursalData = async () => {
+      try {
+        const { data } = await getSucursal('1');
+        console.log(data);
+        setSucursal(data);
+      } catch (error) {
+        const { data } = error.response;
+        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    };
+    getSucursalData();
   }, []);
 
   return (
     <>
       {/* Profile */}
       {user && <MiPerfil user={user} />}
+
+      {/* My Office*/}
+      {sucursal && <MiSucursal sucursal={sucursal} />}
 
       {/* Change password and email*/}
       {/* {user && <ChangePasswordEmail user={user} />} */}

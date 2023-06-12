@@ -17,5 +17,7 @@ export const urls = {
   presentialquoteD: '/dashboard/pquote',
   allUsers: '/dashboard/all-users',
   editUser: '/dashboard/edit-user/:id',
-  newUser: '/dashboard/new-user'
+  newUser: '/dashboard/new-user',
+  newSucursal: '/dashboard/new-sucursal',
+  newVehicle:'/dashboard/new-vehicle',
 };

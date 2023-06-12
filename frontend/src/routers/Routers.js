@@ -20,6 +20,8 @@ import PresentialQuoteD from '../pages/Dashboard/PresentialQuoteD';
 import AllUsers from '../pages/Dashboard/AllUsers';
 import EditUser from '../components/Dashboard/UI/EditUser';
 import NewUser from '../pages/Dashboard/NewUser';
+import NewSucursal from '../pages/Dashboard/NewSucursal';
+import NewVehicle from '../pages/Dashboard/NewVehicle';
 const Routers = () => {
   return (
     <Routes>
@@ -48,6 +50,8 @@ const Routers = () => {
         <Route path={urls.allUsers} element={<AllUsers />} />
         <Route path={urls.editUser} element={<EditUser />} />
         <Route path={urls.newUser} element={<NewUser />} />
+        <Route path={urls.newSucursal} element={<NewSucursal />} />
+        <Route path={urls.newVehicle} element={<NewVehicle />} />
       </Route>
     </Routes>
   );
