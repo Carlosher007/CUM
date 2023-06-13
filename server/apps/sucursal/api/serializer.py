@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from ..models import Sucursal, Vehicle, VehicleSucursal, Part
+from ..models import Sucursal, Vehicle, VehicleSucursal, Part, SucursalPart
 
 class SucursalSerializer(serializers.ModelSerializer):
     class Meta:
@@ -37,3 +37,8 @@ class PartSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['id']
         extra_kwargs = {'vehicle': {'required': False}}
+
+class SucursalPartSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SucursalPart
+        fields = '__all__'
