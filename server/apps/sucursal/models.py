@@ -51,6 +51,16 @@ class Vehicle(models.Model):
     class Meta:
         db_table = 'vehicle'
 
+class Part(models.Model):
+    name = models.CharField(max_length=200)
+    price = models.IntegerField()
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE,
+                                blank=True, null=True)
+    
+    class Meta:
+        db_table = 'part'
+        unique_together = [['name', 'vehicle']]
+
 class Sucursal(models.Model):
     city = models.CharField(max_length=40)
     address = models.CharField(max_length=100)
@@ -59,6 +69,11 @@ class Sucursal(models.Model):
         Vehicle,
         through='VehicleSucursal',
         blank=True,
+    )
+    parts = models.ManyToManyField(
+        Part,
+        through='SucursalPart',
+        blank=True
     )
 
     class Meta:
@@ -95,12 +110,13 @@ class VehicleSucursal(models.Model):
         db_table = 'vehicle_sucursal'
         unique_together = [['vehicle', 'sucursal', 'color']]
 
-class Part(models.Model):
-    name = models.CharField(max_length=200)
-    price = models.IntegerField()
-    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE,
-                                blank=True, null=True)
-    
+class SucursalPart(models.Model):
+    sucursal = models.ForeignKey(Sucursal, on_delete=models.CASCADE,
+                                 blank=True, null=True)
+    part = models.ForeignKey(Part, on_delete=models.CASCADE, 
+                             blank=True, null=True)
+    quantity = models.IntegerField(default=0)
+
     class Meta:
-        db_table = 'part'
-        unique_together = [['name', 'vehicle']]
+        db_table = 'sucursal_part'
+        unique_together = [['sucursal', 'part']]
