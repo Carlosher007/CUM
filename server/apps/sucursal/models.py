@@ -94,3 +94,13 @@ class VehicleSucursal(models.Model):
     class Meta:
         db_table = 'vehicle_sucursal'
         unique_together = [['vehicle', 'sucursal', 'color']]
+
+class Part(models.Model):
+    name = models.CharField(max_length=200)
+    price = models.IntegerField()
+    vehicle = models.ForeignKey(Vehicle, on_delete=models.CASCADE,
+                                blank=True, null=True)
+    
+    class Meta:
+        db_table = 'part'
+        unique_together = [['name', 'vehicle']]

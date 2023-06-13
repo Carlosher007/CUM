@@ -3,10 +3,11 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework import viewsets, status
-from ..models import Sucursal, Vehicle, VehicleSucursal, User
+from ..models import Sucursal, Vehicle, VehicleSucursal, User, Part
 from .serializer import (SucursalSerializer, VehicleSerializer, 
                          SucursalVehiclesSerializer, VehicleSucursalsSerializer, 
-                         SucursalsStaffSerializer, VehicleSucursalSerializer)
+                         SucursalsStaffSerializer, VehicleSucursalSerializer,
+                         PartSerializer)
 from apps.usuario.api.serializers import UserSerializer
 
 # Create your views here.
@@ -81,3 +82,8 @@ class VehicleApiView(viewsets.ModelViewSet):
 class VehicleSucursalApiView(viewsets.ModelViewSet):
     serializer_class = VehicleSucursalSerializer
     queryset = VehicleSucursal.objects.all()
+
+class PartApiView(viewsets.ModelViewSet):
+    serializer_class = PartSerializer
+    queryset = Part.objects.all()
+    
