@@ -19,7 +19,7 @@ class VehicleSerializer(serializers.ModelSerializer):
 class SucursalVehiclesSerializer(serializers.ModelSerializer):
     class Meta:
         model = VehicleSucursal
-        exclude = ['id', 'sucursal']
+        exclude = ['sucursal']
         depth = 1
 
 class VehicleSucursalsSerializer(serializers.ModelSerializer):
