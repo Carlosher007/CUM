@@ -2,9 +2,13 @@ import React from 'react';
 import { FaCarBattery, GiBatteryPack } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { Col } from 'reactstrap';
+import Cookies from 'universal-cookie';
 import { urls } from '../../../assets/urls/urls';
 
 const CarItemD = (props) => {
+  const cookies = new Cookies();
+  const rol = cookies.get('rol');
+
   const {
     model,
     year,
@@ -16,6 +20,31 @@ const CarItemD = (props) => {
     doors,
     id,
   } = props.item;
+
+  const renderButtons = () => {
+    if (rol === 'Cliente') {
+      return (
+        <div className="text-center">
+          <Link to={`/dashboard/cars/${id}`}>
+            <button className="w-2/3 sm:w-full bg-primary text-black rounded-full py-2 px-4 font-semibold">
+              Cotizar
+            </button>
+          </Link>
+        </div>
+      );
+    } else {
+      return (
+        <div className="text-center">
+          <button className="w-2/3 sm:w-full bg-primary text-black rounded-full py-2 px-4 font-semibold">
+            Editar
+          </button>
+          <button className="w-2/3 sm:w-full bg-red-500 text-white rounded-full py-2 px-4 font-semibold mr-2 mt-3">
+            Eliminar
+          </button>
+        </div>
+      );
+    }
+  };
 
   return (
     <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 p-2">
@@ -53,13 +82,7 @@ const CarItemD = (props) => {
             </div>
           </div>
 
-          <div className="text-center">
-            <Link to={`/dashboard/cars/${id}`}>
-              <button className="w-2/3 sm:w-full bg-primary text-black rounded-full py-2 px-4 font-semibold">
-                Cotizar
-              </button>
-            </Link>
-          </div>
+          {renderButtons()}
         </div>
       </div>
     </div>

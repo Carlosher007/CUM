@@ -13,8 +13,9 @@ import {
 import Cookies from 'universal-cookie';
 import { getCars } from '../../assets/api/cars';
 import { getSucursal } from '../../assets/api/sucursal.api';
-import CarItemD from '../../components/Dashboard/UI/CarItemD';
 import carData from '../../assets/data/carData';
+import CarItemD from '../../components/Dashboard/UI/CarItemD';
+import { getCarsBySucursal } from '../../assets/api/sucursal.api';
 
 const CarListingD = () => {
   const ITEMS_PER_PAGE = 5;
@@ -60,9 +61,9 @@ const CarListingD = () => {
 
     const getCarData = async () => {
       try {
-        const { data } = await getCars();
+        const { data } = await getCarsBySucursal(idSucursal);
         setDataCars(data);
-        console.log(data)
+        console.log(data);
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
@@ -74,6 +75,23 @@ const CarListingD = () => {
       }
     };
     getCarData();
+    //
+    //         const getCarData = async () => {
+    //           try {
+    //             const { data } = await getCars();
+    //             setDataCars(data);
+    //             console.log(data);
+    //           } catch (error) {
+    //             if (error.response) {
+    //               const { data } = error.response;
+    //               // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+    //               toast.error(data.error, {
+    //                 position: toast.POSITION.TOP_RIGHT,
+    //               });
+    //             }
+    //           }
+    //         };
+    //         getCarData();
     // setDataCars(carData)
   }, []);
 

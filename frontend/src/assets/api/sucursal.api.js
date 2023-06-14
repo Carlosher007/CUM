@@ -11,3 +11,7 @@ export const getSucursal = (id) => loginApi.get(`sucursal/${id}`);
 export const updateSucursal = (id, body) =>
   loginApi.put(`sucursal/${id}/`, body);
 export const newSucursal = (body) => loginApi.post('sucursal/', body);
+export const getCarsBySucursal = (id) =>
+  loginApi.get(`sucursal/${id}/sucursal-vehicles`);
+export const getUsersBySucursal = (id) =>
+  loginApi.get(`sucursal/${id}/sucursal-users`);

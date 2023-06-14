@@ -1,11 +1,33 @@
 import { useFormik } from 'formik';
 import moment from 'moment';
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getSucursals } from '../../../assets/api/sucursal.api';
+import { updateMyProfile } from '../../../assets/api/user.api';
+import { urls } from '../../../assets/urls/urls';
 import { editProfileValidation } from '../../../assets/validation/EditProfileValidation';
 
 const Perfil = ({ user }) => {
+  const [sucursals, setSucursals] = useState([]);
+
+  const updateProfile = async (values) => {
+    try {
+      const { data } = await updateMyProfile(user.id, values);
+      toast.success('Usuario editado con exito', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       full_name: '',
@@ -17,13 +39,14 @@ const Perfil = ({ user }) => {
     },
     validationSchema: editProfileValidation,
     onSubmit: (values) => {
-      console.log(values);
+      const selectedValue = parseInt(values.sucursal);
+      values.sucursal = isNaN(selectedValue) ? null : selectedValue;
+      // console.log(values);
+      updateProfile(values)
     },
   });
 
   const { handleSubmit, handleChange, values, touched, errors } = formik;
-
-  const [sucursals, setSucursals] = useState([]);
 
   const [rols, setRols] = useState([
     'Gerente',
@@ -33,14 +56,17 @@ const Perfil = ({ user }) => {
   ]);
 
   useEffect(() => {
-    formik.setValues({
-      full_name: user.full_name,
-      cellphone: user.cellphone,
-      address: user.address,
-      email: user.email,
-      rol: user.rol,
-      sucursal: user.sucursal,
-    });
+    if (user) {
+      const initialValues = {
+        full_name: user.full_name || '',
+        cellphone: user.cellphone || '',
+        address: user.address || '',
+        email: user.email || '',
+        rol: user.rol || '',
+        sucursal: user.sucursal || '',
+      };
+      formik.setValues(initialValues);
+    }
   }, [user]);
 
   useEffect(() => {
@@ -77,9 +103,24 @@ const Perfil = ({ user }) => {
 
   return (
     <div className="bg-secondary-100 p-8 rounded-xl mb-8">
-      <h1 className="text-xl text-gray-100">Profile</h1>
+      <h1 className="text-xl text-gray-100">Editando Usuario</h1>
       <hr className="my-8 border-gray-500/30" />
       <form>
+        {/* ID */}
+        <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+          <div className="w-full md:w-1/4">
+            <p>ID</p>
+          </div>
+          <div className="flex-1">
+            <input
+              type="text"
+              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+              name="id"
+              placeholder={user.id}
+              readOnly={true}
+            />
+          </div>
+        </div>
         {/* FULL NAME */}
         <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
           <div className="w-full md:w-1/4">
@@ -101,9 +142,7 @@ const Perfil = ({ user }) => {
         {/* EMAIL */}
         <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
           <div className="w-full md:w-1/4">
-            <p>
-              Email <span className="text-red-500">*</span>
-            </p>
+            <p>Email</p>
           </div>
           <div className="flex-1">
             <input
@@ -119,9 +158,7 @@ const Perfil = ({ user }) => {
         {/* ROL */}
         <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
           <div className="w-full md:w-1/4">
-            <p>
-              Rol <span className="text-red-500">*</span>
-            </p>
+            <p>Rol</p>
           </div>
           <div className="flex-1">
             <select
@@ -142,9 +179,7 @@ const Perfil = ({ user }) => {
         {/* SUCURSAL */}
         <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
           <div className="w-full md:w-1/4">
-            <p>
-              Sucursal <span className="text-red-500">*</span>
-            </p>
+            <p>Sucursal</p>
           </div>
           <div className="flex-1">
             <select
@@ -154,7 +189,7 @@ const Perfil = ({ user }) => {
               onChange={handleChange}
             >
               {sucursals.map((office) => (
-                <option value={office.city} key={office.id}>
+                <option value={office.id} key={office.id}>
                   {office.city}
                 </option>
               ))}
@@ -203,9 +238,7 @@ const Perfil = ({ user }) => {
         {/* IS SUPERUSER */}
         <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
           <div className="w-full md:w-1/4">
-            <p>
-              Super Usuario <span className="text-red-500">*</span>
-            </p>
+            <p>Super Usuario</p>
           </div>
           <div className="flex-1">
             {user.is_superuser ? (
@@ -222,9 +255,7 @@ const Perfil = ({ user }) => {
         {/* Datwe Joined */}
         <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
           <div className="w-full md:w-1/4">
-            <p>
-              Fecha en la que se unio <span className="text-red-500">*</span>
-            </p>
+            <p>Fecha en la que se unio</p>
           </div>
           <div className="flex-1">
             <input
@@ -237,17 +268,27 @@ const Perfil = ({ user }) => {
         </div>
       </form>
       <hr className="my-8 border-gray-500/30" />
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
-          onClick={() => {
-            handleSubmit(); // Primera función
-            resetErrorShown(); // Segunda función
-          }}
-        >
-          Guardar
-        </button>
+      <div className="flex justify-between">
+        <div className="flex justify-start">
+          <Link
+            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+            to={urls.allUsers}
+          >
+            <i className="ri-arrow-left-line"></i> Volver
+          </Link>
+        </div>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+            onClick={() => {
+              handleSubmit(); // Primera función
+              resetErrorShown(); // Segunda función
+            }}
+          >
+            Guardar
+          </button>
+        </div>
       </div>
     </div>
   );

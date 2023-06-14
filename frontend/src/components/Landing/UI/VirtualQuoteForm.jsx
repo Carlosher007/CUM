@@ -7,6 +7,8 @@ import { virtualQuoteValidation } from '../../../assets/validation/VirtualQuoteV
 import '../../../styles/find-car-form.css';
 
 const VirtualQuoteForm = ({ slug, selectedColor }) => {
+
+
   const [sucursals, setSucursals] = useState([]);
   useEffect(() => {
     formik.setFieldValue('color', selectedColor); // Actualiza el valor en formik cuando selectedColor cambie
@@ -16,6 +18,7 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
     const getSucursalsData = async () => {
       try {
         const { data } = await getSucursals();
+        console.log(data)
         setSucursals(data);
       } catch (error) {
         if (error) {
@@ -32,16 +35,16 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
   const formik = useFormik({
     initialValues: {
       name: '',
-      city: '',
+      sucursal: '',
       cc: '',
       phone: '',
       email: '',
       address: '',
-      password: '',
+      // password: '',
       idCar: slug,
       color: selectedColor,
     },
-    validationSchema: virtualQuoteValidation,
+    // validationSchema: virtualQuoteValidation,
     onSubmit: (values) => {
       console.log(values);
     },
@@ -121,8 +124,8 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
           </FormGroup>
         </div>
         <h6 className="mt-4 fw-bold text-black">Acceso a la Plataforma</h6>
-        <div className="d-flex align-items-center justify-content-between flex-wrap">
-          <FormGroup className="form__group ">
+        <div className="d-flex align-items-center flex-wrap ">
+          <FormGroup className="form__group mr-12">
             <FormText>Email</FormText>
             <Input
               type="email"
@@ -134,7 +137,7 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
             />
             {touched.email && errors.email && showErrorToast(errors.email)}
           </FormGroup>
-          <FormGroup className="form__group">
+          {/* <FormGroup className="form__group">
             <FormText>Contraseña</FormText>
             <Input
               type="password"
@@ -147,24 +150,24 @@ const VirtualQuoteForm = ({ slug, selectedColor }) => {
             {touched.password &&
               errors.password &&
               showErrorToast(errors.password)}
-          </FormGroup>
+          </FormGroup> */}
           <FormGroup className="select__group">
             <FormText>Sucursal</FormText>
             <Input
               type="select"
-              name="city"
-              value={values.city}
+              name="sucursal"
+              value={values.sucursal}
               onChange={handleChange}
-              invalid={touched.city && !!errors.city}
+              invalid={touched.sucursal && !!errors.sucursal}
             >
               <option value="">Seleccione una ciudad</option>
               {sucursals.map((office) => (
-                <option value={office.city} key={office.id}>
+                <option value={office.id} key={office.id}>
                   {office.city}
                 </option>
               ))}
             </Input>
-            {touched.city && errors.city && showErrorToast(errors.city)}
+            {touched.sucursal && errors.sucursal && showErrorToast(errors.sucursal)}
           </FormGroup>
         </div>
         <div className="d-flex align-items-center justify-content-center flex-wrap mt-4">

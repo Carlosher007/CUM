@@ -12,3 +12,5 @@ export const deleteUser = (id) => loginApi.delete(`user/${id}`);
 
 export const updateMyProfile = (id, body) =>
   loginApi.patch(`user/${id}/`, body);
+
+export const newUser = (body) => loginApi.post(`user/`, body);
