@@ -52,6 +52,7 @@ THIRD_PARTY_APPS = [
 LOCAL_APPS = [
     'apps.sucursal',
     'apps.usuario',
+    'apps.cotizacion',
 ]
 
 INSTALLED_APPS = DEFAULT_APPS + THIRD_PARTY_APPS + LOCAL_APPS
