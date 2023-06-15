@@ -7,7 +7,8 @@ from ..models import Sucursal, Vehicle, VehicleSucursal, User, Part, SucursalPar
 from .serializer import (SucursalSerializer, VehicleSerializer, 
                          SucursalVehiclesSerializer, VehicleSucursalsSerializer, 
                          SucursalsStaffSerializer, VehicleSucursalSerializer,
-                         PartSerializer, SucursalPartSerializer)
+                         PartSerializer, SucursalPartSerializer,
+                         SucursalVehiclesColorSerializer)
 from apps.usuario.api.serializers import UserSerializer
 
 # Create your views here.
@@ -48,9 +49,16 @@ class SucursalApiView(viewsets.ModelViewSet):
     
     @action(detail=True, methods=['GET'], url_path='sucursal-vehicles')
     def get_sucursal_vehicles(self, request, pk:int):
-        sucursal_vehicles = VehicleSucursal.objects.filter(sucursal=pk)
+        sucursal_vehicles = VehicleSucursal.objects.order_by('vehicle').distinct('vehicle').filter(sucursal=pk)
         sucursal_vehicles_serializer = SucursalVehiclesSerializer(sucursal_vehicles, many=True)
         return Response(sucursal_vehicles_serializer.data,
+                        status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['GET'], url_path='sucursal-vehicles-color')
+    def get_sucursal_vehicles_color(self, request, pk:int):
+        sucursal_vehicles = VehicleSucursal.objects.filter(sucursal=pk)
+        sucursal_vehicles_color_serializer = SucursalVehiclesColorSerializer(sucursal_vehicles, many=True)
+        return Response(sucursal_vehicles_color_serializer.data,
                         status=status.HTTP_200_OK)
     
     @action(detail=True, methods=['GET'], url_path='sucursal-users')

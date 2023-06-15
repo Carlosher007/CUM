@@ -19,6 +19,12 @@ class VehicleSerializer(serializers.ModelSerializer):
 class SucursalVehiclesSerializer(serializers.ModelSerializer):
     class Meta:
         model = VehicleSucursal
+        fields = ['vehicle']
+        depth = 1
+
+class SucursalVehiclesColorSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VehicleSucursal
         exclude = ['sucursal']
         depth = 1
 
