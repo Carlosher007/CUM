@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { BsSearch } from 'react-icons/bs';
 import ReactPaginate from 'react-paginate';
 import { toast } from 'react-toastify';
+import { Link } from 'react-router-dom';
+import { urls } from '../../assets/urls/urls';
 import {
   Col,
   Container,
@@ -75,33 +77,15 @@ const CarListingD = () => {
       }
     };
     getCarData();
-    //
-    //         const getCarData = async () => {
-    //           try {
-    //             const { data } = await getCars();
-    //             setDataCars(data);
-    //             console.log(data);
-    //           } catch (error) {
-    //             if (error.response) {
-    //               const { data } = error.response;
-    //               // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-    //               toast.error(data.error, {
-    //                 position: toast.POSITION.TOP_RIGHT,
-    //               });
-    //             }
-    //           }
-    //         };
-    //         getCarData();
-    // setDataCars(carData)
   }, []);
 
   const sortedCarData = [...dataCars].sort((a, b) => {
     let result = 0;
 
     if (sortOrder.price === 'low') {
-      result = a.price - b.price;
+      result = a.vehicle.price - b.vehicle.price;
     } else if (sortOrder.price === 'high') {
-      result = b.price - a.precio;
+      result = b.vehicle.price - a.vehicle.precio;
     }
 
     return result;
@@ -114,7 +98,7 @@ const CarListingD = () => {
   };
 
   const paginatedCarData = sortedCarData
-    .filter((car) => car.model.toLowerCase().includes(searchTerm))
+    .filter((car) => car.vehicle.model.toLowerCase().includes(searchTerm))
     .slice(offset, offset + ITEMS_PER_PAGE);
   return (
     <div className="bookings">
@@ -184,6 +168,15 @@ const CarListingD = () => {
               pageClassName={'text-white'} // Agrega esta línea para cambiar el color de los números
             />
           </div>
+        </div>
+        <div className="flex justify-end mt-5">
+          <Link to={urls.newVehicle}>
+            <button
+              className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+            >
+              Crear Vehiclulo
+            </button>
+          </Link>
         </div>
       </div>
     </div>

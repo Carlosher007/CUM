@@ -1,14 +1,14 @@
 export const colorNameToCode = (colorName) => {
   switch (colorName.toLowerCase()) {
-    case 'rojo':
+    case 'Rojo':
       return '#FF0000';
-    case 'azul':
+    case 'Azul':
       return '#0000FF';
-    case 'dorado':
+    case 'Dorado':
       return '#BF930D';
-    case 'negro':
+    case 'Negro':
       return '#000000';
-    case 'gris':
+    case 'Gris':
       return '#AAADAC';
     default:
       return '';
@@ -18,15 +18,15 @@ export const colorNameToCode = (colorName) => {
 export const codeToColorName = (colorCode) => {
   switch (colorCode) {
     case '#FF0000':
-      return 'rojo';
+      return 'Rojo';
     case '#0000FF':
-      return 'azul';
+      return 'Azul';
     case '#000000':
-      return 'negro';
+      return 'Negro';
     case '#BF930D':
-      return 'dorado';
+      return 'Dorado';
     case '#AAADAC':
-      return 'gris';
+      return 'Gris';
     default:
       return '';
   }

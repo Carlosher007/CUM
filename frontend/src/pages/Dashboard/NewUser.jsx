@@ -35,7 +35,7 @@ const NewUser = () => {
       cellphone: '',
       full_name: '',
       address: '',
-      sucursal: ''
+      sucursal: '',
     },
     // validationSchema: createProfileValidation,
     onSubmit: (values) => {
@@ -55,7 +55,7 @@ const NewUser = () => {
     'Cliente',
     'JefeTaller',
   ]);
-  
+
   const [sucursals, setSucursals] = useState([]);
   const [selectedSucursal, setSelectedSucursal] = useState('');
 
@@ -70,12 +70,21 @@ const NewUser = () => {
 
   useEffect(() => {
     const getSucursalsData = async () => {
-      const { data } = await getSucursals();
-      setSucursals(data);
+      try {
+        const { data } = await getSucursals();
+        setSucursals(data);
+      } catch (error) {
+        if (error.response) {
+          const { data } = error.response;
+          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     };
     getSucursalsData();
   }, []);
-
 
   return (
     <div className="bg-secondary-100 p-8 rounded-xl mb-8">

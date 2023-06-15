@@ -36,9 +36,9 @@ const OfficesList = () => {
 };
 
 const OfficeItem = ({ item }) => {
-  const { city, address, cellphone, vehicles, staff } = item;
+  const { city, address, cellphone, parts, staff } = item;
 
-  const lengthVehicles = vehicles.length;
+  const lengthVehicles = parts.length;
   const lengthStaff = staff.length;
 
   return (

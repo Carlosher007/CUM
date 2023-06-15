@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { CirclePicker } from 'react-color';
 import { RiEdit2Line } from 'react-icons/ri';
 import { toast } from 'react-toastify';
@@ -22,7 +22,26 @@ import { createVehicleValidation } from '../../assets/validation/createVehicleVa
 const NewVehicle = () => {
   const cookies = new Cookies();
   const idSucursal = cookies.get('sucursal');
+
+  const [vehicles,setVehicles] = useState([])  
   
+  useEffect(() => {
+    const getAllVehicles = async () => {
+       try {
+        //  const { data } = await getSucursals();
+        //  setSucursals(data);
+       } catch (error) {
+         if (error.response) {
+           const { data } = error.response;
+           // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+           toast.error(data.error, {
+             position: toast.POSITION.TOP_RIGHT,
+           });
+         }
+       }
+    }
+  },[])
+
   const createVehicle = async (values) => {
     try {
       const { data } = await newCar(values);
@@ -95,12 +114,40 @@ const NewVehicle = () => {
 
   return (
     <div className="bg-secondary-100 p-8 rounded-xl mb-4">
-      <h2 className=" text-2xl font-bold">Cotice su vehiculo ahora</h2>
+      <div>
+        <h1 className=" text-2xl font-bold">Añadir un Vehiculo</h1>
+        <div className="mt-5">
+          <div style={{ backgroundColor: 'transparent' }} className="">
+            <h2 className=" text-xl mb-4 font-bold">Seleccione un Vehiculo</h2>
+            <FormGroup>
+              <Input
+                type="select"
+                name="bodywork"
+                className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
+                onChange={() => {}}
+              >
+                <option value="">Seleccione uno</option>
+                {bodyWorkData.map((option) => (
+                  <option value={option} key={option}>
+                    {option}
+                  </option>
+                ))}
+              </Input>
+            </FormGroup>
+            <FormGroup>
+              <button className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none">
+                Rehacer
+              </button>
+            </FormGroup>
+          </div>
+        </div>
+      </div>
       <Form
         style={{ backgroundColor: 'transparent' }}
-        className="form"
+        className="mt-6"
         onSubmit={handleSubmit}
       >
+        <h2 className=" text-xl mb-4 font-bold">Datos del Vehiculo</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <FormGroup>
@@ -497,24 +544,22 @@ const NewVehicle = () => {
                     />
                   </div>
                 </div>
-                {touched.color &&
-                  errors.color &&
-                  showErrorToast(errors.color)}
+                {touched.color && errors.color && showErrorToast(errors.color)}
               </FormGroup>
             </div>
           </div>
         </div>
 
-        <div className="flex items-center justify-center flex-wrap mt-4">
-          <FormGroup className="w-1/4">
-            <button
-              className="btn find__car-btn"
-              type="submit"
-              onClick={resetErrorShown}
-            >
-              Enviar
-            </button>
-          </FormGroup>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+            onClick={() => {
+              handleSubmit(); // Primera función
+            }}
+          >
+            Guardar
+          </button>
         </div>
       </Form>
     </div>
