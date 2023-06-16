@@ -1,17 +1,18 @@
 import { useFormik } from 'formik';
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { CirclePicker } from 'react-color';
 import { RiEdit2Line } from 'react-icons/ri';
 import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
 import Cookies from 'universal-cookie';
-import { newCar } from '../../assets/api/cars';
+import { getCar, newCar, newCarInSucursal } from '../../assets/api/cars';
 import {
   bodyWorkData,
   brakesData,
   motorData,
   suspensionData,
 } from '../../assets/api/defaultData';
+import { getCarsBySucursal } from '../../assets/api/sucursal.api';
 import {
   codeToColorName,
   colorNameToCode,
@@ -23,32 +24,51 @@ const NewVehicle = () => {
   const cookies = new Cookies();
   const idSucursal = cookies.get('sucursal');
 
-  const [vehicles,setVehicles] = useState([])  
-  
-  useEffect(() => {
-    const getAllVehicles = async () => {
-       try {
-        //  const { data } = await getSucursals();
-        //  setSucursals(data);
-       } catch (error) {
-         if (error.response) {
-           const { data } = error.response;
-           // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-           toast.error(data.error, {
-             position: toast.POSITION.TOP_RIGHT,
-           });
-         }
-       }
-    }
-  },[])
+  const [vehicles, setVehicles] = useState([]);
+  const [idCarSelectedValue, setIdCarSelectedValue] = useState('');
+  const [car, setCar] = useState({});
+  const [resetForm, setResetForm] = useState(false);
 
-  const createVehicle = async (values) => {
+  const getCarData = async (id) => {
     try {
-      const { data } = await newCar(values);
-      console.log(data);
-      formik.resetForm();
-      toast.success('Vehiculo creado correctamente', {
-        position: toast.POSITION.TOP_RIGHT,
+      const { data } = await getCar(id);
+      setCar(data);
+      const {
+        model,
+        year,
+        brand,
+        bodywork,
+        doors,
+        motor,
+        potency,
+        range,
+        battery_capacity,
+        charging_time,
+        top_speed,
+        brakes,
+        suspension,
+        img_url,
+        price,
+        description,
+      } = data;
+      formik.setValues({
+        ...formik.values,
+        model,
+        year,
+        brand,
+        bodywork,
+        doors,
+        motor,
+        potency,
+        range,
+        battery_capacity,
+        charging_time,
+        top_speed,
+        brakes,
+        suspension,
+        img_url,
+        price,
+        description,
       });
     } catch (error) {
       if (error.response) {
@@ -61,11 +81,84 @@ const NewVehicle = () => {
     }
   };
 
+  const resetFormik = () => {
+    formik.setValues({
+      ...formik.values,
+      model: '',
+      year: '',
+      brand: '',
+      bodywork: '',
+      doors: '',
+      motor: '',
+      potency: '',
+      range: '',
+      battery_capacity: '',
+      charging_time: '',
+      top_speed: '',
+      brakes: '',
+      suspension: '',
+      img_url: '',
+      price: '',
+      description: '',
+      idCar: '', // restablecer a ''
+    });
+    setIdCarSelectedValue(''); // Set the state value to ""
+  };
+
+  useEffect(() => {
+    const getAllVehicles = async () => {
+      try {
+        const { data } = await getCarsBySucursal(idSucursal);
+        setVehicles(data);
+      } catch (error) {
+        if (error.response) {
+          const { data } = error.response;
+          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
+    };
+    getAllVehicles();
+  }, []);
+
   const [selectedColor, setSelectedColor] = useState(colorOptions[0]);
 
   const handleColorChange = (color) => {
     setSelectedColor(color.hex.toUpperCase());
   };
+
+  useEffect(() => {
+    formik.setFieldValue('color', selectedColor);
+  }, [selectedColor]);
+
+  const createNewVehicle = async (values) => {
+    try {
+      const body = {
+        sucursal: values.sucursal,
+        vehicle: values,
+        color: values.color,
+        quantity: values.quantity,
+      };
+
+      const { data } = await newCarInSucursal(body);
+      toast.success('Vehiculo añadido', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      console.log(data);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
+  };
+
+  const addNewVehicle = async (values, idCar) => {};
 
   const formik = useFormik({
     initialValues: {
@@ -87,11 +180,22 @@ const NewVehicle = () => {
       description: '',
       color: selectedColor,
       sucursal: idSucursal,
+      quantity: '',
     },
-    // validationSchema: createVehicleV.alidation,
+    validationSchema: createVehicleValidation,
     onSubmit: (values) => {
-      // createVehicle(values);
+      // createVehicle(values)
+      // const selectedValue = parseInt(values.idCarSelected);
+      // values.idCarSelected = isNaN(selectedValue) ? null : selectedValue;
       console.log(values);
+      console.log(idCarSelectedValue);
+      if (
+        idCarSelectedValue === '' ||
+        idCarSelectedValue === null ||
+        isNaN(idCarSelectedValue)
+      ) {
+        createNewVehicle(values);
+      }
     },
   });
 
@@ -112,30 +216,45 @@ const NewVehicle = () => {
     setErrorShown(false);
   };
 
+  const handleSelectedVehicle = async (e) => {
+    resetFormik();
+    const selectedCarId = e.target.value;
+    setIdCarSelectedValue(selectedCarId);
+    if (selectedCarId) {
+      await getCarData(selectedCarId);
+    }
+  };
+
   return (
     <div className="bg-secondary-100 p-8 rounded-xl mb-4">
       <div>
         <h1 className=" text-2xl font-bold">Añadir un Vehiculo</h1>
         <div className="mt-5">
           <div style={{ backgroundColor: 'transparent' }} className="">
-            <h2 className=" text-xl mb-4 font-bold">Seleccione un Vehiculo</h2>
+            <h2 className=" text-xl mb-4 font-bold">
+              Seleccione un Vehiculo de los existentes si lo desea
+            </h2>
             <FormGroup>
               <Input
                 type="select"
-                name="bodywork"
+                name="idCarSelected"
+                onChange={handleSelectedVehicle} // Usar solo onChange
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
-                onChange={() => {}}
+                value={idCarSelectedValue}
               >
                 <option value="">Seleccione uno</option>
-                {bodyWorkData.map((option) => (
-                  <option value={option} key={option}>
-                    {option}
+                {vehicles.map((car) => (
+                  <option value={car.vehicle.id} key={car.vehicle.id}>
+                    {car.vehicle.model} - {car.vehicle.year}
                   </option>
                 ))}
               </Input>
             </FormGroup>
             <FormGroup>
-              <button className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none">
+              <button
+                className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
+                onClick={resetFormik}
+              >
                 Rehacer
               </button>
             </FormGroup>
@@ -481,42 +600,48 @@ const NewVehicle = () => {
 
         <div className="flex flex-wrap items-center justify-between mt-8">
           <div className="w-full  mt-4 sm:mt-0 space-x-2">
-            <div>
-              <FormGroup>
-                <div>
-                  <p>
-                    Imagen <span className="text-red-500">*</span>
-                  </p>
-                </div>
-                <div className="flex-1">
-                  <div className="relative mt-2">
-                    <img
-                      src="https://img.freepik.com/foto-gratis/negocios-finanzas-empleo-concepto-mujeres-emprendedoras-exitosas-joven-empresaria-segura-anteojos-mostrando-gesto-pulgar-arriba-sostenga-computadora-portatil-garantice-mejor-calidad-servicio_1258-59118.jpg"
-                      className="w-28 h-28 object-cover rounded-lg"
-                      alt="Imagen de una persona"
-                    />
-                    <label
-                      htmlFor="img_url"
-                      className="absolute bg-secondary-100 p-2 rounded-full hover:cursor-pointer -top-2 left-24"
-                    >
-                      <RiEdit2Line />
-                    </label>
-                    <input
-                      type="file"
-                      id="img_url"
-                      className="hidden"
-                      onChange={handleChange}
-                    />
+            {formik.values.img_url ? (
+              <div className="max-w-lg mx-auto">
+                <img src={formik.values.img_url} alt="" className="w-full" />
+              </div>
+            ) : (
+              <div>
+                <FormGroup>
+                  <div>
+                    <p>
+                      Imagen <span className="text-red-500">*</span>
+                    </p>
                   </div>
-                  <p className="text-gray-500 text-sm">
-                    Tipos de img permitidos: png, jpg, jpeg.
-                  </p>
-                </div>
-                {touched.img_url &&
-                  errors.img_url &&
-                  showErrorToast(errors.img_url)}
-              </FormGroup>
-            </div>
+                  <div className="flex-1">
+                    <div className="relative mt-2">
+                      <img
+                        src="https://img.freepik.com/foto-gratis/negocios-finanzas-empleo-concepto-mujeres-emprendedoras-exitosas-joven-empresaria-segura-anteojos-mostrando-gesto-pulgar-arriba-sostenga-computadora-portatil-garantice-mejor-calidad-servicio_1258-59118.jpg"
+                        className="w-28 h-28 object-cover rounded-lg"
+                        alt="Imagen de una persona"
+                      />
+                      <label
+                        htmlFor="img_url"
+                        className="absolute bg-secondary-100 p-2 rounded-full hover:cursor-pointer -top-2 left-24"
+                      >
+                        <RiEdit2Line />
+                      </label>
+                      <input
+                        type="file"
+                        id="img_url"
+                        className="hidden"
+                        onChange={handleChange}
+                      />
+                    </div>
+                    <p className="text-gray-500 text-sm">
+                      Tipos de img permitidos: png, jpg, jpeg.
+                    </p>
+                  </div>
+                  {touched.img_url &&
+                    errors.img_url &&
+                    showErrorToast(errors.img_url)}
+                </FormGroup>
+              </div>
+            )}
           </div>
         </div>
 
@@ -550,13 +675,33 @@ const NewVehicle = () => {
           </div>
         </div>
 
+        <div className="mb-10 mt-3">
+          <FormGroup>
+            <div>
+              <p>
+                Cantidad <span className="text-red-500">*</span>
+              </p>
+            </div>
+            <Input
+              type="number"
+              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+              placeholder="Numero de stock a agregar"
+              name="quantity"
+              value={values.quantity}
+              onChange={handleChange}
+              invalid={touched.quantity && !!errors.quantity}
+            />
+            {touched.quantity &&
+              errors.quantity &&
+              showErrorToast(errors.quantity)}
+          </FormGroup>
+        </div>
+
         <div className="flex justify-end">
           <button
             type="submit"
             className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
-            onClick={() => {
-              handleSubmit(); // Primera función
-            }}
+            onClick={resetErrorShown}
           >
             Guardar
           </button>
