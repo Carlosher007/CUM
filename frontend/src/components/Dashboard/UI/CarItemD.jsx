@@ -2,9 +2,14 @@ import React from 'react';
 import { FaCarBattery, GiBatteryPack } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { Col } from 'reactstrap';
+import Cookies from 'universal-cookie';
 import { urls } from '../../../assets/urls/urls';
+import { codeToColorName } from '../../../assets/color/colorUtils';
 
 const CarItemD = (props) => {
+  const cookies = new Cookies();
+  const rol = cookies.get('rol');
+
   const {
     model,
     year,
@@ -15,7 +20,36 @@ const CarItemD = (props) => {
     price,
     doors,
     id,
-  } = props.item;
+  } = props.item.vehicle;
+
+  const { quantity, color } = props.item;
+
+  const renderButtons = () => {
+    if (rol === 'Cliente') {
+      return (
+        <div className="text-center">
+          <Link to={`/dashboard/cars/${id}`}>
+            <button className="w-2/3 sm:w-full bg-primary text-black rounded-full py-2 px-4 font-semibold">
+              Cotizar
+            </button>
+          </Link>
+        </div>
+      );
+    } else {
+      return (
+        <div className="text-center">
+          <Link to={`/dashboard/edit-vehicle/${id}`}>
+            <button className="w-2/3 sm:w-full bg-primary text-black rounded-full py-2 px-4 font-semibold">
+              Editar
+            </button>
+          </Link>
+          {/* <button className="w-2/3 sm:w-full bg-red-500 text-white rounded-full py-2 px-4 font-semibold mr-2 mt-3">
+            Eliminar
+          </button> */}
+        </div>
+      );
+    }
+  };
 
   return (
     <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 p-2">
@@ -30,6 +64,9 @@ const CarItemD = (props) => {
           </h4>
           <h6 className="text-center mt-1 text-lg font-semibold">
             ${price} <span></span>
+          </h6>
+          <h6 className="text-center mt-1 text-lg font-semibold">
+            {codeToColorName(color)} <span></span>
           </h6>
 
           <div className="flex items-center justify-between mt-3 mb-4 text-white">
@@ -53,13 +90,7 @@ const CarItemD = (props) => {
             </div>
           </div>
 
-          <div className="text-center">
-            <Link to={`/dashboard/cars/${id}`}>
-              <button className="w-2/3 sm:w-full bg-primary text-black rounded-full py-2 px-4 font-semibold">
-                Cotizar
-              </button>
-            </Link>
-          </div>
+          {renderButtons()}
         </div>
       </div>
     </div>

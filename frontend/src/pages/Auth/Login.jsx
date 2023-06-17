@@ -138,6 +138,7 @@ const Login = () => {
         username: email,
         password,
       };
+      console.log(loginData);
 
       const response = await validateUser(loginData);
       console.log(response);

@@ -23,6 +23,7 @@ import Home from '../pages/Landing/Home';
 import NotFound from '../pages/Landing/NotFound';
 import Offices from '../pages/Landing/Offices';
 import PresentialQuote from '../pages/Landing/PresentialQuote';
+import EditVehicle from '../pages/Dashboard/EditVehicle';
 
 const Routers = () => {
   const cookies = new Cookies();
@@ -198,6 +199,14 @@ const Routers = () => {
           element={
             <FilterPage roles={[]}>
               <NewVehicle />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.editVehicle}
+          element={
+            <FilterPage roles={[]}>
+              <EditVehicle />
             </FilterPage>
           }
         />

@@ -1,23 +1,48 @@
 import { useFormik } from 'formik';
 import moment from 'moment';
 import React, { useContext, useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getSucursals } from '../../assets/api/sucursal.api';
+import { newUser } from '../../assets/api/user.api';
+import { urls } from '../../assets/urls/urls';
 import { createProfileValidation } from '../../assets/validation/CreateProfileValidation';
 
 const NewUser = () => {
+  const submitUser = async (values) => {
+    try {
+      const { data } = await newUser(values);
+      console.log(data);
+      formik.resetForm();
+      toast.success('Usuario creado correctamente', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
+  };
   const formik = useFormik({
     initialValues: {
+      id: '',
       email: '',
       rol: '',
       cellphone: '',
-      sucursal: '',
       full_name: '',
       address: '',
+      sucursal: '',
     },
-    validationSchema: createProfileValidation,
+    // validationSchema: createProfileValidation,
     onSubmit: (values) => {
+      values.sucursal = selectedSucursal; // Asignar el valor seleccionado al campo "sucursal"
+      values.sucursal = parseInt(selectedSucursal);
       console.log(values);
+      submitUser(values);
     },
   });
 
@@ -30,7 +55,9 @@ const NewUser = () => {
     'Cliente',
     'JefeTaller',
   ]);
+
   const [sucursals, setSucursals] = useState([]);
+  const [selectedSucursal, setSelectedSucursal] = useState('');
 
   const showErrorToast = (message) => {
     if (!errorShown) {
@@ -41,11 +68,20 @@ const NewUser = () => {
     }
   };
 
-
   useEffect(() => {
     const getSucursalsData = async () => {
-      const { data } = await getSucursals();
-      setSucursals(data);
+      try {
+        const { data } = await getSucursals();
+        setSucursals(data);
+      } catch (error) {
+        if (error.response) {
+          const { data } = error.response;
+          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     };
     getSucursalsData();
   }, []);
@@ -55,6 +91,23 @@ const NewUser = () => {
       <h1 className="text-xl text-gray-100">Nuevo Usuario</h1>
       <hr className="my-8 border-gray-500/30" />
       <form>
+        {/* CC */}
+        <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+          <div className="w-full md:w-1/4">
+            <p>Cedula</p>
+          </div>
+          <div className="flex-1">
+            <input
+              type="text"
+              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+              placeholder="Cedula"
+              name="id"
+              value={values.id}
+              onChange={handleChange}
+            />
+            {touched.id && errors.id && showErrorToast(errors.id)}
+          </div>
+        </div>
         {/* FULL NAME */}
         <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
           <div className="w-full md:w-1/4">
@@ -128,12 +181,15 @@ const NewUser = () => {
             <select
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
               name="sucursal"
-              value={values.sucursal}
-              onChange={handleChange}
+              value={selectedSucursal}
+              onChange={(event) => {
+                setSelectedSucursal(event.target.value);
+                handleChange(event);
+              }}
             >
               <option value="">Seleccione una sucursal</option>
               {sucursals.map((office) => (
-                <option value={office.city} key={office.id}>
+                <option value={office.id} key={office.id}>
                   {office.city}
                 </option>
               ))}
@@ -183,16 +239,26 @@ const NewUser = () => {
         </div>
       </form>
       <hr className="my-8 border-gray-500/30" />
-      <div className="flex justify-end">
-        <button
-          type="submit"
-          className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
-          onClick={() => {
-            handleSubmit(); // Primera función
-          }}
-        >
-          Guardar
-        </button>
+      <div className="flex justify-between">
+        <div className="flex justify-start">
+          <Link
+            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+            to={urls.allUsers}
+          >
+            <i class="ri-arrow-left-line"></i> Volver
+          </Link>
+        </div>
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+            onClick={() => {
+              handleSubmit(); // Primera función
+            }}
+          >
+            Guardar
+          </button>
+        </div>
       </div>
     </div>
   );

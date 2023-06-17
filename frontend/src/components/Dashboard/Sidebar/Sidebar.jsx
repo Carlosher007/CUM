@@ -18,7 +18,6 @@ const Sidebar = () => {
   const cookies = new Cookies();
   const userRole = cookies.get('rol');
   const token = cookies.get('token');
-  console.log(userRole);
 
   const handleLogout = async () => {
     try {
@@ -95,6 +94,11 @@ const Sidebar = () => {
           display: 'Crear Sucursal',
           role: ['Anyone'],
         },
+        {
+          path: urls.newUser,
+          display: 'Crear Usuario',
+          role: ['Anyone'],
+        },
       ],
     },
     {
@@ -103,22 +107,12 @@ const Sidebar = () => {
       sublinks: [
         {
           path: urls.seeCarsD,
-          display: 'Ver vehiculos de la empresa',
+          display: 'Ver vehiculos',
           role: ['Anyone'],
         },
         {
           path: urls.newVehicle,
-          display: 'Añadir un vehiculo a la empresa',
-          role: ['Anyone'],
-        },
-        {
-          path: urls.seeCarsD,
-          display: 'Ver vehiculos de la sucursal',
-          role: ['Anyone'],
-        },
-        {
-          path: urls.seeCarsD,
-          display: 'Añadir vehiculos a la sucursal',
+          display: 'Añadir un vehiculo',
           role: ['Anyone'],
         },
       ],

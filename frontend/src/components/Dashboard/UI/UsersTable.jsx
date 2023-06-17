@@ -1,11 +1,11 @@
 import { Menu, MenuButton, MenuItem } from '@szhsin/react-menu';
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { toast } from 'react-toastify';
 import { deleteUser } from '../../../assets/api/user.api';
 import { urls } from '../../../assets/urls/urls';
 
-const UsersTable = ({ data }) => {
-  console.log(data);
+const UsersTable = ({ data, updateUserList }) => {
 
   function convertToDate(dateString) {
     const parts = dateString.split('/');
@@ -16,10 +16,19 @@ const UsersTable = ({ data }) => {
   const handleDeleteUser = async (id) => {
     try {
       await deleteUser(id);
-      console.log('Usuario eliminado');
       // Aquí puedes actualizar la lista de usuarios llamando a la función que obtiene los usuarios nuevamente
+      toast.success('Usuario eliminado con exito', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      updateUserList();
     } catch (error) {
-      console.log('Error al eliminar el usuario', error);
+      if (error.response) {
+        const { data } = error.response;
+        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
     }
   };
 
@@ -66,9 +75,21 @@ const UsersTable = ({ data }) => {
   }, []);
 
   const truncateEmail = (email) => {
-    if (windowWidth >= 786 && windowWidth <= 1060) {
-      const atIndex = email.indexOf('@');
-      return email.substring(0, atIndex + 4) + '...';
+    if (typeof windowWidth === 'undefined') {
+      return email; // Retornar el email sin cambios si windowWidth es undefined
+    }
+    if (windowWidth >= 768 && windowWidth <= 1040) {
+      if (email.length <= 9) {
+        return email;
+      } else {
+        return email.substring(0, 10) + '...';
+      }
+    } else if (windowWidth >= 1040) {
+      if (email.length <= 16) {
+        return email;
+      } else {
+        return email.substring(0, 16) + '...';
+      }
     }
     return email;
   };
@@ -77,21 +98,26 @@ const UsersTable = ({ data }) => {
     <div>
       <div className="bg-secondary-100 p-6 rounded-xl">
         <div className="hidden md:grid grid-cols-1 md:grid-cols-6 mb-2 p-4">
+          <h5>Id</h5>
           <h5>Nombre</h5>
-          <h5>Email</h5>
           <h5>Rol</h5>
+          <h5>Email</h5>
           <h5>Celular</h5>
-          <h5>Ultima vez activo</h5>
-          <h5>Acciones</h5>
+          <h5>Direccion</h5>
         </div>
         {data.map((item) => (
           <div
-            key={item.full_name}
+            key={item.id}
             className="grid grid-cols-1 md:grid-cols-6 items-center mb-4 bg-secondary-900 p-4 rounded-xl"
           >
             <div>
+              <h5 className="md:hidden mt-6 text-white font-bold mb-2">Id</h5>
+              {/* <span>{convertToDate(item.last_login)}</span> */}
+              <span>{item.id}</span>
+            </div>
+            <div>
               <h5 className="md:hidden text-white font-bold mb-2">Nombre</h5>
-              <span>#{item.full_name}</span>
+              <span>{item.full_name}</span>
             </div>
             <div>
               <h5 className="md:hidden mt-6 text-white font-bold mb-2">Rol</h5>
@@ -108,13 +134,6 @@ const UsersTable = ({ data }) => {
                 Celular
               </h5>
               <span>{item.cellphone}</span>
-            </div>
-            <div>
-              <h5 className="md:hidden mt-6 text-white font-bold mb-2">
-                Ultima vez activo
-              </h5>
-              {/* <span>{convertToDate(item.last_login)}</span> */}
-              <span>{item.last_login}</span>
             </div>
             <div>
               <div>

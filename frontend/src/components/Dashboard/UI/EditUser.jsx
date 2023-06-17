@@ -1,11 +1,12 @@
 import React, { useEffect, useState } from 'react';
+import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { getUser } from '../../../assets/api/user.api';
 import Perfil from './Perfil';
 
 const EditUser = () => {
-  // const { id } = useParams();
-  const id = '1005945875';
+  const { id } = useParams();
+  // const id = '1005945875';
   const [user, setUser] = useState({});
 
   useEffect(() => {

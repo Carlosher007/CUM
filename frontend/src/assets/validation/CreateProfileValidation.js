@@ -12,4 +12,5 @@ export const createProfileValidation = yup.object().shape({
   full_name: yup.string().required('El nombre es obligatorio'),
   address: yup.string().required('La dirección es obligatoria'),
   sucursal: yup.string().required('La sucursal es obligatoria'),
+  id: yup.number().required('La cc es obligatoria')
 });

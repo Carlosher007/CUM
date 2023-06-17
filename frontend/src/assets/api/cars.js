@@ -1,9 +1,12 @@
 import axios from 'axios';
 
-const loginApi = axios.create({
+const path = axios.create({
   baseURL: 'http://localhost:8000/api/',
 });
 
-export const getCars = () => loginApi.get('vehicle/');
-export const getCar = (id) => loginApi.get(`vehicle/${id}`);
-export const newCar = (body) => loginApi.post('vehicle/',body)
+export const getCars = () => path.get('vehicle/');
+export const getCar = (id) => path.get(`vehicle/${id}`);
+export const newCar = (body) => path.post('vehicle/', body);
+export const newCarInSucursal = (body) =>
+  path.post('vehicle-sucursal/', body);
+export const updateCar = (body,id) => path.patch(`vehicle/${id}/`,body)
