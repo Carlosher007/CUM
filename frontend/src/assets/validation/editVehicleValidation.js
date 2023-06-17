@@ -1,6 +1,6 @@
 import * as yup from 'yup';
 
-export const createVehicleValidation = yup.object().shape({
+export const editVehicleValidation = yup.object().shape({
   model: yup.string().required('El modelo es obligatorio'),
   year: yup.string().required('El año es obligatorio'),
   brand: yup.string().required('La marca es obligatoria'),
@@ -18,6 +18,4 @@ export const createVehicleValidation = yup.object().shape({
   img_url: yup.string().required('La imagen es obligatoria'),
   price: yup.string().required('El precio es obligatorio'),
   description: yup.string().required('La descripcion es obligaotria'),
-  color: yup.string().required('El color es obligatorio'),
-  quantity: yup.string().required('La cantidad es obligatoria'),
 });

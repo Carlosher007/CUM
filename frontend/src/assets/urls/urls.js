@@ -20,5 +20,5 @@ export const urls = {
   newUser: '/dashboard/new-user',
   newSucursal: '/dashboard/new-sucursal',
   newVehicle:'/dashboard/new-vehicle',
-  editVehicle:'/dashboard/edit-vehicle/:id'
+  editVehicle:'/dashboard/edit-vehicle/:idVehicle'
 };

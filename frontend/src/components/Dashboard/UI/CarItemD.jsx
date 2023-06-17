@@ -9,7 +9,6 @@ import { codeToColorName } from '../../../assets/color/colorUtils';
 const CarItemD = (props) => {
   const cookies = new Cookies();
   const rol = cookies.get('rol');
-  console.log(props);
 
   const {
     model,
@@ -44,9 +43,9 @@ const CarItemD = (props) => {
               Editar
             </button>
           </Link>
-          <button className="w-2/3 sm:w-full bg-red-500 text-white rounded-full py-2 px-4 font-semibold mr-2 mt-3">
+          {/* <button className="w-2/3 sm:w-full bg-red-500 text-white rounded-full py-2 px-4 font-semibold mr-2 mt-3">
             Eliminar
-          </button>
+          </button> */}
         </div>
       );
     }

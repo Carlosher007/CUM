@@ -2,10 +2,16 @@ import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { CirclePicker } from 'react-color';
 import { RiEdit2Line } from 'react-icons/ri';
+import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
 import Cookies from 'universal-cookie';
-import { getCar, newCar, newCarInSucursal } from '../../assets/api/cars';
+import {
+  getCar,
+  newCar,
+  newCarInSucursal,
+  updateCar,
+} from '../../assets/api/cars';
 import {
   bodyWorkData,
   brakesData,
@@ -18,184 +24,79 @@ import {
   colorNameToCode,
   colorOptions,
 } from '../../assets/color/colorUtils';
-import { createVehicleValidation } from '../../assets/validation/createVehicleValidation';
-import { Link } from 'react-router-dom';
 import { urls } from '../../assets/urls/urls';
+import { editVehicleValidation } from '../../assets/validation/editVehicleValidation';
 
-const NewVehicle = () => {
-  const cookies = new Cookies();
-  const idSucursal = cookies.get('sucursal');
+const EditVehicle = () => {
+  const { idVehicle } = useParams();
 
-  const [vehicles, setVehicles] = useState([]);
-  const [idCarSelectedValue, setIdCarSelectedValue] = useState('');
-  const [car, setCar] = useState({});
-  const [resetForm, setResetForm] = useState(false);
-
-  const getCarData = async (id) => {
-    try {
-      const { data } = await getCar(id);
-      setCar(data);
-      const {
-        model,
-        year,
-        brand,
-        bodywork,
-        doors,
-        motor,
-        potency,
-        range,
-        battery_capacity,
-        charging_time,
-        top_speed,
-        brakes,
-        suspension,
-        img_url,
-        price,
-        description,
-      } = data;
-      formik.setValues({
-        ...formik.values,
-        model,
-        year,
-        brand,
-        bodywork,
-        doors,
-        motor,
-        potency,
-        range,
-        battery_capacity,
-        charging_time,
-        top_speed,
-        brakes,
-        suspension,
-        img_url,
-        price,
-        description,
-      });
-    } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      }
-    }
-  };
-
-  const resetFormik = () => {
-    setErrorShown(true);
-    formik.setValues({
-      ...formik.values,
-      model: '',
-      year: '',
-      brand: '',
-      bodywork: '',
-      doors: '',
-      motor: '',
-      potency: '',
-      range: '',
-      battery_capacity: '',
-      charging_time: '',
-      top_speed: '',
-      brakes: '',
-      suspension: '',
-      img_url:
-        'https://img.freepik.com/foto-gratis/superdeportivo-rojo-negro-palabra-superdeportivo-lateral_1340-23413.jpg?t=st=1686946509~exp=1686947109~hmac=66cf44ff6bc1a2e43aa90567092fbc768357a9df4fd8d07aa0695381794a4fa2',
-      price: '',
-      description: '',
-      idCar: '', // restablecer a ''
-      quantity: '',
-    });
-    setIdCarSelectedValue(''); // Set the state value to ""
-  };
-
-  const getAllVehicles = async () => {
-    try {
-      const { data } = await getCarsBySucursal(idSucursal);
-      setVehicles(data);
-    } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      }
-    }
-  };
+  const [carData, setCarData] = useState({});
+  const [urlImage, setUrlImage] = useState('');
 
   useEffect(() => {
-    getAllVehicles();
+    const getVehicleData = async () => {
+      try {
+        const { data } = await getCar(idVehicle);
+        setCarData(data);
+        setUrlImage(data.img_url)
+        const {
+          model,
+          year,
+          brand,
+          bodywork,
+          doors,
+          motor,
+          potency,
+          range,
+          battery_capacity,
+          charging_time,
+          top_speed,
+          brakes,
+          suspension,
+          img_url,
+          price,
+          description,
+          id,
+        } = data;
+        formik.setValues({
+          ...formik.values,
+          id,
+          model,
+          year,
+          brand,
+          bodywork,
+          doors,
+          motor,
+          potency,
+          range,
+          battery_capacity,
+          charging_time,
+          top_speed,
+          brakes,
+          suspension,
+          img_url,
+          price,
+          description,
+        });
+      } catch (error) {
+        if (error.response) {
+          const { data } = error.response;
+          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
+    };
+    getVehicleData();
   }, []);
 
-  const [selectedColor, setSelectedColor] = useState(colorOptions[0]);
-
-  const handleColorChange = (color) => {
-    setSelectedColor(color.hex.toUpperCase());
-  };
-
-  useEffect(() => {
-    formik.setFieldValue('color', selectedColor);
-  }, [selectedColor]);
-
-  const createNewVehicleInSucursal = async (values, carId) => {
+  const updateSelectedCar = async (values, id) => {
     try {
-      const body = {
-        sucursal: values.sucursal,
-        vehicle: carId,
-        color: values.color,
-        quantity: values.quantity,
-      };
-      console.log(body);
-
-      const { data } = await newCarInSucursal(body);
-      toast.success('Vehiculo añadido', {
+      const { data } = await updateCar(values, id);
+      toast.success('Vehiculo actualizado', {
         position: toast.POSITION.TOP_RIGHT,
       });
-      console.log(data);
-    } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      }
-    }
-  };
-
-  const addNewVehicle = async (values) => {
-    try {
-      const { data } = await newCar(values);
-      console.log(data);
-      return data.id; // Devolver el ID del carro añadido
-    } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      }
-    }
-  };
-
-  const addVehicleInSucursal = async (values, carId) => {
-    try {
-      const body = {
-        sucursal: parseInt(values.sucursal),
-        vehicle: parseInt(carId),
-        color: values.color,
-        quantity: values.quantity,
-      };
-      console.log(body);
-
-      const { data } = await newCarInSucursal(body);
-      toast.success('Vehiculo añadido', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-      console.log(data);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
@@ -209,6 +110,7 @@ const NewVehicle = () => {
 
   const formik = useFormik({
     initialValues: {
+      id: '',
       model: '',
       year: '',
       brand: '',
@@ -226,30 +128,10 @@ const NewVehicle = () => {
         'https://img.freepik.com/foto-gratis/superdeportivo-rojo-negro-palabra-superdeportivo-lateral_1340-23413.jpg?t=st=1686946509~exp=1686947109~hmac=66cf44ff6bc1a2e43aa90567092fbc768357a9df4fd8d07aa0695381794a4fa2',
       price: '',
       description: '',
-      color: selectedColor,
-      sucursal: idSucursal,
-      quantity: '',
     },
-    validationSchema: createVehicleValidation,
+    validationSchema: editVehicleValidation,
     onSubmit: async (values) => {
-      if (
-        idCarSelectedValue === '' ||
-        idCarSelectedValue === null ||
-        isNaN(idCarSelectedValue)
-      ) {
-        console.log('no existente');
-        // const carId = await addNewVehicle(values); // Añadir el carro y obtener su ID
-        const carId = 1;
-        if (carId) {
-          // await createNewVehicleInSucursal(values, carId); // Crear el vehículo en la sucursal con el ID del carro
-          resetFormik();
-          // await getAllVehicles();
-        }
-      } else {
-        console.log('existente');
-        await addVehicleInSucursal(values, idCarSelectedValue);
-        resetFormik();
-      }
+      updateSelectedCar(values, values.id);
     },
   });
 
@@ -270,49 +152,30 @@ const NewVehicle = () => {
     setErrorShown(false);
   };
 
-  const handleSelectedVehicle = async (e) => {
-    resetFormik();
-    const selectedCarId = e.target.value;
-    setIdCarSelectedValue(selectedCarId);
-    if (selectedCarId) {
-      await getCarData(selectedCarId);
+  const handleImageChange = (event) => {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+
+    reader.onloadend = () => {
+      const imageUrl = reader.result;
+      setUrlImage(imageUrl);
+    };
+
+    if (file) {
+      reader.readAsDataURL(file);
     }
+    console.log(urlImage)
   };
+
 
   return (
     <div className="bg-secondary-100 p-8 rounded-xl mb-4">
-      <div>
-        <h1 className=" text-2xl font-bold">Elegir un Vehiculo Existente</h1>
-        <div className="mt-5">
-          <div style={{ backgroundColor: 'transparent' }} className="">
-            <h2 className=" text-xl mb-4 font-bold">Seleccione</h2>
-            <FormGroup>
-              <Input
-                type="select"
-                name="idCarSelected"
-                onChange={handleSelectedVehicle} // Usar solo onChange
-                className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
-                value={idCarSelectedValue}
-              >
-                <option value="">Seleccione uno</option>
-                {vehicles.map((car) => (
-                  <option value={car.vehicle.id} key={car.vehicle.id}>
-                    {car.vehicle.model} - {car.vehicle.year}
-                  </option>
-                ))}
-              </Input>
-            </FormGroup>
-            <FormGroup>
-              <button
-                className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
-                onClick={resetFormik}
-              >
-                Rehacer
-              </button>
-            </FormGroup>
-          </div>
-        </div>
-      </div>
+      <h1 className=" text-2xl font-bold mb-10">
+        Editando el vehiculo:{' '}
+        <span className="text-primary">
+          {carData.model} - {carData.year}{' '}
+        </span>
+      </h1>
       <Form
         style={{ backgroundColor: 'transparent' }}
         className="mt-6"
@@ -335,7 +198,6 @@ const NewVehicle = () => {
                 value={values.model}
                 onChange={handleChange}
                 invalid={touched.model && !!errors.model}
-                disabled={!!idCarSelectedValue}
               />
               {touched.model && errors.model && showErrorToast(errors.model)}
             </FormGroup>
@@ -355,7 +217,6 @@ const NewVehicle = () => {
                 value={values.year}
                 onChange={handleChange}
                 invalid={touched.year && !!errors.year}
-                disabled={!!idCarSelectedValue}
               />
               {touched.year && errors.year && showErrorToast(errors.year)}
             </FormGroup>
@@ -375,7 +236,6 @@ const NewVehicle = () => {
                 value={values.brand}
                 onChange={handleChange}
                 invalid={touched.brand && !!errors.brand}
-                disabled={!!idCarSelectedValue}
               />
               {touched.brand && errors.brand && showErrorToast(errors.brand)}
             </FormGroup>
@@ -393,7 +253,6 @@ const NewVehicle = () => {
                 value={values.bodywork}
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
                 invalid={touched.bodywork && !!errors.bodywork}
               >
                 <option value="">Seleccione un tipo</option>
@@ -422,7 +281,6 @@ const NewVehicle = () => {
                 name="doors"
                 value={values.doors}
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
                 invalid={touched.doors && !!errors.doors}
               />
               {touched.doors && errors.doors && showErrorToast(errors.doors)}
@@ -441,7 +299,6 @@ const NewVehicle = () => {
                 value={values.motor}
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
                 invalid={touched.motor && !!errors.motor}
               >
                 <option value="">Seleccione un tipo</option>
@@ -468,7 +325,6 @@ const NewVehicle = () => {
                 name="potency"
                 value={values.potency}
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
                 invalid={touched.potency && !!errors.potency}
               />
               {touched.potency &&
@@ -490,7 +346,6 @@ const NewVehicle = () => {
                 name="range"
                 value={values.range}
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
                 invalid={touched.range && !!errors.range}
               />
               {touched.range && errors.range && showErrorToast(errors.range)}
@@ -509,7 +364,6 @@ const NewVehicle = () => {
                 placeholder="Capacidad de bateria"
                 name="battery_capacity"
                 value={values.battery_capacity}
-                disabled={!!idCarSelectedValue}
                 onChange={handleChange}
                 invalid={touched.battery_capacity && !!errors.battery_capacity}
               />
@@ -531,7 +385,6 @@ const NewVehicle = () => {
                 placeholder="Tiempo de carga"
                 name="charging_time"
                 value={values.charging_time}
-                disabled={!!idCarSelectedValue}
                 onChange={handleChange}
                 invalid={touched.charging_time && !!errors.charging_time}
               />
@@ -554,7 +407,6 @@ const NewVehicle = () => {
                 name="top_speed"
                 value={values.top_speed}
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
                 invalid={touched.top_speed && !!errors.top_speed}
               />
               {touched.top_speed &&
@@ -575,7 +427,6 @@ const NewVehicle = () => {
                 value={values.brakes}
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
                 invalid={touched.brakes && !!errors.brakes}
               >
                 <option value="">Seleccione un tipo</option>
@@ -601,7 +452,6 @@ const NewVehicle = () => {
                 value={values.suspension}
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
                 invalid={touched.suspension && !!errors.suspension}
               >
                 <option value="">Seleccione un tipo</option>
@@ -630,7 +480,6 @@ const NewVehicle = () => {
                 name="price"
                 value={values.price}
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
                 invalid={touched.price && !!errors.price}
               />
               {touched.price && errors.price && showErrorToast(errors.price)}
@@ -654,7 +503,6 @@ const NewVehicle = () => {
                   name="description"
                   value={values.description}
                   onChange={handleChange}
-                  disabled={!!idCarSelectedValue}
                   invalid={touched.description && !!errors.description}
                 />
                 {touched.description &&
@@ -669,26 +517,14 @@ const NewVehicle = () => {
           <div className="w-full  mt-4 sm:mt-0 space-x-2">
             {formik.values.img_url ? (
               <div className="max-w-lg mx-auto">
-                <img src={formik.values.img_url} alt="" className="w-full" />
-              </div>
-            ) : (
-              <div>
                 <FormGroup>
-                  <div>
-                    <p>
-                      Imagen <span className="text-red-500">*</span>
-                    </p>
-                  </div>
                   <div className="flex-1">
-                    <div className="relative mt-2">
-                      <img
-                        src="https://img.freepik.com/foto-gratis/negocios-finanzas-empleo-concepto-mujeres-emprendedoras-exitosas-joven-empresaria-segura-anteojos-mostrando-gesto-pulgar-arriba-sostenga-computadora-portatil-garantice-mejor-calidad-servicio_1258-59118.jpg"
-                        className="w-28 h-28 object-cover rounded-lg"
-                        alt="Imagen de una persona"
-                      />
+                    <div className="relative">
+                      <img src={urlImage} alt="" className="w-full" />
+
                       <label
                         htmlFor="img_url"
-                        className="absolute bg-secondary-100 p-2 rounded-full hover:cursor-pointer -top-2 left-24"
+                        className="absolute bg-secondary-100 p-2 rounded-full hover:cursor-pointer -top-2"
                       >
                         <RiEdit2Line />
                       </label>
@@ -696,8 +532,8 @@ const NewVehicle = () => {
                         type="file"
                         id="img_url"
                         className="hidden"
-                        disabled={!!idCarSelectedValue}
-                        onChange={handleChange}
+                        onChange={handleImageChange}
+                        // onChange={handleChange}
                       />
                     </div>
                     <p className="text-gray-500 text-sm">
@@ -709,60 +545,10 @@ const NewVehicle = () => {
                     showErrorToast(errors.img_url)}
                 </FormGroup>
               </div>
+            ) : (
+              <div></div>
             )}
           </div>
-        </div>
-
-        <div className="flex flex-wrap items-center justify-between mt-5">
-          <div className="w-full  mt-4 sm:mt-0 space-x-2">
-            <div>
-              <FormGroup>
-                <div>
-                  <p>
-                    Color <span className="text-red-500">*</span> :{' '}
-                    {selectedColor
-                      ? codeToColorName(selectedColor).charAt(0).toUpperCase() +
-                        codeToColorName(selectedColor).slice(1)
-                      : 'Sin definir'}
-                  </p>
-                </div>
-                <div className="my-4">
-                  <div className="color__options">
-                    <CirclePicker
-                      colors={colorOptions}
-                      color={selectedColor}
-                      onChangeComplete={handleColorChange}
-                      circleSize={30}
-                      circleSpacing={10}
-                    />
-                  </div>
-                </div>
-                {touched.color && errors.color && showErrorToast(errors.color)}
-              </FormGroup>
-            </div>
-          </div>
-        </div>
-
-        <div className="mb-10 mt-3">
-          <FormGroup>
-            <div>
-              <p>
-                Cantidad <span className="text-red-500">*</span>
-              </p>
-            </div>
-            <Input
-              type="number"
-              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder="Numero de stock a agregar"
-              name="quantity"
-              value={values.quantity}
-              onChange={handleChange}
-              invalid={touched.quantity && !!errors.quantity}
-            />
-            {touched.quantity &&
-              errors.quantity &&
-              showErrorToast(errors.quantity)}
-          </FormGroup>
         </div>
 
         <hr className="my-8 border-gray-500/30" />
@@ -790,4 +576,4 @@ const NewVehicle = () => {
   );
 };
 
-export default NewVehicle;
+export default EditVehicle;

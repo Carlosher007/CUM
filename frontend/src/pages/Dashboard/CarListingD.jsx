@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { BsSearch } from 'react-icons/bs';
 import ReactPaginate from 'react-paginate';
-import { toast } from 'react-toastify';
 import { Link } from 'react-router-dom';
-import { urls } from '../../assets/urls/urls';
+import { toast } from 'react-toastify';
 import {
   Col,
   Container,
@@ -14,13 +13,13 @@ import {
 } from 'reactstrap';
 import Cookies from 'universal-cookie';
 import { getCars } from '../../assets/api/cars';
-import { getSucursal } from '../../assets/api/sucursal.api';
+import { getCarsBySucursal, getSucursal } from '../../assets/api/sucursal.api';
 import carData from '../../assets/data/carData';
+import { urls } from '../../assets/urls/urls';
 import CarItemD from '../../components/Dashboard/UI/CarItemD';
-import { getCarsBySucursal } from '../../assets/api/sucursal.api';
 
 const CarListingD = () => {
-  const ITEMS_PER_PAGE = 5;
+  const ITEMS_PER_PAGE = 3;
 
   const cookies = new Cookies();
   const idSucursal = cookies.get('sucursal');
@@ -65,7 +64,6 @@ const CarListingD = () => {
       try {
         const { data } = await getCarsBySucursal(idSucursal);
         setDataCars(data);
-        console.log(data);
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
@@ -96,10 +94,16 @@ const CarListingD = () => {
     setSearchTerm(searchTerm);
     setCurrentPage(0);
   };
+  
 
   const paginatedCarData = sortedCarData
-    .filter((car) => car.vehicle.model.toLowerCase().includes(searchTerm))
+    .filter(
+      (car) =>
+        car.vehicle.model.toLowerCase().includes(searchTerm) ||
+        (car.vehicle.year && car.vehicle.year.toString().includes(searchTerm))
+    )
     .slice(offset, offset + ITEMS_PER_PAGE);
+
   return (
     <div className="bookings">
       <div className="text-center font-bold text-3xl bg-secondary-100 p-8 rounded-xl mb-8 booking__wrapper">
@@ -115,7 +119,7 @@ const CarListingD = () => {
             <Input
               type="text"
               className="py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder="Buscar por modelo"
+              placeholder="Buscar por modelo o año"
               onChange={handleSearch}
             />
           </div>
@@ -171,10 +175,8 @@ const CarListingD = () => {
         </div>
         <div className="flex justify-end mt-5">
           <Link to={urls.newVehicle}>
-            <button
-              className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
-            >
-              Crear Vehiclulo
+            <button className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors">
+              Añadir Vehiclulo
             </button>
           </Link>
         </div>

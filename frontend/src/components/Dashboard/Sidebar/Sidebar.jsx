@@ -94,6 +94,11 @@ const Sidebar = () => {
           display: 'Crear Sucursal',
           role: ['Anyone'],
         },
+        {
+          path: urls.newUser,
+          display: 'Crear Usuario',
+          role: ['Anyone'],
+        },
       ],
     },
     {

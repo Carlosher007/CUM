@@ -1,16 +1,16 @@
 import axios from 'axios';
 
-const loginApi = axios.create({
+const path = axios.create({
   baseURL: 'http://localhost:8000/api/',
 });
 
-export const getUsers = () => loginApi.get('user/');
+export const getUsers = () => path.get('user/');
 
-export const getUser = (id) => loginApi.get(`user/${id}`);
+export const getUser = (id) => path.get(`user/${id}`);
 
-export const deleteUser = (id) => loginApi.delete(`user/${id}`);
+export const deleteUser = (id) => path.delete(`user/${id}`);
 
 export const updateMyProfile = (id, body) =>
-  loginApi.patch(`user/${id}/`, body);
+  path.patch(`user/${id}/`, body);
 
-export const newUser = (body) => loginApi.post(`user/`, body);
+export const newUser = (body) => path.post(`user/`, body);

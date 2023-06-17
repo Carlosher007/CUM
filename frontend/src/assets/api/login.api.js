@@ -1,15 +1,15 @@
 import axios from 'axios';
 
-const loginApi = axios.create({
+const path = axios.create({
   baseURL: 'http://localhost:8000/api/',
 });
 
 export const validateUser = (credentials) =>
-  loginApi.post('validate-user/', credentials);
+  path.post('validate-user/', credentials);
 
-export const login = (credentials) => loginApi.post('login/', credentials);
+export const login = (credentials) => path.post('login/', credentials);
 
 export const sendEmail = (email) =>
-  loginApi.get('verification-code/', { params: { email } });
+  path.get('verification-code/', { params: { email } });
 
-export const logout = (token) => loginApi.get('logout/', { params: { token } });
+export const logout = (token) => path.get('logout/', { params: { token } });
