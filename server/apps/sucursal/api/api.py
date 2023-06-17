@@ -102,7 +102,9 @@ class VehicleSucursalApiView(viewsets.ModelViewSet):
     def create(self, request):
         vehicle_sucursal_serializer = VehicleSucursalSerializer(data=request.data)
         if vehicle_sucursal_serializer.is_valid():
-            return Response('Normal')
+            vehicle_sucursal_serializer.save()
+            return Response(vehicle_sucursal_serializer.data,
+                            status=status.HTTP_201_CREATED) 
         else:
             if 'non_field_errors' in vehicle_sucursal_serializer.errors:
                 if vehicle_sucursal_serializer.errors['non_field_errors'][0].code == 'unique':
@@ -111,8 +113,12 @@ class VehicleSucursalApiView(viewsets.ModelViewSet):
                         vehicle=vehicle_sucursal_serializer.data['vehicle'],
                         color=vehicle_sucursal_serializer.data['color']
                     ).first()
-                    print(vehicle.quantity+vehicle_sucursal_serializer.data['quantity'])
-                    return Response('Ya esya')
+
+                    vehicle.quantity = vehicle.quantity+vehicle_sucursal_serializer.data['quantity']
+                    vehicle.save()
+
+                    return Response(VehicleSucursalSerializer(vehicle).data,
+                                    status=status.HTTP_200_OK)
                 else:
                     return Response(vehicle_sucursal_serializer.errors,
                                     status=status.HTTP_400_BAD_REQUEST)
