@@ -176,7 +176,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
         ) : (
           <div className="flex">
             <button
-              className="bg-quaternary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors mr-10"
+              className="bg-quaternary/80 text-black py-2 px-4 rounded-lg hover:bg-quaternary transition-colors mr-10"
               onClick={() => {
                 resetErrorShown();
               }}
@@ -184,7 +184,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
               Cancelar
             </button>
             <button
-              className="bg-terciary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+              className="bg-terciary/80 text-black py-2 px-4 rounded-lg hover:bg-terciary transition-colors"
               onClick={() => {
                 resetErrorShown();
               }}
