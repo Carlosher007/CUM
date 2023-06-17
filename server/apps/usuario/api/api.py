@@ -34,23 +34,23 @@ class UserAPIView(viewsets.ModelViewSet):
         password = generate_verification_code()
 
         user_serializer = UserSerializer(data=request.data)
-        user_serializer.password = password
         if user_serializer.is_valid():
             email = user_serializer.validated_data['email']
-            try:
-                send_mail(
-                    'Contraseña',
-                    f'Tu contraseña es: {password}',
-                    'settings.EMAIL_HOST_USER',
-                    [email],
-                    fail_silently=False,
-                )
-                user_serializer.save()
-                return Response(user_serializer.data,
-                                status=status.HTTP_201_CREATED)
-            except:
-                return Response({'error':'No se logro enviar el email con la contraseña'},
-                               status=status.HTTP_400_BAD_REQUEST)
+            #try:
+            send_mail(
+                'Contraseña',
+                f'Tu contraseña es: {password}',
+                'settings.EMAIL_HOST_USER',
+                [email],
+                fail_silently=False,
+            )
+            user_serializer.validated_data['password']=password
+            user_serializer.create(user_serializer.validated_data)
+            return Response(user_serializer.data,
+                            status=status.HTTP_201_CREATED)
+            #except:
+                #return Response({'error':'No se logro enviar el email con la contraseña'},
+                               #status=status.HTTP_400_BAD_REQUEST)
         return Response(user_serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
         
