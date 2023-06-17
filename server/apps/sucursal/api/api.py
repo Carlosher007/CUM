@@ -72,7 +72,15 @@ class SucursalApiView(viewsets.ModelViewSet):
         except:
             return Response({'error':'La sucursal dada no existe'},
                             status=status.HTTP_400_BAD_REQUEST)
-    
+        
+    @action(detail=True, methods=['GET'], url_path='(?P<vehicle>\w+)/vehicle-colors')
+    def get_available_colors_vehicle(self, request, pk:int, vehicle:int):
+        available_colors_vehicle = VehicleSucursal.objects.filter(
+            sucursal=pk, vehicle=vehicle
+        ).values('color')
+        return Response(available_colors_vehicle,
+                        status=status.HTTP_200_OK)
+        
 class VehicleApiView(viewsets.ModelViewSet):
     serializer_class = VehicleSerializer
     queryset = Vehicle.objects.all()
