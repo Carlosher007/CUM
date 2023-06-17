@@ -99,6 +99,26 @@ class VehicleSucursalApiView(viewsets.ModelViewSet):
     serializer_class = VehicleSucursalSerializer
     queryset = VehicleSucursal.objects.all()
 
+    def create(self, request):
+        vehicle_sucursal_serializer = VehicleSucursalSerializer(data=request.data)
+        if vehicle_sucursal_serializer.is_valid():
+            return Response('Normal')
+        else:
+            if 'non_field_errors' in vehicle_sucursal_serializer.errors:
+                if vehicle_sucursal_serializer.errors['non_field_errors'][0].code == 'unique':
+                    vehicle = VehicleSucursal.objects.filter(
+                        sucursal=vehicle_sucursal_serializer.data['sucursal'],
+                        vehicle=vehicle_sucursal_serializer.data['vehicle'],
+                        color=vehicle_sucursal_serializer.data['color']
+                    ).first()
+                    print(vehicle.quantity+vehicle_sucursal_serializer.data['quantity'])
+                    return Response('Ya esya')
+                else:
+                    return Response(vehicle_sucursal_serializer.errors,
+                                    status=status.HTTP_400_BAD_REQUEST)
+            return Response(vehicle_sucursal_serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+
 class PartApiView(viewsets.ModelViewSet):
     serializer_class = PartSerializer
     queryset = Part.objects.all()

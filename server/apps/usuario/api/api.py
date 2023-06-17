@@ -32,9 +32,9 @@ class UserAPIView(viewsets.ModelViewSet):
 
     def create(self, request):
         password = generate_verification_code()
-        request.data['password'] = password
 
         user_serializer = UserSerializer(data=request.data)
+        user_serializer.password = password
         if user_serializer.is_valid():
             email = user_serializer.validated_data['email']
             try:
@@ -78,7 +78,7 @@ class LoginView(ObtainAuthToken):
                 return Response({'error':'Este usuario no puede iniciar sesion'},
                                 status=status.HTTP_401_UNAUTHORIZED)
         else:
-            return Response({'error':'Nombre de usuario o contraseña incorrectos'},
+            return Response(login_serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
 
 class EmailVerificationCodeView(APIView):
