@@ -8,7 +8,8 @@ import { codeToColorName } from '../../../assets/color/colorUtils';
 
 const CarItemD = (props) => {
   const cookies = new Cookies();
-  const rol = cookies.get('rol');
+  // const rol = cookies.get('rol');
+  const rol = 'Cliente'
 
   const {
     model,

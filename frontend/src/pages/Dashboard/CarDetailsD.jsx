@@ -138,7 +138,7 @@ const CarDetailsD = () => {
       <div>
         <div className="bg-secondary-100 p-8 rounded-xl mb-8">
           <h4 className="font-bold text-3xl ">Cotice su vehiculo ahora</h4>
-          <VirtualQuoteFormD slug={id} selectedColor={selectedColor} />
+          <VirtualQuoteFormD slug={id} selectedColor={selectedColor} price={car.price} />
         </div>
       </div>
     </div>

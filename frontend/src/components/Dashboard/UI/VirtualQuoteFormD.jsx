@@ -1,12 +1,20 @@
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
 import { getSucursals } from '../../../assets/api/sucursal.api';
+import { urls } from '../../../assets/urls/urls';
 import { virtualQuoteValidation } from '../../../assets/validation/VirtualQuoteValidation';
 
-const VirtualQuoteFormD = ({ slug, selectedColor }) => {
+const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
   const [sucursals, setSucursals] = useState([]);
+
+  const [showValueCotization, setShowValueCotization] = useState(false);
+  const [lifeSegure, setLifeSegure] = useState('')
+  const [valueMensualDue, setValueMensualDue] = useState('')
+  const tasa = 0.0185;
+  const [valueTotal, setValueTotal] = useState('')
 
   useEffect(() => {
     formik.setFieldValue('color', selectedColor); // Actualiza el valor en formik cuando selectedColor cambie
@@ -29,21 +37,39 @@ const VirtualQuoteFormD = ({ slug, selectedColor }) => {
     getSucursalsData();
   }, []);
 
+  const calculateQuote = async (values) => {
+    const lendValue = price - values.initial_dues;
+    const tasa = 0.0185; // Tasa del 1.85% en forma decimal
+    const numeroCuotas = values.number_dues;
+    const segureLife = 718000;
+
+    const dueValue =
+      (lendValue * tasa) / (1 - Math.pow(1 + tasa, -numeroCuotas));
+
+    console.log(dueValue)
+    const totalValue = dueValue + segureLife;
+    console.log(totalValue)
+    const roundedTotalValue = parseInt(Math.ceil(totalValue));
+
+    console.log(roundedTotalValue);
+
+    setLifeSegure(segureLife)
+    setValueMensualDue(dueValue)
+    setValueTotal(roundedTotalValue)
+    setShowValueCotization(true)
+  };
+
   const formik = useFormik({
     initialValues: {
-      name: '',
-      city: '',
-      cc: '',
-      phone: '',
-      email: '',
-      address: '',
-      password: '',
+      initial_dues: '',
+      number_dues: '',
       idCar: slug,
       color: selectedColor,
     },
     // validationSchema: virtualQuoteValidation,
     onSubmit: (values) => {
       console.log(values);
+      calculateQuote(values);
     },
   });
 
@@ -70,135 +96,103 @@ const VirtualQuoteFormD = ({ slug, selectedColor }) => {
       className="form"
       onSubmit={handleSubmit}
     >
-      <h6 className="font-bold mb-2">Datos Personales</h6>
-      <div className="flex flex-wrap items-center justify-between">
-        <div className="w-full sm:w-1/2 ">
-          <FormGroup className="w-full">
-            <FormText>Nombre</FormText>
+      <div className="mb-6">
+        <h3 className="font-bold text-xl mb-2">
+          Costo del vehiculo: <span className="text-primary">{price}</span>
+        </h3>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <FormGroup>
+            <div>
+              <p>
+                Cuota Inicial <span className="text-red-500">*</span>
+              </p>
+            </div>
             <Input
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
               type="text"
-              placeholder="Nombre"
-              name="name"
-              value={values.name}
+              placeholder="Valor cuota inicial"
+              name="initial_dues"
+              value={values.initial_dues}
               onChange={handleChange}
-              invalid={touched.name && !!errors.name}
+              invalid={touched.initial_dues && !!errors.initial_dues}
+              disabled={!!showValueCotization}
             />
-            {touched.name && errors.name && showErrorToast(errors.name)}
-          </FormGroup>
-          <FormGroup className="w-full">
-            <FormText>Telefono</FormText>
-            <Input
-              type="text"
-              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder="Telefono"
-              name="phone"
-              value={values.phone}
-              onChange={handleChange}
-              invalid={touched.phone && !!errors.phone}
-            />
-            {touched.phone && errors.phone && showErrorToast(errors.phone)}
+
+            {touched.initial_dues &&
+              errors.initial_dues &&
+              showErrorToast(errors.initial_dues)}
           </FormGroup>
         </div>
-        <div className="w-full sm:w-1/2 mt-4 sm:mt-0 space-x-2">
-          <FormGroup className="w-full ml-2">
-            <FormText>Dirección</FormText>
+        <div>
+          <FormGroup>
+            <div>
+              <p>
+                Numero de cuotas <span className="text-red-500">*</span>
+              </p>
+            </div>
             <Input
-              type="text"
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder="Direccion"
-              name="address"
-              value={values.address}
-              onChange={handleChange}
-              invalid={touched.address && !!errors.address}
-            />
-            {touched.address &&
-              errors.address &&
-              showErrorToast(errors.address)}
-          </FormGroup>
-          <FormGroup className="w-full ml-2">
-            <FormText>Cedula</FormText>
-            <Input
               type="text"
-              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder="Cedula"
-              name="cc"
-              value={values.cc}
+              placeholder="Numero de cuotas a pagar"
+              name="number_dues"
+              value={values.number_dues}
               onChange={handleChange}
-              invalid={touched.cc && !!errors.cc}
+              invalid={touched.number_dues && !!errors.number_dues}
+              disabled={!!showValueCotization}
             />
-            {touched.cc && errors.cc && showErrorToast(errors.cc)}
+            {touched.number_dues &&
+              errors.number_dues &&
+              showErrorToast(errors.number_dues)}
           </FormGroup>
         </div>
       </div>
 
-      <h6 className="font-bold mt-5">Datos para la Plataforma</h6>
-      <div className="flex flex-wrap items-center justify-between">
-        <div className="w-full sm:w-1/2 ">
-          <FormGroup className="w-full">
-            <FormText>Email</FormText>
-            <Input
-              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              type="email"
-              placeholder="Email"
-              name="email"
-              value={values.email}
-              onChange={handleChange}
-              invalid={touched.email && !!errors.email}
-            />
-            {touched.email && errors.email && showErrorToast(errors.email)}
-          </FormGroup>
-        </div>
-        <div className="w-full sm:w-1/2 mt-4 sm:mt-0 space-x-2">
-          <FormGroup className="w-full ml-2">
-            <FormText>Contraseña</FormText>
-            <Input
-              type="password"
-              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder="Contraseña"
-              name="password"
-              value={values.password}
-              onChange={handleChange}
-              invalid={touched.password && !!errors.password}
-              autoComplete="off"
-            />
-            {touched.password &&
-              errors.password &&
-              showErrorToast(errors.password)}
-          </FormGroup>
-        </div>
-        <div className="w-full sm:w-1/2 mt-4 sm:mt-0 space-x-2">
-          <FormGroup className="w-full ml-2">
-            <FormText>Sucursal</FormText>
-            <Input
-              type="select"
-              name="city"
-              value={values.city}
-              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
-              onChange={handleChange}
-              invalid={touched.city && !!errors.city}
-            >
-              <option value="">Seleccione una ciudad</option>
-              {sucursals.map((office) => (
-                <option value={office.city} key={office.id}>
-                  {office.city}
-                </option>
-              ))}
-            </Input>
-            {touched.city && errors.city && showErrorToast(errors.city)}
-          </FormGroup>
-        </div>
-      </div>
-      <div className="flex items-center justify-center flex-wrap mt-4">
-        <FormGroup className="w-1/4">
-          <button
-            className="btn find__car-btn"
-            type="submit"
-            onClick={resetErrorShown}
+      <hr className="my-8 border-gray-500/30" />
+      <div className="flex justify-between">
+        <div className="flex justify-start">
+          <Link
+            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+            to={urls.seeCarsD}
           >
-            Enviar
-          </button>
-        </FormGroup>
+            <i className="ri-arrow-left-line"></i> Volver
+          </Link>
+        </div>
+        {!showValueCotization ? (
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+              onClick={() => {
+                resetErrorShown();
+                handleSubmit(); // Primera función
+              }}
+            >
+              Guardar
+            </button>
+          </div>
+        ) : (
+          <div className="flex">
+            <button
+              className="bg-quaternary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors mr-10"
+              onClick={() => {
+                resetErrorShown();
+              }}
+            >
+              Cancelar
+            </button>
+            <button
+              className="bg-terciary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+              onClick={() => {
+                resetErrorShown();
+              }}
+            >
+              Enviar
+            </button>
+          </div>
+        )}
       </div>
     </Form>
   );

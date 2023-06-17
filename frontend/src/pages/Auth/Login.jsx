@@ -123,7 +123,7 @@ const Login = () => {
         toast.success(`¡Bienvenido, ${fullName}!`, {
           position: toast.POSITION.TOP_RIGHT,
         });
-      }, 2000);
+      }, 1500);
     } else {
       toast.error('Código de verificación incorrecto', {
         position: toast.POSITION.TOP_RIGHT,

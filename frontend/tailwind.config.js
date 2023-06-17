@@ -10,6 +10,8 @@ module.exports = {
           200: '#35363d',
           900: '#131517',
         },
+        terciary: '#32a852',
+        quaternary: '#E57373',
       },
     },
   },
