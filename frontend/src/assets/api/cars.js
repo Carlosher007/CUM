@@ -12,4 +12,4 @@ export const updateCar = (body, id) => path.patch(`vehicle/${id}/`, body);
 export const getColorsCar = (id, vehicle) =>
   path.get(`sucursal/${id}/${vehicle}/vehicle-colors/`);
 export const getCarByColor = (id, vehicle, color) =>
-  path.get(`sucursal/${id}/${vehicle}/${color}/vehicle-sucursal-id`);
+  path.get(`sucursal/${id}/${vehicle}/${color}/vehicle-sucursal-id/`);

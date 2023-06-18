@@ -1,10 +1,11 @@
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
 import Cookies from 'universal-cookie';
 import { getCarByColor } from '../../../assets/api/cars';
+import { createQuote } from '../../../assets/api/quote';
 import { getSucursals } from '../../../assets/api/sucursal.api';
 import { formatPrice } from '../../../assets/general/formatPrice';
 import { urls } from '../../../assets/urls/urls';
@@ -14,6 +15,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
   const cookies = new Cookies();
   const idClient = cookies.get('id');
   const idSucursal = cookies.get('sucursal');
+  const navigate = useNavigate();
 
   const [sucursals, setSucursals] = useState([]);
   const [showValueCotization, setShowValueCotization] = useState(false);
@@ -25,9 +27,9 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
   useEffect(() => {
     const getVehicleByColor = async () => {
       try {
-        const { data } = await getCarByColor(idSucursal, slug, selectedColor);
-        console.log(data);
-        formik.setFieldValue('vehicleSucursal', 1);
+        const colorSinNumeral = selectedColor.slice(1); // Utilizando slice())
+        const { data } = await getCarByColor(idSucursal, slug, colorSinNumeral);
+        formik.setFieldValue('vehicle_sucursal', data.id);
       } catch (error) {
         if (error) {
           const { data } = error.response;
@@ -79,14 +81,14 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     setValueTotal(roundedTotalValue);
     setShowValueCotization(true);
 
-    formik.setFieldValue('quote_value', roundedTotalValue);
+    formik.setFieldValue('quota_value', roundedTotalValue);
   };
 
   const formik = useFormik({
     initialValues: {
       initial_fee: '',
       num_installments: '',
-      quote_value: '',
+      quota_value: '',
       vehicle_sucursal: '',
       color: selectedColor,
       client: idClient,
@@ -121,20 +123,24 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
   };
 
   const handleQuote = () => {
-    // const sendQuote = async () => {
-    //   try {
-    //     const { data } = await getSucursals();
-    //     setSucursals(data);
-    //   } catch (error) {
-    //     if (error) {
-    //       const { data } = error.response;
-    //       toast.error(data.error, {
-    //         position: toast.POSITION.TOP_RIGHT,
-    //       });
-    //     }
-    //   }
-    // };
-    // sendQuote();
+    const sendQuote = async () => {
+      try {
+        const { data } = await createQuote(values);
+        console.log(data);
+        toast.success('Se agrego la cotizacion del carro', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        navigate(urls.seeCars)
+      } catch (error) {
+        if (error) {
+          const { data } = error.response;
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
+    };
+    sendQuote();
     console.log(values);
   };
 
