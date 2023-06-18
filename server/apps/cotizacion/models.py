@@ -1,4 +1,6 @@
 from django.db import models
+from django.db.models import Count, Max
+from apps.usuario.models import User
 
 class Quotation(models.Model):
     vehicle_sucursal = models.ForeignKey('sucursal.VehicleSucursal',
@@ -12,6 +14,17 @@ class Quotation(models.Model):
     class Meta:
         db_table = 'quotation'
 
+    def save(self, *args, **kwargs):
+        super(Quotation, self).save(*args, **kwargs)
+        best_seller = AssignedQuote.objects.values('seller').annotate(
+            count=Count('quotation')
+        ).order_by('count').first()
+
+        best_seller = User.objects.get(pk=best_seller['seller'])
+
+        assigned_quote = AssignedQuote(quotation=self, seller=best_seller)
+        assigned_quote.save()
+
 class AssignedQuote(models.Model):
     STATE_CHOICES = (
         ("IN_PROGRESS", "IN_PROGRESS"),
@@ -24,7 +37,9 @@ class AssignedQuote(models.Model):
                                      on_delete=models.CASCADE,
                                      primary_key=True)
     seller = models.ForeignKey('usuario.User', on_delete=models.CASCADE)
-    state = models.CharField(max_length=100, choices=STATE_CHOICES)
+    state = models.CharField(max_length=100, 
+                             choices=STATE_CHOICES,
+                             default='IN_PROGRESS')
 
     class Meta:
         db_table = 'assigned_quote'
