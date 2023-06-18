@@ -21,6 +21,10 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
   const [valueTotal, setValueTotal] = useState('');
 
   useEffect(() => {
+
+  },[])
+
+  useEffect(() => {
     formik.setFieldValue('color', selectedColor); // Actualiza el valor en formik cuando selectedColor cambie
   }, [selectedColor]);
 
@@ -48,7 +52,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     const segureLife = 71800;
 
     const dueValue =
-      (lendValue * tasa) / (1 - Math.pow(1 + tasa, -(numeroCuotas - 1)));
+      (lendValue * tasa) / (1 - Math.pow(1 + tasa, -(numeroCuotas)));
     const roundedDueValue = parseInt(Math.ceil(dueValue));
 
     const totalValue = dueValue + segureLife;
@@ -58,14 +62,16 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     setValueMensualDue(roundedDueValue);
     setValueTotal(roundedTotalValue);
     setShowValueCotization(true);
+
+    formik.setFieldValue('quote_value', roundedTotalValue); 
   };
 
   const formik = useFormik({
     initialValues: {
       initial_fee: '',
       num_installments: '',
-      quote_value: {valueTotal},
-      vehicle_sucursal: slug,
+      quote_value: '',
+      vehicle_sucursal: '',
       color: selectedColor,
       client: idClient,
     },
