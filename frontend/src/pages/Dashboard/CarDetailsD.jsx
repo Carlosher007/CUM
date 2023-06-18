@@ -2,16 +2,20 @@ import React, { useEffect, useState } from 'react';
 import { CirclePicker } from 'react-color';
 import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import { getCar } from '../../assets/api/cars';
+import Cookies from 'universal-cookie';
+import { getCar, getColorsCar } from '../../assets/api/cars';
 import { codeToColorName, colorOptions } from '../../assets/color/colorUtils';
-import VirtualQuoteFormD from '../../components/Dashboard/UI/VirtualQuoteFormD';
 import { formatPrice } from '../../assets/general/formatPrice';
+import VirtualQuoteFormD from '../../components/Dashboard/UI/VirtualQuoteFormD';
 
 const CarDetailsD = () => {
+  const cookies = new Cookies();
+  const idSucursal = cookies.get('sucursal')
   const { id } = useParams();
 
   const [car, setCar] = useState({});
   const [selectedColor, setSelectedColor] = useState(colorOptions[0]);
+  const [availableColors, setAvailableColors] = useState([]);
 
   const handleColorChange = (color) => {
     setSelectedColor(color.hex.toUpperCase());
@@ -22,7 +26,6 @@ const CarDetailsD = () => {
       try {
         const { data } = await getCar(id);
         setCar(data);
-        console.log(data);
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
@@ -34,6 +37,23 @@ const CarDetailsD = () => {
       }
     };
     getCarData();
+
+    const getAvailableColors = async () => {
+      try {
+        const { data } = await getColorsCar(idSucursal,id);
+        const colors = data.map((obj) => obj.color);
+        setAvailableColors(colors);
+      } catch (error) {
+        if (error.response) {
+          const { data } = error.response;
+          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
+    };
+    getAvailableColors();
   }, []);
 
   return (
@@ -57,7 +77,7 @@ const CarDetailsD = () => {
             <div className="flex items-center gap-5 ">
               <div className="color__options">
                 <CirclePicker
-                  colors={colorOptions}
+                  colors={availableColors}
                   color={selectedColor}
                   onChangeComplete={handleColorChange}
                   circleSize={30}
@@ -139,7 +159,11 @@ const CarDetailsD = () => {
       <div>
         <div className="bg-secondary-100 p-8 rounded-xl mb-8">
           <h4 className="font-bold text-3xl ">Cotice su vehiculo ahora</h4>
-          <VirtualQuoteFormD slug={id} selectedColor={selectedColor} price={car.price} />
+          <VirtualQuoteFormD
+            slug={id}
+            selectedColor={selectedColor}
+            price={car.price}
+          />
         </div>
       </div>
     </div>

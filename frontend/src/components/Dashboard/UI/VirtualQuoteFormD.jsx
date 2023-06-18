@@ -4,9 +4,9 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
 import { getSucursals } from '../../../assets/api/sucursal.api';
+import { formatPrice } from '../../../assets/general/formatPrice';
 import { urls } from '../../../assets/urls/urls';
 import { virtualQuoteValidation } from '../../../assets/validation/VirtualQuoteValidation';
-import { formatPrice } from '../../../assets/general/formatPrice';
 
 const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
   const [sucursals, setSucursals] = useState([]);
@@ -48,12 +48,8 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
       (lendValue * tasa) / (1 - Math.pow(1 + tasa, -(numeroCuotas - 1)));
     const roundedDueValue = parseInt(Math.ceil(dueValue));
 
-    console.log(dueValue);
     const totalValue = dueValue + segureLife;
-    console.log(totalValue);
     const roundedTotalValue = parseInt(Math.ceil(totalValue));
-
-    console.log(roundedTotalValue);
 
     setLifeSegure(segureLife);
     setValueMensualDue(roundedDueValue);
@@ -68,9 +64,9 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
       idCar: slug,
       color: selectedColor,
     },
-    // validationSchema: virtualQuoteValidation,
+    validationSchema: virtualQuoteValidation,
     onSubmit: (values) => {
-      console.log(values);
+      console.log('submit');
       calculateQuote(values);
     },
   });
@@ -92,7 +88,28 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     setErrorShown(false);
   };
 
-  
+  const handleCancel = () => {
+    setShowValueCotization(false);
+    console.log('cancel');
+  };
+
+  const handleQuote = () => {
+    const sendQuote = async () => {
+      try {
+        const { data } = await getSucursals();
+        setSucursals(data);
+      } catch (error) {
+        if (error) {
+          const { data } = error.response;
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
+    };
+    sendQuote();
+  };
+
   return (
     <Form
       style={{ backgroundColor: 'transparent' }}
@@ -101,7 +118,8 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     >
       <div className="mb-6">
         <h3 className="font-bold text-xl mb-2">
-          Costo del vehiculo: <span className="text-primary">{formatPrice(price)}</span>
+          Costo del vehiculo:{' '}
+          <span className="text-primary">{formatPrice(price)}</span>
         </h3>
       </div>
 
@@ -161,20 +179,34 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
           <div className="grid grid-cols-1 md:grid-cols-1 gap-4 text-lg">
             <div>
               <p>
+                Valor de la cuota inicial:{' '}
+                <span className="text-primary/60">
+                  {formatPrice(values.initial_dues)}
+                </span>
+              </p>
+            </div>
+            <div>
+              <p>
                 Valor de la cutoa mensual:{' '}
-                <span className="text-primary/60">{formatPrice(valueMensualDue)}</span>
+                <span className="text-primary/60">
+                  {formatPrice(valueMensualDue)}
+                </span>
               </p>
             </div>
             <div>
               <p>
                 Valor del seguro de vida:{' '}
-                <span className="text-primary/60">{formatPrice(lifeSegure)}</span>
+                <span className="text-primary/60">
+                  {formatPrice(lifeSegure)}
+                </span>
               </p>
             </div>
             <div>
               <p>
                 Valor total:{' '}
-                <span className="text-primary/60">{formatPrice(valueTotal)}</span>
+                <span className="text-primary/60">
+                  {formatPrice(valueTotal)}
+                </span>
               </p>
             </div>
           </div>
@@ -198,32 +230,27 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
             <button
               type="submit"
               className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
-              onClick={() => {
-                resetErrorShown();
-                handleSubmit(); // Primera función
-              }}
+              onClick={resetErrorShown}
             >
               Cotizar
             </button>
           </div>
         ) : (
           <div className="flex">
-            <button
+            <p
               className="bg-quaternary/80 text-black py-2 px-4 rounded-lg hover:bg-quaternary transition-colors mr-10"
-              onClick={() => {
-                resetErrorShown();
-              }}
+              onClick={handleCancel}
+              type="button"
             >
               Cancelar
-            </button>
-            <button
+            </p>
+            <p
               className="bg-terciary/80 text-black py-2 px-4 rounded-lg hover:bg-terciary transition-colors"
-              onClick={() => {
-                resetErrorShown();
-              }}
+              onClick={handleQuote}
+              type="button"
             >
               Enviar
-            </button>
+            </p>
           </div>
         )}
       </div>
