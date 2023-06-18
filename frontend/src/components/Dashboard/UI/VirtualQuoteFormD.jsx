@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
 import Cookies from 'universal-cookie';
+import { getCarByColor } from '../../../assets/api/cars';
 import { getSucursals } from '../../../assets/api/sucursal.api';
 import { formatPrice } from '../../../assets/general/formatPrice';
 import { urls } from '../../../assets/urls/urls';
@@ -12,6 +13,7 @@ import { virtualQuoteValidation } from '../../../assets/validation/VirtualQuoteV
 const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
   const cookies = new Cookies();
   const idClient = cookies.get('id');
+  const idSucursal = cookies.get('sucursal');
 
   const [sucursals, setSucursals] = useState([]);
   const [showValueCotization, setShowValueCotization] = useState(false);
@@ -21,8 +23,22 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
   const [valueTotal, setValueTotal] = useState('');
 
   useEffect(() => {
-
-  },[])
+    const getVehicleByColor = async () => {
+      try {
+        const { data } = await getCarByColor(idSucursal, slug, selectedColor);
+        console.log(data);
+        formik.setFieldValue('vehicleSucursal', 1);
+      } catch (error) {
+        if (error) {
+          const { data } = error.response;
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
+    };
+    getVehicleByColor();
+  }, [selectedColor]);
 
   useEffect(() => {
     formik.setFieldValue('color', selectedColor); // Actualiza el valor en formik cuando selectedColor cambie
@@ -52,7 +68,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     const segureLife = 71800;
 
     const dueValue =
-      (lendValue * tasa) / (1 - Math.pow(1 + tasa, -(numeroCuotas)));
+      (lendValue * tasa) / (1 - Math.pow(1 + tasa, -numeroCuotas));
     const roundedDueValue = parseInt(Math.ceil(dueValue));
 
     const totalValue = dueValue + segureLife;
@@ -63,7 +79,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     setValueTotal(roundedTotalValue);
     setShowValueCotization(true);
 
-    formik.setFieldValue('quote_value', roundedTotalValue); 
+    formik.setFieldValue('quote_value', roundedTotalValue);
   };
 
   const formik = useFormik({
