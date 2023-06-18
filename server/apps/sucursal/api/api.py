@@ -81,7 +81,7 @@ class SucursalApiView(viewsets.ModelViewSet):
         return Response(available_colors_vehicle,
                         status=status.HTTP_200_OK)
     
-    @action(detail=True, methods=['GET'], url_path='(?P<vehicle>\w+)//(?P<color>\w+)/vehicle-sucursal-id')
+    @action(detail=True, methods=['GET'], url_path='(?P<vehicle>\w+)/(?P<color>\w+)/vehicle-sucursal-id')
     def get_id_vehicle_sucursal(self, request, pk:int, vehicle:int, color:str):
         vehicle = Vehicle.objects.filter(id=vehicle)
         if vehicle.exists():
@@ -94,7 +94,7 @@ class SucursalApiView(viewsets.ModelViewSet):
                 return Response(VehicleSucursalSerializer(vehicle_sucursal).data,
                                 status=status.HTTP_200_OK)
 
-            return Response({'error': 'No existe un vehiculo en la sucursal dada que coincida con los parametros dados'},
+            return Response({'error': 'No existe un vehiculo en la sucursal dada que coincida con los parametros dados o la sucursal no existe'},
                             status=status.HTTP_400_BAD_REQUEST)
 
         return Response({'error': 'No existe un vehiculo que coincida con la id dada'},
