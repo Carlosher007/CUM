@@ -1,7 +1,7 @@
 import * as yup from 'yup';
 
 export const virtualQuoteValidation = yup.object().shape({
-  initial_dues: yup
+  initial_fee: yup
     .string()
     .required('El valor de cuotas iniciales es obligatorio')
     .test(
@@ -14,7 +14,7 @@ export const virtualQuoteValidation = yup.object().shape({
       'El valor de cuotas iniciales debe ser mínimo de 1 millón',
       (value) => parseInt(value) >= 1000000
     ),
-  number_dues: yup
+  num_installments: yup
     .string()
     .required('El valor del número de cuotas es obligatorio')
     .test(

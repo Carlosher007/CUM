@@ -3,14 +3,17 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
+import Cookies from 'universal-cookie';
 import { getSucursals } from '../../../assets/api/sucursal.api';
 import { formatPrice } from '../../../assets/general/formatPrice';
 import { urls } from '../../../assets/urls/urls';
 import { virtualQuoteValidation } from '../../../assets/validation/VirtualQuoteValidation';
 
 const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
-  const [sucursals, setSucursals] = useState([]);
+  const cookies = new Cookies();
+  const idClient = cookies.get('id');
 
+  const [sucursals, setSucursals] = useState([]);
   const [showValueCotization, setShowValueCotization] = useState(false);
   const [lifeSegure, setLifeSegure] = useState('');
   const [valueMensualDue, setValueMensualDue] = useState('');
@@ -39,10 +42,10 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
   }, []);
 
   const calculateQuote = async (values) => {
-    const lendValue = price - values.initial_dues;
+    const lendValue = price - values.initial_fee;
     const tasa = 0.0185; // Tasa del 1.85% en forma decimal
-    const numeroCuotas = values.number_dues;
-    const segureLife = 718000;
+    const numeroCuotas = values.num_installments;
+    const segureLife = 71800;
 
     const dueValue =
       (lendValue * tasa) / (1 - Math.pow(1 + tasa, -(numeroCuotas - 1)));
@@ -59,10 +62,12 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
 
   const formik = useFormik({
     initialValues: {
-      initial_dues: '',
-      number_dues: '',
-      idCar: slug,
+      initial_fee: '',
+      num_installments: '',
+      quote_value: {valueTotal},
+      vehicle_sucursal: slug,
       color: selectedColor,
+      client: idClient,
     },
     validationSchema: virtualQuoteValidation,
     onSubmit: (values) => {
@@ -94,20 +99,21 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
   };
 
   const handleQuote = () => {
-    const sendQuote = async () => {
-      try {
-        const { data } = await getSucursals();
-        setSucursals(data);
-      } catch (error) {
-        if (error) {
-          const { data } = error.response;
-          toast.error(data.error, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        }
-      }
-    };
-    sendQuote();
+    // const sendQuote = async () => {
+    //   try {
+    //     const { data } = await getSucursals();
+    //     setSucursals(data);
+    //   } catch (error) {
+    //     if (error) {
+    //       const { data } = error.response;
+    //       toast.error(data.error, {
+    //         position: toast.POSITION.TOP_RIGHT,
+    //       });
+    //     }
+    //   }
+    // };
+    // sendQuote();
+    console.log(values);
   };
 
   return (
@@ -135,16 +141,16 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
               type="text"
               placeholder="Valor cuota inicial"
-              name="initial_dues"
-              value={values.initial_dues}
+              name="initial_fee"
+              value={values.initial_fee}
               onChange={handleChange}
-              invalid={touched.initial_dues && !!errors.initial_dues}
+              invalid={touched.initial_fee && !!errors.initial_fee}
               disabled={!!showValueCotization}
             />
 
-            {touched.initial_dues &&
-              errors.initial_dues &&
-              showErrorToast(errors.initial_dues)}
+            {touched.initial_fee &&
+              errors.initial_fee &&
+              showErrorToast(errors.initial_fee)}
           </FormGroup>
         </div>
         <div>
@@ -158,15 +164,15 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
               type="text"
               placeholder="Numero de cuotas a pagar"
-              name="number_dues"
-              value={values.number_dues}
+              name="num_installments"
+              value={values.num_installments}
               onChange={handleChange}
-              invalid={touched.number_dues && !!errors.number_dues}
+              invalid={touched.num_installments && !!errors.num_installments}
               disabled={!!showValueCotization}
             />
-            {touched.number_dues &&
-              errors.number_dues &&
-              showErrorToast(errors.number_dues)}
+            {touched.num_installments &&
+              errors.num_installments &&
+              showErrorToast(errors.num_installments)}
           </FormGroup>
         </div>
       </div>
@@ -181,7 +187,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
               <p>
                 Valor de la cuota inicial:{' '}
                 <span className="text-primary/60">
-                  {formatPrice(values.initial_dues)}
+                  {formatPrice(values.initial_fee)}
                 </span>
               </p>
             </div>
