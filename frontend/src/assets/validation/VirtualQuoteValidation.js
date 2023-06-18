@@ -1,24 +1,31 @@
 import * as yup from 'yup';
 
 export const virtualQuoteValidation = yup.object().shape({
-  name: yup.string().required('El nombre es obligatorio'),
-  sucursal: yup.string().required('La sucursal es obligatoria'),
-  cc: yup
+  initial_fee: yup
     .string()
-    .required('El número de cédula es obligatorio'),
-  phone: yup
+    .required('El valor de cuotas iniciales es obligatorio')
+    .test(
+      'is-number',
+      'El valor de cuotas iniciales debe ser un número',
+      (value) => !isNaN(value)
+    )
+    .test(
+      'minimum-value',
+      'El valor de cuotas iniciales debe ser mínimo de 1 millón',
+      (value) => parseInt(value) >= 1000000
+    ),
+  num_installments: yup
     .string()
-    .required('El número de teléfono es obligatorio'),
-  email: yup
-    .string()
-    .email('El correo electrónico no es válido')
-    .required('El correo electrónico es obligatorio'),
-  address: yup.string().required('La dirección es obligatoria'),
-  // password: yup
-  //   .string()
-  //   .required('La contraseña es obligatoria')
-  //   .matches(
-  //     /^(?=.*\d).{6,15}$/,
-  //     'La contraseña debe tener entre 6 y 15 caracteres y al menos un número'
-  //   ),
+    .required('El valor del número de cuotas es obligatorio')
+    .test(
+      'valid-number',
+      'El número de cuotas debe estar entre 2 y 24',
+      (value) => {
+        if (!isNaN(value)) {
+          const numberDues = parseInt(value);
+          return numberDues > 1 && numberDues <= 24;
+        }
+        return false;
+      }
+    ),
 });

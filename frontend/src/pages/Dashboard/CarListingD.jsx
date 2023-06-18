@@ -17,6 +17,7 @@ import { getCarsBySucursal, getSucursal } from '../../assets/api/sucursal.api';
 import carData from '../../assets/data/carData';
 import { urls } from '../../assets/urls/urls';
 import CarItemD from '../../components/Dashboard/UI/CarItemD';
+import { formatPrice } from '../../assets/general/formatPrice';
 
 const CarListingD = () => {
   const ITEMS_PER_PAGE = 3;

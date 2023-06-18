@@ -1,12 +1,46 @@
 import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
+import Cookies from 'universal-cookie';
+import { getCarByColor } from '../../../assets/api/cars';
+import { createQuote } from '../../../assets/api/quote';
 import { getSucursals } from '../../../assets/api/sucursal.api';
+import { formatPrice } from '../../../assets/general/formatPrice';
+import { urls } from '../../../assets/urls/urls';
 import { virtualQuoteValidation } from '../../../assets/validation/VirtualQuoteValidation';
 
-const VirtualQuoteFormD = ({ slug, selectedColor }) => {
+const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
+  const cookies = new Cookies();
+  const idClient = cookies.get('id');
+  const idSucursal = cookies.get('sucursal');
+  const navigate = useNavigate();
+
   const [sucursals, setSucursals] = useState([]);
+  const [showValueCotization, setShowValueCotization] = useState(false);
+  const [lifeSegure, setLifeSegure] = useState('');
+  const [valueMensualDue, setValueMensualDue] = useState('');
+  const tasa = 0.0185;
+  const [valueTotal, setValueTotal] = useState('');
+
+  useEffect(() => {
+    const getVehicleByColor = async () => {
+      try {
+        const colorSinNumeral = selectedColor.slice(1); // Utilizando slice())
+        const { data } = await getCarByColor(idSucursal, slug, colorSinNumeral);
+        formik.setFieldValue('vehicle_sucursal', data.id);
+      } catch (error) {
+        if (error) {
+          const { data } = error.response;
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
+    };
+    getVehicleByColor();
+  }, [selectedColor]);
 
   useEffect(() => {
     formik.setFieldValue('color', selectedColor); // Actualiza el valor en formik cuando selectedColor cambie
@@ -29,21 +63,40 @@ const VirtualQuoteFormD = ({ slug, selectedColor }) => {
     getSucursalsData();
   }, []);
 
+  const calculateQuote = async (values) => {
+    const lendValue = price - values.initial_fee;
+    const tasa = 0.0185; // Tasa del 1.85% en forma decimal
+    const numeroCuotas = values.num_installments;
+    const segureLife = 71800;
+
+    const dueValue =
+      (lendValue * tasa) / (1 - Math.pow(1 + tasa, -numeroCuotas));
+    const roundedDueValue = parseInt(Math.ceil(dueValue));
+
+    const totalValue = dueValue + segureLife;
+    const roundedTotalValue = parseInt(Math.ceil(totalValue));
+
+    setLifeSegure(segureLife);
+    setValueMensualDue(roundedDueValue);
+    setValueTotal(roundedTotalValue);
+    setShowValueCotization(true);
+
+    formik.setFieldValue('quota_value', roundedTotalValue);
+  };
+
   const formik = useFormik({
     initialValues: {
-      name: '',
-      city: '',
-      cc: '',
-      phone: '',
-      email: '',
-      address: '',
-      password: '',
-      idCar: slug,
+      initial_fee: '',
+      num_installments: '',
+      quota_value: '',
+      vehicle_sucursal: '',
       color: selectedColor,
+      client: idClient,
     },
-    // validationSchema: virtualQuoteValidation,
+    validationSchema: virtualQuoteValidation,
     onSubmit: (values) => {
-      console.log(values);
+      console.log('submit');
+      calculateQuote(values);
     },
   });
 
@@ -64,141 +117,176 @@ const VirtualQuoteFormD = ({ slug, selectedColor }) => {
     setErrorShown(false);
   };
 
+  const handleCancel = () => {
+    setShowValueCotization(false);
+    console.log('cancel');
+  };
+
+  const handleQuote = () => {
+    const sendQuote = async () => {
+      try {
+        const { data } = await createQuote(values);
+        console.log(data);
+        toast.success('Se agrego la cotizacion del carro', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        navigate(urls.seeCars)
+      } catch (error) {
+        if (error) {
+          const { data } = error.response;
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
+    };
+    sendQuote();
+    console.log(values);
+  };
+
   return (
     <Form
       style={{ backgroundColor: 'transparent' }}
       className="form"
       onSubmit={handleSubmit}
     >
-      <h6 className="font-bold mb-2">Datos Personales</h6>
-      <div className="flex flex-wrap items-center justify-between">
-        <div className="w-full sm:w-1/2 ">
-          <FormGroup className="w-full">
-            <FormText>Nombre</FormText>
+      <div className="mb-6">
+        <h3 className="font-bold text-xl mb-2">
+          Costo del vehiculo:{' '}
+          <span className="text-primary">{formatPrice(price)}</span>
+        </h3>
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div>
+          <FormGroup>
+            <div>
+              <p>
+                Cuota Inicial <span className="text-red-500">*</span>
+              </p>
+            </div>
             <Input
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
               type="text"
-              placeholder="Nombre"
-              name="name"
-              value={values.name}
+              placeholder="Valor cuota inicial"
+              name="initial_fee"
+              value={values.initial_fee}
               onChange={handleChange}
-              invalid={touched.name && !!errors.name}
+              invalid={touched.initial_fee && !!errors.initial_fee}
+              disabled={!!showValueCotization}
             />
-            {touched.name && errors.name && showErrorToast(errors.name)}
-          </FormGroup>
-          <FormGroup className="w-full">
-            <FormText>Telefono</FormText>
-            <Input
-              type="text"
-              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder="Telefono"
-              name="phone"
-              value={values.phone}
-              onChange={handleChange}
-              invalid={touched.phone && !!errors.phone}
-            />
-            {touched.phone && errors.phone && showErrorToast(errors.phone)}
+
+            {touched.initial_fee &&
+              errors.initial_fee &&
+              showErrorToast(errors.initial_fee)}
           </FormGroup>
         </div>
-        <div className="w-full sm:w-1/2 mt-4 sm:mt-0 space-x-2">
-          <FormGroup className="w-full ml-2">
-            <FormText>Dirección</FormText>
+        <div>
+          <FormGroup>
+            <div>
+              <p>
+                Numero de cuotas <span className="text-red-500">*</span>
+              </p>
+            </div>
             <Input
-              type="text"
               className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder="Direccion"
-              name="address"
-              value={values.address}
-              onChange={handleChange}
-              invalid={touched.address && !!errors.address}
-            />
-            {touched.address &&
-              errors.address &&
-              showErrorToast(errors.address)}
-          </FormGroup>
-          <FormGroup className="w-full ml-2">
-            <FormText>Cedula</FormText>
-            <Input
               type="text"
-              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder="Cedula"
-              name="cc"
-              value={values.cc}
+              placeholder="Numero de cuotas a pagar"
+              name="num_installments"
+              value={values.num_installments}
               onChange={handleChange}
-              invalid={touched.cc && !!errors.cc}
+              invalid={touched.num_installments && !!errors.num_installments}
+              disabled={!!showValueCotization}
             />
-            {touched.cc && errors.cc && showErrorToast(errors.cc)}
+            {touched.num_installments &&
+              errors.num_installments &&
+              showErrorToast(errors.num_installments)}
           </FormGroup>
         </div>
       </div>
 
-      <h6 className="font-bold mt-5">Datos para la Plataforma</h6>
-      <div className="flex flex-wrap items-center justify-between">
-        <div className="w-full sm:w-1/2 ">
-          <FormGroup className="w-full">
-            <FormText>Email</FormText>
-            <Input
-              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              type="email"
-              placeholder="Email"
-              name="email"
-              value={values.email}
-              onChange={handleChange}
-              invalid={touched.email && !!errors.email}
-            />
-            {touched.email && errors.email && showErrorToast(errors.email)}
-          </FormGroup>
+      {showValueCotization ? (
+        <div>
+          <h3 className="font-bold text-xl mb-4 mt-10">
+            Información de la cotización a realizar
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-4 text-lg">
+            <div>
+              <p>
+                Valor de la cuota inicial:{' '}
+                <span className="text-primary/60">
+                  {formatPrice(values.initial_fee)}
+                </span>
+              </p>
+            </div>
+            <div>
+              <p>
+                Valor de la cutoa mensual:{' '}
+                <span className="text-primary/60">
+                  {formatPrice(valueMensualDue)}
+                </span>
+              </p>
+            </div>
+            <div>
+              <p>
+                Valor del seguro de vida:{' '}
+                <span className="text-primary/60">
+                  {formatPrice(lifeSegure)}
+                </span>
+              </p>
+            </div>
+            <div>
+              <p>
+                Valor total:{' '}
+                <span className="text-primary/60">
+                  {formatPrice(valueTotal)}
+                </span>
+              </p>
+            </div>
+          </div>
         </div>
-        <div className="w-full sm:w-1/2 mt-4 sm:mt-0 space-x-2">
-          <FormGroup className="w-full ml-2">
-            <FormText>Contraseña</FormText>
-            <Input
-              type="password"
-              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-              placeholder="Contraseña"
-              name="password"
-              value={values.password}
-              onChange={handleChange}
-              invalid={touched.password && !!errors.password}
-              autoComplete="off"
-            />
-            {touched.password &&
-              errors.password &&
-              showErrorToast(errors.password)}
-          </FormGroup>
-        </div>
-        <div className="w-full sm:w-1/2 mt-4 sm:mt-0 space-x-2">
-          <FormGroup className="w-full ml-2">
-            <FormText>Sucursal</FormText>
-            <Input
-              type="select"
-              name="city"
-              value={values.city}
-              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
-              onChange={handleChange}
-              invalid={touched.city && !!errors.city}
-            >
-              <option value="">Seleccione una ciudad</option>
-              {sucursals.map((office) => (
-                <option value={office.city} key={office.id}>
-                  {office.city}
-                </option>
-              ))}
-            </Input>
-            {touched.city && errors.city && showErrorToast(errors.city)}
-          </FormGroup>
-        </div>
-      </div>
-      <div className="flex items-center justify-center flex-wrap mt-4">
-        <FormGroup className="w-1/4">
-          <button
-            className="btn find__car-btn"
-            type="submit"
-            onClick={resetErrorShown}
+      ) : (
+        <div></div>
+      )}
+
+      <hr className="my-8 border-gray-500/30" />
+      <div className="flex justify-between">
+        <div className="flex justify-start">
+          <Link
+            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+            to={urls.seeCarsD}
           >
-            Enviar
-          </button>
-        </FormGroup>
+            <i className="ri-arrow-left-line"></i> Volver
+          </Link>
+        </div>
+        {!showValueCotization ? (
+          <div className="flex justify-end">
+            <button
+              type="submit"
+              className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+              onClick={resetErrorShown}
+            >
+              Cotizar
+            </button>
+          </div>
+        ) : (
+          <div className="flex">
+            <p
+              className="bg-quaternary/80 text-black py-2 px-4 rounded-lg hover:bg-quaternary transition-colors mr-10"
+              onClick={handleCancel}
+              type="button"
+            >
+              Cancelar
+            </p>
+            <p
+              className="bg-terciary/80 text-black py-2 px-4 rounded-lg hover:bg-terciary transition-colors"
+              onClick={handleQuote}
+              type="button"
+            >
+              Enviar
+            </p>
+          </div>
+        )}
       </div>
     </Form>
   );

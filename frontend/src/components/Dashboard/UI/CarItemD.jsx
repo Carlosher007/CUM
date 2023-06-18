@@ -5,10 +5,12 @@ import { Col } from 'reactstrap';
 import Cookies from 'universal-cookie';
 import { urls } from '../../../assets/urls/urls';
 import { codeToColorName } from '../../../assets/color/colorUtils';
+import { formatPrice } from '../../../assets/general/formatPrice';
 
 const CarItemD = (props) => {
   const cookies = new Cookies();
-  const rol = cookies.get('rol');
+  // const rol = cookies.get('rol');
+  const rol = 'Cliente'
 
   const {
     model,
@@ -63,7 +65,7 @@ const CarItemD = (props) => {
             {model} - {year}
           </h4>
           <h6 className="text-center mt-1 text-lg font-semibold">
-            ${price} <span></span>
+            {formatPrice(price)} <span></span>
           </h6>
           <h6 className="text-center mt-1 text-lg font-semibold">
             {codeToColorName(color)} <span></span>
