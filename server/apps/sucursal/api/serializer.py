@@ -36,7 +36,8 @@ class VehicleSucursalsSerializer(serializers.ModelSerializer):
 class VehicleSucursalSerializer(serializers.ModelSerializer):
     class Meta:
         model = VehicleSucursal
-        fields = ['sucursal', 'vehicle', 'color', 'quantity']
+        fields = ['id', 'sucursal', 'vehicle', 'color', 'quantity']
+        read_only_fields = ['id']
 
 class PartSerializer(serializers.ModelSerializer):
     class Meta:
