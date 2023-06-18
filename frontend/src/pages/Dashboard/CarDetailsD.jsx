@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { getCar } from '../../assets/api/cars';
 import { codeToColorName, colorOptions } from '../../assets/color/colorUtils';
 import VirtualQuoteFormD from '../../components/Dashboard/UI/VirtualQuoteFormD';
+import { formatPrice } from '../../assets/general/formatPrice';
 
 const CarDetailsD = () => {
   const { id } = useParams();
@@ -52,7 +53,7 @@ const CarDetailsD = () => {
                   codeToColorName(selectedColor).slice(1)
                 : 'Sin definir'}
             </h2>
-            <h6 className="font-bold text-lg mb-5">${car.price}</h6>
+            <h6 className="font-bold text-lg mb-5">{formatPrice(car.price)}</h6>
             <div className="flex items-center gap-5 ">
               <div className="color__options">
                 <CirclePicker

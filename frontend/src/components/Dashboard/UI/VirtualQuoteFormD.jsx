@@ -6,15 +6,16 @@ import { Form, FormGroup, FormText, Input } from 'reactstrap';
 import { getSucursals } from '../../../assets/api/sucursal.api';
 import { urls } from '../../../assets/urls/urls';
 import { virtualQuoteValidation } from '../../../assets/validation/VirtualQuoteValidation';
+import { formatPrice } from '../../../assets/general/formatPrice';
 
 const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
   const [sucursals, setSucursals] = useState([]);
 
   const [showValueCotization, setShowValueCotization] = useState(false);
-  const [lifeSegure, setLifeSegure] = useState('')
-  const [valueMensualDue, setValueMensualDue] = useState('')
+  const [lifeSegure, setLifeSegure] = useState('');
+  const [valueMensualDue, setValueMensualDue] = useState('');
   const tasa = 0.0185;
-  const [valueTotal, setValueTotal] = useState('')
+  const [valueTotal, setValueTotal] = useState('');
 
   useEffect(() => {
     formik.setFieldValue('color', selectedColor); // Actualiza el valor en formik cuando selectedColor cambie
@@ -44,19 +45,20 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     const segureLife = 718000;
 
     const dueValue =
-      (lendValue * tasa) / (1 - Math.pow(1 + tasa, -numeroCuotas));
+      (lendValue * tasa) / (1 - Math.pow(1 + tasa, -(numeroCuotas - 1)));
+    const roundedDueValue = parseInt(Math.ceil(dueValue));
 
-    console.log(dueValue)
+    console.log(dueValue);
     const totalValue = dueValue + segureLife;
-    console.log(totalValue)
+    console.log(totalValue);
     const roundedTotalValue = parseInt(Math.ceil(totalValue));
 
     console.log(roundedTotalValue);
 
-    setLifeSegure(segureLife)
-    setValueMensualDue(dueValue)
-    setValueTotal(roundedTotalValue)
-    setShowValueCotization(true)
+    setLifeSegure(segureLife);
+    setValueMensualDue(roundedDueValue);
+    setValueTotal(roundedTotalValue);
+    setShowValueCotization(true);
   };
 
   const formik = useFormik({
@@ -90,6 +92,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     setErrorShown(false);
   };
 
+  
   return (
     <Form
       style={{ backgroundColor: 'transparent' }}
@@ -98,7 +101,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     >
       <div className="mb-6">
         <h3 className="font-bold text-xl mb-2">
-          Costo del vehiculo: <span className="text-primary">{price}</span>
+          Costo del vehiculo: <span className="text-primary">{formatPrice(price)}</span>
         </h3>
       </div>
 
@@ -150,6 +153,36 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
         </div>
       </div>
 
+      {showValueCotization ? (
+        <div>
+          <h3 className="font-bold text-xl mb-4 mt-10">
+            Información de la cotización a realizar
+          </h3>
+          <div className="grid grid-cols-1 md:grid-cols-1 gap-4 text-lg">
+            <div>
+              <p>
+                Valor de la cutoa mensual:{' '}
+                <span className="text-primary/60">{formatPrice(valueMensualDue)}</span>
+              </p>
+            </div>
+            <div>
+              <p>
+                Valor del seguro de vida:{' '}
+                <span className="text-primary/60">{formatPrice(lifeSegure)}</span>
+              </p>
+            </div>
+            <div>
+              <p>
+                Valor total:{' '}
+                <span className="text-primary/60">{formatPrice(valueTotal)}</span>
+              </p>
+            </div>
+          </div>
+        </div>
+      ) : (
+        <div></div>
+      )}
+
       <hr className="my-8 border-gray-500/30" />
       <div className="flex justify-between">
         <div className="flex justify-start">
@@ -170,7 +203,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
                 handleSubmit(); // Primera función
               }}
             >
-              Guardar
+              Cotizar
             </button>
           </div>
         ) : (
