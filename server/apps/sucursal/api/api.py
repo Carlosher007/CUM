@@ -2,7 +2,9 @@ from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
+from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import viewsets, status
+
 from ..models import Sucursal, Vehicle, VehicleSucursal, User, Part, SucursalPart
 from .serializer import (SucursalSerializer, VehicleSerializer, 
                          SucursalVehiclesSerializer, VehicleSucursalsSerializer, 
@@ -103,6 +105,7 @@ class SucursalApiView(viewsets.ModelViewSet):
 class VehicleApiView(viewsets.ModelViewSet):
     serializer_class = VehicleSerializer
     queryset = Vehicle.objects.all()
+    parser_classes = (MultiPartParser, FormParser)
 
     @action(detail=True, methods=['GET'], url_path='vehicle-sucursals')
     def get_vehicle_sucursals(self, request, pk:int):

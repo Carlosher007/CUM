@@ -44,7 +44,7 @@ class Vehicle(models.Model):
     top_speed = models.PositiveSmallIntegerField()
     brakes = models.CharField(max_length=100, choices=BRAKES_CHOICES)
     suspension = models.CharField(max_length=100, choices=SUSPENSION_CHOICES)
-    img_url = models.CharField(max_length=500)
+    image = models.FileField(upload_to='cum_vehicles')
     price = models.IntegerField()
     description = models.TextField()
 
