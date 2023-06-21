@@ -2,6 +2,7 @@ import { useFormik } from 'formik';
 import React, { useEffect, useState } from 'react';
 import { CirclePicker } from 'react-color';
 import { RiEdit2Line } from 'react-icons/ri';
+import { Link, URL } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
 import Cookies from 'universal-cookie';
@@ -18,9 +19,8 @@ import {
   colorNameToCode,
   colorOptions,
 } from '../../assets/color/colorUtils';
-import { createVehicleValidation } from '../../assets/validation/createVehicleValidation';
-import { Link } from 'react-router-dom';
 import { urls } from '../../assets/urls/urls';
+import { createVehicleValidation } from '../../assets/validation/createVehicleValidation';
 
 const NewVehicle = () => {
   const cookies = new Cookies();
@@ -30,6 +30,7 @@ const NewVehicle = () => {
   const [idCarSelectedValue, setIdCarSelectedValue] = useState('');
   const [car, setCar] = useState({});
   const [resetForm, setResetForm] = useState(false);
+  const [previewImage, setPreviewImage] = useState('');
 
   const getCarData = async (id) => {
     try {
@@ -49,7 +50,7 @@ const NewVehicle = () => {
         top_speed,
         brakes,
         suspension,
-        img_url,
+        image,
         price,
         description,
       } = data;
@@ -68,7 +69,7 @@ const NewVehicle = () => {
         top_speed,
         brakes,
         suspension,
-        img_url,
+        image,
         price,
         description,
       });
@@ -100,15 +101,17 @@ const NewVehicle = () => {
       top_speed: '',
       brakes: '',
       suspension: '',
-      img_url:
-        'https://img.freepik.com/foto-gratis/superdeportivo-rojo-negro-palabra-superdeportivo-lateral_1340-23413.jpg?t=st=1686946509~exp=1686947109~hmac=66cf44ff6bc1a2e43aa90567092fbc768357a9df4fd8d07aa0695381794a4fa2',
+      image: '',
       price: '',
       description: '',
       idCar: '', // restablecer a ''
       quantity: '',
     });
     setIdCarSelectedValue(''); // Set the state value to ""
+    setPreviewImage('')
   };
+
+
 
   const getAllVehicles = async () => {
     try {
@@ -147,13 +150,11 @@ const NewVehicle = () => {
         color: values.color,
         quantity: values.quantity,
       };
-      console.log(body);
 
       const { data } = await newCarInSucursal(body);
-      toast.success('Vehiculo añadido', {
+      toast.success('Vehiculo añadido a la empresa y la sucursal', {
         position: toast.POSITION.TOP_RIGHT,
       });
-      console.log(data);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
@@ -168,13 +169,19 @@ const NewVehicle = () => {
   const addNewVehicle = async (values) => {
     try {
       const { data } = await newCar(values);
-      console.log(data);
       return data.id; // Devolver el ID del carro añadido
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
@@ -189,13 +196,11 @@ const NewVehicle = () => {
         color: values.color,
         quantity: values.quantity,
       };
-      console.log(body);
 
       const { data } = await newCarInSucursal(body);
-      toast.success('Vehiculo añadido', {
+      toast.success('Se agrego la cantidad dada del vehiculo a la sucursal', {
         position: toast.POSITION.TOP_RIGHT,
       });
-      console.log(data);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
@@ -222,8 +227,7 @@ const NewVehicle = () => {
       top_speed: '',
       brakes: '',
       suspension: '',
-      img_url:
-        'https://img.freepik.com/foto-gratis/superdeportivo-rojo-negro-palabra-superdeportivo-lateral_1340-23413.jpg?t=st=1686946509~exp=1686947109~hmac=66cf44ff6bc1a2e43aa90567092fbc768357a9df4fd8d07aa0695381794a4fa2',
+      image: '',
       price: '',
       description: '',
       color: selectedColor,
@@ -237,19 +241,20 @@ const NewVehicle = () => {
         idCarSelectedValue === null ||
         isNaN(idCarSelectedValue)
       ) {
-        console.log('no existente');
-        // const carId = await addNewVehicle(values); // Añadir el carro y obtener su ID
-        const carId = 1;
+        // console.log('no existente');
+        const carId = await addNewVehicle(values); // Añadir el carro y obtener su ID
+        // const carId = 1;
         if (carId) {
-          // await createNewVehicleInSucursal(values, carId); // Crear el vehículo en la sucursal con el ID del carro
+          await createNewVehicleInSucursal(values, carId); // Crear el vehículo en la sucursal con el ID del carro
           resetFormik();
           // await getAllVehicles();
         }
       } else {
-        console.log('existente');
+        // console.log('existente');
         await addVehicleInSucursal(values, idCarSelectedValue);
         resetFormik();
       }
+      await getAllVehicles();
     },
   });
 
@@ -317,6 +322,7 @@ const NewVehicle = () => {
         style={{ backgroundColor: 'transparent' }}
         className="mt-6"
         onSubmit={handleSubmit}
+        encType="multipart/form-data"
       >
         <h2 className=" text-xl mb-4 font-bold">Datos del Vehiculo</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -667,9 +673,29 @@ const NewVehicle = () => {
 
         <div className="flex flex-wrap items-center justify-between mt-8">
           <div className="w-full  mt-4 sm:mt-0 space-x-2">
-            {formik.values.img_url ? (
-              <div className="max-w-lg mx-auto">
-                <img src={formik.values.img_url} alt="" className="w-full" />
+            {formik.values.image ? (
+              <div className="">
+                <div>
+                  <FormGroup>
+                    <div>
+                      <p>
+                        Imagen <span className="text-red-500">*</span>
+                      </p>
+                    </div>
+                    <div className="flex-1">
+                      <div className="relative mt-2">
+                        <img
+                          src={previewImage || formik.values.image}
+                          className="w-28 h-28 object-cover rounded-lg"
+                          alt="Imagen subida"
+                        />
+                      </div>
+                    </div>
+                    {touched.image &&
+                      errors.image &&
+                      showErrorToast(errors.image)}
+                  </FormGroup>
+                </div>
               </div>
             ) : (
               <div>
@@ -682,31 +708,45 @@ const NewVehicle = () => {
                   <div className="flex-1">
                     <div className="relative mt-2">
                       <img
-                        src="https://img.freepik.com/foto-gratis/negocios-finanzas-empleo-concepto-mujeres-emprendedoras-exitosas-joven-empresaria-segura-anteojos-mostrando-gesto-pulgar-arriba-sostenga-computadora-portatil-garantice-mejor-calidad-servicio_1258-59118.jpg"
+                        src={
+                          previewImage
+                            ? previewImage
+                            : 'https://img.freepik.com/fotos-premium/icono-archivo-imagen-ilustracion-procesamiento-3d_567294-3412.jpg?w=826'
+                        }
                         className="w-28 h-28 object-cover rounded-lg"
-                        alt="Imagen de una persona"
+                        alt="Imagen subida"
                       />
+
                       <label
-                        htmlFor="img_url"
+                        htmlFor="image"
                         className="absolute bg-secondary-100 p-2 rounded-full hover:cursor-pointer -top-2 left-24"
                       >
                         <RiEdit2Line />
                       </label>
                       <input
                         type="file"
-                        id="img_url"
+                        id="image"
                         className="hidden"
-                        disabled={!!idCarSelectedValue}
-                        onChange={handleChange}
+                        // disabled={!!idCarSelectedValue}
+                        onChange={(event) => {
+                          const file = event.currentTarget.files[0];
+                          formik.setFieldValue('image', file);
+
+                          const reader = new FileReader();
+                          reader.onload = (e) => {
+                            setPreviewImage(e.target.result);
+                          };
+                          reader.readAsDataURL(file);
+                        }}
                       />
                     </div>
                     <p className="text-gray-500 text-sm">
                       Tipos de img permitidos: png, jpg, jpeg.
                     </p>
                   </div>
-                  {touched.img_url &&
-                    errors.img_url &&
-                    showErrorToast(errors.img_url)}
+                  {touched.image &&
+                    errors.image &&
+                    showErrorToast(errors.image)}
                 </FormGroup>
               </div>
             )}

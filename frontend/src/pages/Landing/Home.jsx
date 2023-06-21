@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from 'react';
+import { toast } from 'react-toastify';
 import { Col, Container, Row } from 'reactstrap';
 import { getCars } from '../../assets/api/cars';
 import carData from '../../assets/data/carData';
@@ -8,7 +9,6 @@ import CarItem from '../../components/Landing/UI/CarItem';
 import HeroSlider from '../../components/Landing/UI/HeroSlider';
 import PresentialQuoteForm from '../../components/Landing/UI/PresentialQuoteForm';
 import ServicesList from '../../components/Landing/UI/ServicesList';
-import { toast } from 'react-toastify';
 // import '../../styles/landing.css';
 
 const Home = () => {
@@ -20,7 +20,7 @@ const Home = () => {
         const { data } = await getCars();
         setDataCars(data);
       } catch (error) {
-        if (error) {
+        if (error.response) {
           const { data } = error.response;
           toast.error(data.error, {
             position: toast.POSITION.TOP_RIGHT,

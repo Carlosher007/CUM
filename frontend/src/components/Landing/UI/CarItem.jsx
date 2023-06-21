@@ -12,17 +12,19 @@ const CarItem = (props) => {
     battery_capacity,
     charging_time,
     top_speed,
-    img_url,
+    image,
     price,
     doors,
     id,
   } = props.item;
 
+  console.log(image)
+
   return (
     <Col lg="4" md="4" sm="6" className="mb-5">
       <div className="car__item">
         <div className="car__img">
-          <img src={img_url} alt="" className="w-100" />
+          <img src={image} alt="" className="w-100" />
         </div>
 
         <div className="car__item-content mt-4">

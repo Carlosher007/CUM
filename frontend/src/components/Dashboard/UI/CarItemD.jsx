@@ -9,8 +9,8 @@ import { formatPrice } from '../../../assets/general/formatPrice';
 
 const CarItemD = (props) => {
   const cookies = new Cookies();
-  // const rol = cookies.get('rol');
-  const rol = 'Cliente'
+  const rol = cookies.get('rol');
+  // const rol = 'Cliente'
 
   const {
     model,
@@ -18,7 +18,7 @@ const CarItemD = (props) => {
     battery_capacity,
     charging_time,
     top_speed,
-    img_url,
+    image,
     price,
     doors,
     id,
@@ -57,7 +57,7 @@ const CarItemD = (props) => {
     <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 p-2">
       <div className="border border-gray-400 p-4 rounded-lg">
         <div className="car__img">
-          <img src={img_url} alt="" className="w-full" />
+          <img src={image} alt="" className="w-full max-h-[120px] object-cover" />
         </div>
 
         <div className="mt-4">
