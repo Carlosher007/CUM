@@ -20,10 +20,11 @@ import CarItemD from '../../components/Dashboard/UI/CarItemD';
 import { formatPrice } from '../../assets/general/formatPrice';
 
 const CarListingD = () => {
-  const ITEMS_PER_PAGE = 3;
+  const ITEMS_PER_PAGE = 4;
 
   const cookies = new Cookies();
   const idSucursal = cookies.get('sucursal');
+  const rol = cookies.get('rol')
   const [citySucursal, setCitySucursal] = useState();
   const [currentPage, setCurrentPage] = useState(0);
   const [dataCars, setDataCars] = useState([]);
@@ -114,8 +115,8 @@ const CarListingD = () => {
         </h1>
       </div>
       <div className="bg-secondary-100 p-8 rounded-xl mb-8">
-        <div className="flex items-center gap-16">
-          <div className="flex items-center gap-5">
+        <div className="flex flex-col md:flex-row items-center md:gap-16">
+          <div className="flex items-center gap-5 mb-5 md:mb-0">
             <BsSearch />
             <Input
               type="text"
@@ -124,15 +125,14 @@ const CarListingD = () => {
               onChange={handleSearch}
             />
           </div>
-          <div className="flex items-center gap-5">
-            <span className="flex items-center gap-2">
+          <div className="flex flex-col items-center md:flex-row gap-3 md:items-center">
+            <span className="flex items-center gap-2 md:order-1">
               <i className="ri-sort-asc"></i> Ordena por precio
             </span>
-            <div className="flex-1">
+            <div className="flex-1 md:order-2 md:w-auto">
               <Input
                 type="select"
                 onChange={(event) => handleSortChange(event, 'price')}
-                style={{ maxWidth: '200px' }}
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
               >
                 <option>Select</option>
@@ -142,11 +142,12 @@ const CarListingD = () => {
             </div>
           </div>
         </div>
+
         <div className="mt-10">
           <div className="flex flex-wrap">
             {paginatedCarData.length > 0 ? (
               paginatedCarData.map((item) => (
-                <CarItemD item={item} key={item.model} />
+                <CarItemD item={item} key={item.vehicle.id} />
               ))
             ) : (
               <div>No se encontraron resultados.</div>
@@ -174,13 +175,15 @@ const CarListingD = () => {
             />
           </div>
         </div>
-        <div className="flex justify-end mt-5">
-          <Link to={urls.newVehicle}>
-            <button className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors">
-              Añadir Vehiclulo
-            </button>
-          </Link>
-        </div>
+        {rol !== 'Cliente' && rol !== 'Jefe_Taller' && (
+          <div className="flex justify-end mt-5">
+            <Link to={urls.newVehicle}>
+              <button className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors">
+                Añadir Vehiculo
+              </button>
+            </Link>
+          </div>
+        )}
       </div>
     </div>
   );

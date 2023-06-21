@@ -1,11 +1,25 @@
 import React, { Fragment, useEffect } from 'react';
 import { Helmet } from 'react-helmet';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 import Footer from '../Footer/Footer';
 import Header from '../Header/Header';
 // import "bootstrap/dist/css/bootstrap.min.css";
+import Cookies from 'universal-cookie';
+import { urls } from '../../../assets/urls/urls';
 
 const Layout = () => {
+  console.log("sssss")
+  const cookies = new Cookies();
+  const token = cookies.get('token');
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    if (token !== null || !isNaN(token)) {
+      console.log("oooo")
+      navigate(urls.home2);
+    }
+  }, [token, navigate]);
+
   return (
     <Fragment>
       <Helmet>

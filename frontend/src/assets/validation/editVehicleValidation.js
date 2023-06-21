@@ -15,7 +15,7 @@ export const editVehicleValidation = yup.object().shape({
   top_speed: yup.string().required('La velocidad maxima es obligatoria'),
   brakes: yup.string().required('El tipo de frenos es obligatorio'),
   suspension: yup.string().required('El tipo de suspensión es obligatoria'),
-  img_url: yup.string().required('La imagen es obligatoria'),
+  image: yup.string().required('La imagen es obligatoria'),
   price: yup.string().required('El precio es obligatorio'),
   description: yup.string().required('La descripcion es obligaotria'),
 });

@@ -28,8 +28,15 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     const getVehicleByColor = async () => {
       try {
         const colorSinNumeral = selectedColor.slice(1); // Utilizando slice())
-        const { data } = await getCarByColor(idSucursal, slug, colorSinNumeral);
-        formik.setFieldValue('vehicle_sucursal', data.id);
+        if (colorSinNumeral != '') {
+          const { data } = await getCarByColor(
+            idSucursal,
+            slug,
+            colorSinNumeral
+          );
+          formik.setFieldValue('vehicle_sucursal', data.id);
+          console.log(data.id);
+        }
       } catch (error) {
         if (error) {
           const { data } = error.response;
@@ -130,7 +137,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
         toast.success('Se agrego la cotizacion del carro', {
           position: toast.POSITION.TOP_RIGHT,
         });
-        navigate(urls.seeCars)
+        navigate(urls.seeCars);
       } catch (error) {
         if (error) {
           const { data } = error.response;

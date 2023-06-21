@@ -10,11 +10,11 @@ import VirtualQuoteFormD from '../../components/Dashboard/UI/VirtualQuoteFormD';
 
 const CarDetailsD = () => {
   const cookies = new Cookies();
-  const idSucursal = cookies.get('sucursal')
+  const idSucursal = cookies.get('sucursal');
   const { id } = useParams();
 
   const [car, setCar] = useState({});
-  const [selectedColor, setSelectedColor] = useState(colorOptions[0]);
+  const [selectedColor, setSelectedColor] = useState('');
   const [availableColors, setAvailableColors] = useState([]);
 
   const handleColorChange = (color) => {
@@ -40,9 +40,11 @@ const CarDetailsD = () => {
 
     const getAvailableColors = async () => {
       try {
-        const { data } = await getColorsCar(idSucursal,id);
+        console.log(idSucursal+" "+id)
+        const { data } = await getColorsCar(idSucursal, id);
         const colors = data.map((obj) => obj.color);
         setAvailableColors(colors);
+        setSelectedColor(colors[0])
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
@@ -61,7 +63,7 @@ const CarDetailsD = () => {
       <div className="bg-secondary-100 p-8 rounded-xl mb-8">
         <div className="flex items-start">
           <div className="w-1/2 pr-4">
-            <img src={car.img_url} alt="" className="w-full h-auto" />
+            <img src={car.image} alt="" className="w-full h-auto" />
           </div>
           <div className="w-1/2">
             <h2 className="text-4xl font-bold mb-3">

@@ -31,14 +31,13 @@ const EditVehicle = () => {
   const { idVehicle } = useParams();
 
   const [carData, setCarData] = useState({});
-  const [urlImage, setUrlImage] = useState('');
+  const [previewImage, setPreviewImage] = useState('');
 
   useEffect(() => {
     const getVehicleData = async () => {
       try {
         const { data } = await getCar(idVehicle);
         setCarData(data);
-        setUrlImage(data.img_url)
         const {
           model,
           year,
@@ -53,7 +52,7 @@ const EditVehicle = () => {
           top_speed,
           brakes,
           suspension,
-          img_url,
+          image,
           price,
           description,
           id,
@@ -74,10 +73,11 @@ const EditVehicle = () => {
           top_speed,
           brakes,
           suspension,
-          img_url,
+          image,
           price,
           description,
         });
+        setPreviewImage(data.image)
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
@@ -93,7 +93,14 @@ const EditVehicle = () => {
 
   const updateSelectedCar = async (values, id) => {
     try {
-      const { data } = await updateCar(values, id);
+      const body = values;
+      console.log(typeof body.image);
+      if (typeof body.image === 'string') {
+        delete body.image;
+      }
+      console.log(body);
+      const { data } = await updateCar(body, id);
+      console.log(data);
       toast.success('Vehiculo actualizado', {
         position: toast.POSITION.TOP_RIGHT,
       });
@@ -124,8 +131,7 @@ const EditVehicle = () => {
       top_speed: '',
       brakes: '',
       suspension: '',
-      img_url:
-        'https://img.freepik.com/foto-gratis/superdeportivo-rojo-negro-palabra-superdeportivo-lateral_1340-23413.jpg?t=st=1686946509~exp=1686947109~hmac=66cf44ff6bc1a2e43aa90567092fbc768357a9df4fd8d07aa0695381794a4fa2',
+      image: '',
       price: '',
       description: '',
     },
@@ -152,22 +158,6 @@ const EditVehicle = () => {
     setErrorShown(false);
   };
 
-  const handleImageChange = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-
-    reader.onloadend = () => {
-      const imageUrl = reader.result;
-      setUrlImage(imageUrl);
-    };
-
-    if (file) {
-      reader.readAsDataURL(file);
-    }
-    console.log(urlImage)
-  };
-
-
   return (
     <div className="bg-secondary-100 p-8 rounded-xl mb-4">
       <h1 className=" text-2xl font-bold mb-10">
@@ -180,6 +170,7 @@ const EditVehicle = () => {
         style={{ backgroundColor: 'transparent' }}
         className="mt-6"
         onSubmit={handleSubmit}
+        encType="multipart/form-data"
       >
         <h2 className=" text-xl mb-4 font-bold">Datos del Vehiculo</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
@@ -515,34 +506,51 @@ const EditVehicle = () => {
 
         <div className="flex flex-wrap items-center justify-between mt-8">
           <div className="w-full  mt-4 sm:mt-0 space-x-2">
-            {formik.values.img_url ? (
+            {formik.values.image ? (
               <div className="max-w-lg mx-auto">
                 <FormGroup>
                   <div className="flex-1">
-                    <div className="relative">
-                      <img src={urlImage} alt="" className="w-full" />
+                    <div className="relative mt-2">
+                      <img
+                        src={
+                          previewImage
+                            ? previewImage
+                            : 'https://img.freepik.com/fotos-premium/icono-archivo-imagen-ilustracion-procesamiento-3d_567294-3412.jpg?w=826'
+                        }
+                        className="w-full h-full object-cover rounded-lg"
+                        alt="Imagen subida"
+                      />
 
                       <label
-                        htmlFor="img_url"
-                        className="absolute bg-secondary-100 p-2 rounded-full hover:cursor-pointer -top-2"
+                        htmlFor="image"
+                        className="absolute bg-secondary-100 p-2 rounded-full hover:cursor-pointer -top-2 left-24"
                       >
                         <RiEdit2Line />
                       </label>
                       <input
                         type="file"
-                        id="img_url"
+                        id="image"
                         className="hidden"
-                        onChange={handleImageChange}
-                        // onChange={handleChange}
+                        // disabled={!!idCarSelectedValue}
+                        onChange={(event) => {
+                          const file = event.currentTarget.files[0];
+                          formik.setFieldValue('image', file);
+
+                          const reader = new FileReader();
+                          reader.onload = (e) => {
+                            setPreviewImage(e.target.result);
+                          };
+                          reader.readAsDataURL(file);
+                        }}
                       />
                     </div>
                     <p className="text-gray-500 text-sm">
                       Tipos de img permitidos: png, jpg, jpeg.
                     </p>
                   </div>
-                  {touched.img_url &&
-                    errors.img_url &&
-                    showErrorToast(errors.img_url)}
+                  {touched.image &&
+                    errors.image &&
+                    showErrorToast(errors.image)}
                 </FormGroup>
               </div>
             ) : (

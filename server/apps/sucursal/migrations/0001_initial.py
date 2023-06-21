@@ -41,7 +41,7 @@ class Migration(migrations.Migration):
                 ('top_speed', models.PositiveSmallIntegerField()),
                 ('brakes', models.CharField(choices=[('D4X4', 'Frenos de Disco en las Cuatro Ruedas'), ('D4x2', 'Frenos de Tambor en las Ruedas Traseras'), ('EBA', 'Emergency Brake Assist'), ('ABS', 'Antiblockiersystem')], max_length=100)),
                 ('suspension', models.CharField(choices=[('SI4x4', 'Suspension Independiente en las Cuatro Ruedas'), ('SI2x4', 'Suspension de Doble Horquilla en la Parte Delantera'), ('SMP', 'Suspension MacPherson')], max_length=100)),
-                ('img_url', models.CharField(max_length=500)),
+                ('image', models.CharField(max_length=500)),
                 ('price', models.IntegerField()),
                 ('description', models.TextField()),
             ],

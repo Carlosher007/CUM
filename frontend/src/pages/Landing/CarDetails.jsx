@@ -23,7 +23,7 @@ const CarDetails = () => {
       try {
         const { data } = await getCar(id);
         setCar(data);
-        console.log(data)
+        console.log(data);
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
@@ -44,7 +44,7 @@ const CarDetails = () => {
           <Container>
             <Row>
               <Col col="lg-6">
-                <img src={car.img_url} alt="" className="w-100" />
+                <img src={car.image} alt="" className="w-100" />
               </Col>
               <Col col="lg-6">
                 <div className="car__info">
@@ -153,10 +153,10 @@ const CarDetails = () => {
 
             <Row>
               <div className="bg-gray-100 w-full max-w-2xl rounded-lg shadow-md mt-5">
-                  <div className="booking-info mt-5">
-                    <h4 className=" font-bold">Cotice su vehiculo ahora</h4>
-                    <VirtualQuoteForm slug={id} selectedColor={selectedColor} />
-                  </div>
+                <div className="booking-info mt-5">
+                  <h4 className=" font-bold">Cotice su vehiculo ahora</h4>
+                  <VirtualQuoteForm slug={id} selectedColor={selectedColor} />
+                </div>
               </div>
             </Row>
           </Container>

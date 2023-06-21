@@ -10,6 +10,7 @@ import Login from '../pages/Auth/Login';
 import AllUsers from '../pages/Dashboard/AllUsers';
 import CarDetailsD from '../pages/Dashboard/CarDetailsD';
 import CarListingD from '../pages/Dashboard/CarListingD';
+import EditVehicle from '../pages/Dashboard/EditVehicle';
 import HomeD from '../pages/Dashboard/HomeD';
 import NewSucursal from '../pages/Dashboard/NewSucursal';
 import NewUser from '../pages/Dashboard/NewUser';
@@ -23,7 +24,6 @@ import Home from '../pages/Landing/Home';
 import NotFound from '../pages/Landing/NotFound';
 import Offices from '../pages/Landing/Offices';
 import PresentialQuote from '../pages/Landing/PresentialQuote';
-import EditVehicle from '../pages/Dashboard/EditVehicle';
 
 const Routers = () => {
   const cookies = new Cookies();
@@ -66,7 +66,12 @@ const Routers = () => {
           </FilterPage>
         }
       />
-      <Route path="/" element={<Navigate to="/landing/home" />} />
+
+      {token !== null && !isNaN(token) ? (
+        <Route path="/" element={<Navigate to={urls.home} />} />
+      ) : (
+        <Route path="/" element={<Navigate to={urls.home2} />} />
+      )}
 
       <Route path="/landing" element={<Layout />}>
         <Route path="/landing" element={<Navigate to={urls.home} />} />
