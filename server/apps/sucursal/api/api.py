@@ -130,17 +130,21 @@ class VehicleSucursalApiView(viewsets.ModelViewSet):
         else:
             if 'non_field_errors' in vehicle_sucursal_serializer.errors:
                 if vehicle_sucursal_serializer.errors['non_field_errors'][0].code == 'unique':
-                    vehicle = VehicleSucursal.objects.filter(
-                        sucursal=vehicle_sucursal_serializer.data['sucursal'],
-                        vehicle=vehicle_sucursal_serializer.data['vehicle'],
-                        color=vehicle_sucursal_serializer.data['color']
-                    ).first()
+                    try:
+                        vehicle = VehicleSucursal.objects.filter(
+                            sucursal=vehicle_sucursal_serializer.data['sucursal'],
+                            vehicle=vehicle_sucursal_serializer.data['vehicle'],
+                            color=vehicle_sucursal_serializer.data['color']
+                        ).first()
 
-                    vehicle.quantity = vehicle.quantity+vehicle_sucursal_serializer.data['quantity']
-                    vehicle.save()
+                        vehicle.quantity = vehicle.quantity+vehicle_sucursal_serializer.data['quantity']
+                        vehicle.save()
 
-                    return Response(VehicleSucursalSerializer(vehicle).data,
-                                    status=status.HTTP_200_OK)
+                        return Response(VehicleSucursalSerializer(vehicle).data,
+                                        status=status.HTTP_200_OK)
+                    except:
+                        return Response({'error':'Datos invalidos o faltantes'},
+                                        status=status.HTTP_400_BAD_REQUEST)
                 else:
                     return Response(vehicle_sucursal_serializer.errors,
                                     status=status.HTTP_400_BAD_REQUEST)
