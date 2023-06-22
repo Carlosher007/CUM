@@ -18,8 +18,7 @@ class Quotation(models.Model):
         super(Quotation, self).save(*args, **kwargs)
         best_seller = AssignedQuote.objects.values('seller').annotate(
             count=Count('quotation')
-        ).order_by('count').first()
-
+        ).order_by('count').filter(seller__sucursal=self.client.sucursal).first()
         best_seller = User.objects.get(pk=best_seller['seller'])
 
         assigned_quote = AssignedQuote(quotation=self, seller=best_seller)
