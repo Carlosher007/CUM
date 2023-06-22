@@ -117,6 +117,22 @@ const Sidebar = () => {
         },
       ],
     },
+    {
+      display: 'Repuestos',
+      role: ['Anyone'],
+      sublinks: [
+        {
+          path: urls.seeParts,
+          display: 'Ver repuestos',
+          role: ['Anyone'],
+        },
+        {
+          path: urls.newPart,
+          display: 'Añadir reuestos',
+          role: ['Anyone'],
+        },
+      ],
+    },
   ];
 
   const filteredNavLinks = navLinks.filter((link) => {

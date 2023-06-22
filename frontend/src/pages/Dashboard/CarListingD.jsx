@@ -175,7 +175,7 @@ const CarListingD = () => {
             />
           </div>
         </div>
-        {rol !== 'Cliente' && rol !== 'Jefe_Taller' && (
+        {rol !== 'Cliente' && rol !== 'JefeTaller' && (
           <div className="flex justify-end mt-5">
             <Link to={urls.newVehicle}>
               <button className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors">

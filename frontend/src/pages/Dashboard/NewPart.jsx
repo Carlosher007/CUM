@@ -7,6 +7,8 @@ import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
 import Cookies from 'universal-cookie';
 import { getCar, newCar, newCarInSucursal } from '../../assets/api/cars';
+import { getPart, getParts, newPart, newPartInSucursal } from '../../assets/api/parts';
+
 import {
   bodyWorkData,
   brakesData,
@@ -27,51 +29,21 @@ const NewVehicle = () => {
   const idSucursal = cookies.get('sucursal');
 
   const [vehicles, setVehicles] = useState([]);
-  const [idCarSelectedValue, setIdCarSelectedValue] = useState('');
-  const [car, setCar] = useState({});
+  const [parts, setParts] = useState([]);
+  const [idPartSelectedValue, setIdPartSelectedValue] = useState('');
+  const [part, setPart] = useState({});
   const [resetForm, setResetForm] = useState(false);
-  const [previewImage, setPreviewImage] = useState('');
 
-  const getCarData = async (id) => {
+  const getPartData = async (id) => {
     try {
-      const { data } = await getCar(id);
-      setCar(data);
-      const {
-        model,
-        year,
-        brand,
-        bodywork,
-        doors,
-        motor,
-        potency,
-        range,
-        battery_capacity,
-        charging_time,
-        top_speed,
-        brakes,
-        suspension,
-        image,
-        price,
-        description,
-      } = data;
+      const { data } = await getPart(id);
+      setPart(data);
+      const { name, price, vehicle } = data;
       formik.setValues({
         ...formik.values,
-        model,
-        year,
-        brand,
-        bodywork,
-        doors,
-        motor,
-        potency,
-        range,
-        battery_capacity,
-        charging_time,
-        top_speed,
-        brakes,
-        suspension,
-        image,
+        name,
         price,
-        description,
+        vehicle,
       });
     } catch (error) {
       if (error.response) {
@@ -88,30 +60,13 @@ const NewVehicle = () => {
     setErrorShown(true);
     formik.setValues({
       ...formik.values,
-      model: '',
-      year: '',
-      brand: '',
-      bodywork: '',
-      doors: '',
-      motor: '',
-      potency: '',
-      range: '',
-      battery_capacity: '',
-      charging_time: '',
-      top_speed: '',
-      brakes: '',
-      suspension: '',
-      image: '',
-      price: '',
-      description: '',
-      idCar: '', // restablecer a ''
+      name:'',
+      price:'',
+      vehicle:'',
       quantity: '',
     });
-    setIdCarSelectedValue(''); // Set the state value to ""
-    setPreviewImage('')
+    setIdPartSelectedValue(''); // Set the state value to ""
   };
-
-
 
   const getAllVehicles = async () => {
     try {
@@ -128,31 +83,37 @@ const NewVehicle = () => {
     }
   };
 
-  useEffect(() => {
-    getAllVehicles();
-  }, []);
-
-  const [selectedColor, setSelectedColor] = useState(colorOptions[0]);
-
-  const handleColorChange = (color) => {
-    setSelectedColor(color.hex.toUpperCase());
+  const getAllParts = async () => {
+    try {
+      const { data } = await getParts();
+      setParts(data);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
   };
 
   useEffect(() => {
-    formik.setFieldValue('color', selectedColor);
-  }, [selectedColor]);
+    getAllVehicles();
+    getAllParts();
+  }, []);
 
-  const createNewVehicleInSucursal = async (values, carId) => {
+
+  const createNewPartInSucursal = async (values, partId) => {
     try {
       const body = {
         sucursal: values.sucursal,
-        vehicle: carId,
-        color: values.color,
         quantity: values.quantity,
+        part: partId,
       };
 
-      const { data } = await newCarInSucursal(body);
-      toast.success('Vehiculo añadido a la empresa y la sucursal', {
+      const { data } = await newPartInSucursal(body);
+      toast.success('Repuesto añadido a la empresa y la sucursal', {
         position: toast.POSITION.TOP_RIGHT,
       });
     } catch (error) {
@@ -166,9 +127,9 @@ const NewVehicle = () => {
     }
   };
 
-  const addNewVehicle = async (values) => {
+  const addNewPart = async (values) => {
     try {
-      const { data } = await newCar(values);
+      const { data } = await newPart(values);
       return data.id; // Devolver el ID del carro añadido
     } catch (error) {
       if (error.response) {
@@ -188,17 +149,16 @@ const NewVehicle = () => {
     }
   };
 
-  const addVehicleInSucursal = async (values, carId) => {
+  const addPartInSucursal = async (values, partId) => {
     try {
       const body = {
         sucursal: parseInt(values.sucursal),
-        vehicle: parseInt(carId),
-        color: values.color,
+        part: parseInt(partId),
         quantity: values.quantity,
       };
 
-      const { data } = await newCarInSucursal(body);
-      toast.success('Se agrego la cantidad dada del vehiculo a la sucursal', {
+      const { data } = await newPartInSucursal(body);
+      toast.success('Se agrego la cantidad dada del repuesto a la sucursal', {
         position: toast.POSITION.TOP_RIGHT,
       });
     } catch (error) {
@@ -214,44 +174,30 @@ const NewVehicle = () => {
 
   const formik = useFormik({
     initialValues: {
-      model: '',
-      year: '',
-      brand: '',
-      bodywork: '',
-      doors: '',
-      motor: '',
-      potency: '',
-      range: '',
-      battery_capacity: '',
-      charging_time: '',
-      top_speed: '',
-      brakes: '',
-      suspension: '',
-      image: '',
-      price: '',
-      description: '',
-      color: selectedColor,
+      name:'',
+      price:'',
+      vehicle:'',
       sucursal: idSucursal,
       quantity: '',
     },
-    validationSchema: createVehicleValidation,
+    // validationSchema: createVehicleValidation,
     onSubmit: async (values) => {
       if (
-        idCarSelectedValue === '' ||
-        idCarSelectedValue === null ||
-        isNaN(idCarSelectedValue)
+        idPartSelectedValue === '' ||
+        idPartSelectedValue === null ||
+        isNaN(idPartSelectedValue)
       ) {
-        // console.log('no existente');
-        const carId = await addNewVehicle(values); // Añadir el carro y obtener su ID
-        // const carId = 1;
-        if (carId) {
-          await createNewVehicleInSucursal(values, carId); // Crear el vehículo en la sucursal con el ID del carro
+        console.log('no existente');
+        // const partId = await addNewPart(values); // Añadir el carro y obtener su ID
+        const partId = 1;
+        if (partId) {
+          // await createNewPartInSucursal(values, partId); // Crear el vehículo en la sucursal con el ID del carro
           resetFormik();
           // await getAllVehicles();
         }
       } else {
-        // console.log('existente');
-        await addVehicleInSucursal(values, idCarSelectedValue);
+        console.log('existente');
+        // await addPartInSucursal(values, idPartSelectedValue);
         resetFormik();
       }
       await getAllVehicles();
@@ -278,16 +224,18 @@ const NewVehicle = () => {
   const handleSelectedVehicle = async (e) => {
     resetFormik();
     const selectedCarId = e.target.value;
-    setIdCarSelectedValue(selectedCarId);
+    setIdPartSelectedValue(selectedCarId);
     if (selectedCarId) {
-      await getCarData(selectedCarId);
+      await getPartData(selectedCarId);
     }
   };
 
   return (
-    <div className="bg-secondary-100 p-8 rounded-xl mb-4">
+    <div getPart="bg-secondary-100 p-8 rounded-xl mb-4">
       <div>
-        <h1 className=" text-2xl font-bold">Elige un vehiculo existente si desea aumentar su cantidad</h1>
+        <h1 className=" text-2xl font-bold">
+          Elige un vehiculo existente si desea aumentar su cantidad
+        </h1>
         <div className="mt-5">
           <div style={{ backgroundColor: 'transparent' }} className="">
             {/* <h2 className=" text-xl mb-4 font-bold">Seleccione</h2> */}
@@ -297,7 +245,7 @@ const NewVehicle = () => {
                 name="idCarSelected"
                 onChange={handleSelectedVehicle} // Usar solo onChange
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
-                value={idCarSelectedValue}
+                value={idPartSelectedValue}
               >
                 <option value="">Seleccione uno</option>
                 {vehicles.map((car) => (
@@ -341,7 +289,7 @@ const NewVehicle = () => {
                 value={values.model}
                 onChange={handleChange}
                 invalid={touched.model && !!errors.model}
-                disabled={!!idCarSelectedValue}
+                disabled={!!idPartSelectedValue}
               />
               {touched.model && errors.model && showErrorToast(errors.model)}
             </FormGroup>
@@ -361,7 +309,7 @@ const NewVehicle = () => {
                 value={values.year}
                 onChange={handleChange}
                 invalid={touched.year && !!errors.year}
-                disabled={!!idCarSelectedValue}
+                disabled={!!idPartSelectedValue}
               />
               {touched.year && errors.year && showErrorToast(errors.year)}
             </FormGroup>
@@ -381,7 +329,7 @@ const NewVehicle = () => {
                 value={values.brand}
                 onChange={handleChange}
                 invalid={touched.brand && !!errors.brand}
-                disabled={!!idCarSelectedValue}
+                disabled={!!idPartSelectedValue}
               />
               {touched.brand && errors.brand && showErrorToast(errors.brand)}
             </FormGroup>
@@ -399,7 +347,7 @@ const NewVehicle = () => {
                 value={values.bodywork}
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
+                disabled={!!idPartSelectedValue}
                 invalid={touched.bodywork && !!errors.bodywork}
               >
                 <option value="">Seleccione un tipo</option>
@@ -428,7 +376,7 @@ const NewVehicle = () => {
                 name="doors"
                 value={values.doors}
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
+                disabled={!!idPartSelectedValue}
                 invalid={touched.doors && !!errors.doors}
               />
               {touched.doors && errors.doors && showErrorToast(errors.doors)}
@@ -447,7 +395,7 @@ const NewVehicle = () => {
                 value={values.motor}
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
+                disabled={!!idPartSelectedValue}
                 invalid={touched.motor && !!errors.motor}
               >
                 <option value="">Seleccione un tipo</option>
@@ -474,7 +422,7 @@ const NewVehicle = () => {
                 name="potency"
                 value={values.potency}
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
+                disabled={!!idPartSelectedValue}
                 invalid={touched.potency && !!errors.potency}
               />
               {touched.potency &&
@@ -496,7 +444,7 @@ const NewVehicle = () => {
                 name="range"
                 value={values.range}
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
+                disabled={!!idPartSelectedValue}
                 invalid={touched.range && !!errors.range}
               />
               {touched.range && errors.range && showErrorToast(errors.range)}
@@ -515,7 +463,7 @@ const NewVehicle = () => {
                 placeholder="Capacidad de bateria"
                 name="battery_capacity"
                 value={values.battery_capacity}
-                disabled={!!idCarSelectedValue}
+                disabled={!!idPartSelectedValue}
                 onChange={handleChange}
                 invalid={touched.battery_capacity && !!errors.battery_capacity}
               />
@@ -537,7 +485,7 @@ const NewVehicle = () => {
                 placeholder="Tiempo de carga"
                 name="charging_time"
                 value={values.charging_time}
-                disabled={!!idCarSelectedValue}
+                disabled={!!idPartSelectedValue}
                 onChange={handleChange}
                 invalid={touched.charging_time && !!errors.charging_time}
               />
@@ -560,7 +508,7 @@ const NewVehicle = () => {
                 name="top_speed"
                 value={values.top_speed}
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
+                disabled={!!idPartSelectedValue}
                 invalid={touched.top_speed && !!errors.top_speed}
               />
               {touched.top_speed &&
@@ -581,7 +529,7 @@ const NewVehicle = () => {
                 value={values.brakes}
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
+                disabled={!!idPartSelectedValue}
                 invalid={touched.brakes && !!errors.brakes}
               >
                 <option value="">Seleccione un tipo</option>
@@ -607,7 +555,7 @@ const NewVehicle = () => {
                 value={values.suspension}
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
+                disabled={!!idPartSelectedValue}
                 invalid={touched.suspension && !!errors.suspension}
               >
                 <option value="">Seleccione un tipo</option>
@@ -636,7 +584,7 @@ const NewVehicle = () => {
                 name="price"
                 value={values.price}
                 onChange={handleChange}
-                disabled={!!idCarSelectedValue}
+                disabled={!!idPartSelectedValue}
                 invalid={touched.price && !!errors.price}
               />
               {touched.price && errors.price && showErrorToast(errors.price)}
@@ -660,7 +608,7 @@ const NewVehicle = () => {
                   name="description"
                   value={values.description}
                   onChange={handleChange}
-                  disabled={!!idCarSelectedValue}
+                  disabled={!!idPartSelectedValue}
                   invalid={touched.description && !!errors.description}
                 />
                 {touched.description &&
@@ -727,7 +675,7 @@ const NewVehicle = () => {
                         type="file"
                         id="image"
                         className="hidden"
-                        // disabled={!!idCarSelectedValue}
+                        // disabled={!!idPartSelectedValue}
                         onChange={(event) => {
                           const file = event.currentTarget.files[0];
                           formik.setFieldValue('image', file);

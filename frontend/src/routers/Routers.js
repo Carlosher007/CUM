@@ -15,6 +15,8 @@ import HomeD from '../pages/Dashboard/HomeD';
 import NewSucursal from '../pages/Dashboard/NewSucursal';
 import NewUser from '../pages/Dashboard/NewUser';
 import NewVehicle from '../pages/Dashboard/NewVehicle';
+import NewPart from '../pages/Dashboard/NewPart';
+import PartsListing from '../pages/Dashboard/PartsListing';
 import PresentialQuoteD from '../pages/Dashboard/PresentialQuoteD';
 import Profile from '../pages/Dashboard/Profile';
 import CarDetails from '../pages/Landing/CarDetails';
@@ -212,6 +214,22 @@ const Routers = () => {
           element={
             <FilterPage roles={[]}>
               <EditVehicle />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.seeParts}
+          element={
+            <FilterPage roles={[]}>
+              <PartsListing />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.newPart}
+          element={
+            <FilterPage roles={[]}>
+              <NewPart />
             </FilterPage>
           }
         />
