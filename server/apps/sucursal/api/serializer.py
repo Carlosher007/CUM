@@ -39,7 +39,14 @@ class VehicleSucursalSerializer(serializers.ModelSerializer):
         fields = ['id', 'sucursal', 'vehicle', 'color', 'quantity']
         read_only_fields = ['id']
 
-class PartSerializer(serializers.ModelSerializer):
+class ListPartSerializer(serializers.ModelSerializer):
+    vehicle = VehicleSerializer()
+    class Meta:
+        model = Part
+        fields = '__all__'
+        read_only_fields = ['id']
+
+class CreatePartSerializer(serializers.ModelSerializer):
     class Meta:
         model = Part
         fields = '__all__'
@@ -47,7 +54,7 @@ class PartSerializer(serializers.ModelSerializer):
         extra_kwargs = {'vehicle': {'required': False}}
 
 class ListSucursalPartSerializer(serializers.ModelSerializer):
-    part = PartSerializer(read_only=True)
+    part = ListPartSerializer(read_only=True)
     class Meta:
         model = SucursalPart
         fields = '__all__'

@@ -9,7 +9,8 @@ from ..models import Sucursal, Vehicle, VehicleSucursal, User, Part, SucursalPar
 from .serializer import (SucursalSerializer, VehicleSerializer, 
                          SucursalVehiclesSerializer, VehicleSucursalsSerializer, 
                          SucursalsStaffSerializer, VehicleSucursalSerializer,
-                         PartSerializer, ListSucursalPartSerializer,
+                         ListPartSerializer, CreatePartSerializer, 
+                         ListSucursalPartSerializer,
                          SucursalVehiclesColorSerializer,
                          CreateSucursalPartSerializer)
 from apps.usuario.api.serializers import UserSerializer
@@ -153,14 +154,19 @@ class VehicleSucursalApiView(viewsets.ModelViewSet):
                             status=status.HTTP_400_BAD_REQUEST)
 
 class PartApiView(viewsets.ModelViewSet):
-    serializer_class = PartSerializer
+    serializer_class = CreatePartSerializer
     queryset = Part.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == "list" or "read":
+            return ListPartSerializer
+        return CreatePartSerializer
     
 class SucursalPartApiView(viewsets.ModelViewSet):
     serializer_class = ListSucursalPartSerializer
     queryset = SucursalPart.objects.all()
 
     def get_serializer_class(self):
-        if self.action == "list":
+        if self.action == "list" or "read":
             return ListSucursalPartSerializer
         return CreateSucursalPartSerializer
