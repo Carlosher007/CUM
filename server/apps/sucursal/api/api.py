@@ -9,8 +9,9 @@ from ..models import Sucursal, Vehicle, VehicleSucursal, User, Part, SucursalPar
 from .serializer import (SucursalSerializer, VehicleSerializer, 
                          SucursalVehiclesSerializer, VehicleSucursalsSerializer, 
                          SucursalsStaffSerializer, VehicleSucursalSerializer,
-                         PartSerializer, SucursalPartSerializer,
-                         SucursalVehiclesColorSerializer)
+                         PartSerializer, ListSucursalPartSerializer,
+                         SucursalVehiclesColorSerializer,
+                         CreateSucursalPartSerializer)
 from apps.usuario.api.serializers import UserSerializer
 
 # Create your views here.
@@ -156,5 +157,10 @@ class PartApiView(viewsets.ModelViewSet):
     queryset = Part.objects.all()
     
 class SucursalPartApiView(viewsets.ModelViewSet):
-    serializer_class = SucursalPartSerializer
+    serializer_class = ListSucursalPartSerializer
     queryset = SucursalPart.objects.all()
+
+    def get_serializer_class(self):
+        if self.action == "list":
+            return ListSucursalPartSerializer
+        return CreateSucursalPartSerializer
