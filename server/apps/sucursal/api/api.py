@@ -167,16 +167,16 @@ class PartApiView(viewsets.ModelViewSet):
     queryset = Part.objects.all()
 
     def get_serializer_class(self):
-        if self.action == "list" or "read":
+        if self.action == "list" or self.action == "retrieve":
             return ListPartSerializer
         return CreatePartSerializer
     
 class SucursalPartApiView(viewsets.ModelViewSet):
-    serializer_class = ListSucursalPartSerializer
+    serializer_class = CreateSucursalPartSerializer
     queryset = SucursalPart.objects.all()
 
     def get_serializer_class(self):
-        if self.action == "list" or "read":
+        if self.action == "list" or self.action == "retrieve":
             return ListSucursalPartSerializer
         return CreateSucursalPartSerializer
     
