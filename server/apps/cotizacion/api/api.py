@@ -45,3 +45,19 @@ class AssignedQuoteApiView(viewsets.ModelViewSet):
         
         return Response({'error':'invalid state', 'states':states},
                         status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=False, methods=['GET'], url_path='assigned-quotes-sucursal/(?P<sucursal>\w+)/(?P<state>\w+)')
+    def get_assigned_quotes_sucursal(self, request, sucursal:int, state:str):
+        states = ["IN_PROGRESS","CANCELLED", "ACCEPTED",
+        "FINISHED", "ALL"]
+        if state in states:
+            if state == 'ALL':
+                assigned_quotes = AssignedQuote.objects.filter(seller__sucursal=sucursal)
+            else:
+                assigned_quotes = AssignedQuote.objects.filter(seller__sucursal=sucursal, state=state)
+            assigned_quote_serializer = AssignedQuoteSerializer(assigned_quotes, many=True)
+            return Response(assigned_quote_serializer.data,
+                            status=status.HTTP_200_OK)
+        
+        return Response({'error':'invalid state', 'states':states},
+                        status=status.HTTP_400_BAD_REQUEST)
