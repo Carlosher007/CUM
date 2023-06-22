@@ -17,9 +17,12 @@ class AssignedQuoteApiView(viewsets.ModelViewSet):
     @action(detail=False, methods=['GET'], url_path='assigned-quotes-seller/(?P<seller>\w+)/(?P<state>\w+)')
     def get_assigned_quotes_seller(self, request, seller:str, state:str):
         states = ["IN_PROGRESS","CANCELLED", "ACCEPTED",
-        "FINISHED"]
+        "FINISHED", "ALL"]
         if state in states:
-            assigned_quotes = AssignedQuote.objects.filter(seller=seller, state=state)
+            if state == "ALL":
+                assigned_quotes = AssignedQuote.objects.filter(seller=seller)
+            else:
+                assigned_quotes = AssignedQuote.objects.filter(seller=seller, state=state)
             assigned_quote_serializer = AssignedQuoteSerializer(assigned_quotes, many=True)
             return Response(assigned_quote_serializer.data,
                             status=status.HTTP_200_OK)
@@ -30,9 +33,12 @@ class AssignedQuoteApiView(viewsets.ModelViewSet):
     @action(detail=False, methods=['GET'], url_path='assigned-quotes-client/(?P<client>\w+)/(?P<state>\w+)')
     def get_assigned_quotes_client(self, request, client:str, state:str):
         states = ["IN_PROGRESS","CANCELLED", "ACCEPTED",
-        "FINISHED"]
+        "FINISHED", "ALL"]
         if state in states:
-            assigned_quotes = AssignedQuote.objects.filter(quotation__client=client, state=state)
+            if state == 'ALL':
+                assigned_quotes = AssignedQuote.objects.filter(quotation__client=client)
+            else:
+                assigned_quotes = AssignedQuote.objects.filter(quotation__client=client, state=state)
             assigned_quote_serializer = AssignedQuoteSerializer(assigned_quotes, many=True)
             return Response(assigned_quote_serializer.data,
                             status=status.HTTP_200_OK)
