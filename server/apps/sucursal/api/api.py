@@ -103,6 +103,15 @@ class SucursalApiView(viewsets.ModelViewSet):
 
         return Response({'error': 'No existe un vehiculo que coincida con la id dada'},
                         status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=True, methods=['GET'], url_path='sucursal-parts')
+    def get_sucursal_parts(self, request, pk:int):
+        sucursal_parts = SucursalPart.objects.filter(sucursal=pk)
+        list_sucursal_part_serializer = ListSucursalPartSerializer(
+            sucursal_parts, many=True
+        )
+        return Response(list_sucursal_part_serializer.data,
+                        status=status.HTTP_200_OK)
         
 class VehicleApiView(viewsets.ModelViewSet):
     serializer_class = VehicleSerializer
@@ -170,3 +179,4 @@ class SucursalPartApiView(viewsets.ModelViewSet):
         if self.action == "list" or "read":
             return ListSucursalPartSerializer
         return CreateSucursalPartSerializer
+    
