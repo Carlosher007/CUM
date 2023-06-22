@@ -13,7 +13,7 @@ import {
 } from 'reactstrap';
 import Cookies from 'universal-cookie';
 import { getCars } from '../../assets/api/cars';
-import { getParts } from '../../assets/api/parts';
+import { getParts, getPartsInSucursal } from '../../assets/api/parts';
 import { getCarsBySucursal, getSucursal } from '../../assets/api/sucursal.api';
 import carData from '../../assets/data/carData';
 import { formatPrice } from '../../assets/general/formatPrice';
@@ -64,7 +64,7 @@ const PartsListing = () => {
 
     const getPartData = async () => {
       try {
-        const { data } = await getParts();
+        const { data } = await getPartsInSucursal(idSucursal);
         setDataParts(data);
         console.log(data);
       } catch (error) {
@@ -104,8 +104,9 @@ const PartsListing = () => {
   };
 
   const paginatedPartData = dataParts
-    .filter((part) => part.name.toLowerCase().includes(searchTerm))
+    .filter((part) => part.part.name.toLowerCase().includes(searchTerm))
     .slice(offset, offset + ITEMS_PER_PAGE);
+    
 
   return (
     <div className="bookings">
@@ -148,7 +149,7 @@ const PartsListing = () => {
           </div>
         </div>
 
-        <div className="mt-10">
+        <div className="">
           {paginatedPartData.length > 0 ? (
             <div>
               <PartsTable data={paginatedPartData} />

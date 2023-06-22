@@ -25,4 +25,7 @@ export const urls = {
   editPart:'/dashboard/edit-part/:idPart',
   seeParts:'/dashboard/parts',
   seePart:'/dashboard/parts/:id',
+  myQuotes:'/dashboard/my-quotes/',
+  allQuotes:'/dashboard/all-quotes/',
+  seeQuote:'/dashboard/see-quote/:idQuote'
 };

@@ -26,6 +26,8 @@ import Home from '../pages/Landing/Home';
 import NotFound from '../pages/Landing/NotFound';
 import Offices from '../pages/Landing/Offices';
 import PresentialQuote from '../pages/Landing/PresentialQuote';
+import EditPart from '../pages/Dashboard/EditPart';
+import MyQuotes from '../pages/Dashboard/MyQuotes';
 
 const Routers = () => {
   const cookies = new Cookies();
@@ -230,6 +232,22 @@ const Routers = () => {
           element={
             <FilterPage roles={[]}>
               <NewPart />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.editPart}
+          element={
+            <FilterPage roles={[]}>
+              <EditPart />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.myQuotes}
+          element={
+            <FilterPage roles={[]}>
+              <MyQuotes />
             </FilterPage>
           }
         />

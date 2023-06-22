@@ -78,6 +78,16 @@ const Sidebar = () => {
           display: 'Cotizar Presencialmente',
           role: ['Anyone'],
         },
+        {
+          path: urls.myQuotes,
+          display: 'Mis cotizaciones ',
+          role: ['Anyone'],
+        },
+        {
+          path: urls.allQuotes,
+          display: 'Todas las cotizaciones ',
+          role: ['Anyone'],
+        },
       ],
     },
     {
