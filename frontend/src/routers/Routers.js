@@ -28,6 +28,7 @@ import Offices from '../pages/Landing/Offices';
 import PresentialQuote from '../pages/Landing/PresentialQuote';
 import EditPart from '../pages/Dashboard/EditPart';
 import MyQuotes from '../pages/Dashboard/MyQuotes';
+import DetailsQuote from '../pages/Dashboard/DetailsQuote';
 
 const Routers = () => {
   const cookies = new Cookies();
@@ -248,6 +249,14 @@ const Routers = () => {
           element={
             <FilterPage roles={[]}>
               <MyQuotes />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.seeQuote}
+          element={
+            <FilterPage roles={[]}>
+              <DetailsQuote />
             </FilterPage>
           }
         />

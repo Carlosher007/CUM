@@ -21,7 +21,7 @@ const MyQuotes = () => {
 
   const getQuoteClient = async () => {
     try {
-      const { data } = await getQuotesByClient(id, 'IN_PROGRESS');
+      const { data } = await getQuotesByClient(id, 'ALL');
       setQuotes(data);
       console.log(data)
     } catch (error) {

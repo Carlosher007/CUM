@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
+import { getCar } from '../../../assets/api/cars';
+import { getCarsBySucursal } from '../../../assets/api/sucursal.api';
 import { deleteUser, getUser } from '../../../assets/api/user.api';
 import {
   renderCState,
@@ -10,57 +12,10 @@ import {
 } from '../../../assets/general/cotizationState';
 import { formatPrice } from '../../../assets/general/formatPrice';
 import { urls } from '../../../assets/urls/urls';
-import { getCar } from '../../../assets/api/cars';
-import { getCarsBySucursal } from '../../../assets/api/sucursal.api';
 const MyQuotesTable = ({ data }) => {
-  const [nameClient, setNameClient] = useState('');
-  const [nameSeller, setNameSeller] = useState('');
-  const [modelCar, setModelCar] = useState('');
-  const [yearCar, setYearCar] = useState('');
-
-  const getNameClient = async () => {
-    try {
-      const { dataC } = await getUser(data.quotation.client);
-      setNameClient(dataC.name);
-    } catch (error) {
-      const { data } = error.response;
-      // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-      toast.error(data.error, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    }
-  };
-
-  const getNameSeller = async () => {
-    try {
-      const { dataC } = await getUser(data.seller);
-      setNameSeller(dataC.name);
-    } catch (error) {
-      const { data } = error.response;
-      // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-      toast.error(data.error, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    }
-  };
-
-  const getDataCar = async () => {
-    try {
-      const { dataC } = await getCarsBySucursal(data.quotation.vehicle_sucursal);
-      setNameClient(dataC.name);
-    } catch (error) {
-      const { data } = error.response;
-      // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-      toast.error(data.error, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    }
-  };
-
-  useEffect(() => {});
-
   const cookies = new Cookies();
   const rol = cookies.get('rol');
+
   const renderState = (rol) => {
     if (rol === 'IN_PROGRESS') {
       return (
@@ -94,10 +49,10 @@ const MyQuotesTable = ({ data }) => {
       <div className="bg-secondary-100 p-6 rounded-xl">
         <div className="hidden md:grid grid-cols-1 md:grid-cols-6 mb-2 p-4">
           <h5>Estado</h5>
-          <h5>Numero de Quotas</h5>
-          <h5>Valor de cutoas</h5>
-          <h5>Vehiculo</h5>
-          {rol === 'Cliente' ? <h5>Vendedor</h5> : <h5>Cliente</h5>}
+          <h5>Numero Cuotas</h5>
+          <h5>Valor Cutoa</h5>
+          <h5>ID Vehiculo</h5>
+          {rol === 'Cliente' ? <h5>ID Vendedor</h5> : <h5>ID Cliente</h5>}
           <h5>Acciones</h5>
         </div>
         {data.map((item) => (
@@ -128,14 +83,14 @@ const MyQuotesTable = ({ data }) => {
               <h5 className="md:hidden mt-6 text-white font-bold mb-2">
                 Vehiculo
               </h5>
-              <span>{item.quotation.vehicle_sucursal}</span>
+              <span>{item.quotation.vehicle_sucursal.vehicle}</span>
             </div>
             {rol === 'Cliente' ? (
               <div>
                 <h5 className="md:hidden mt-6 text-white font-bold mb-2">
                   Vendedor
                 </h5>
-                <span>{item.seller}</span>
+                <span>{data.seller}</span>
               </div>
             ) : (
               <div>
@@ -164,12 +119,12 @@ const MyQuotesTable = ({ data }) => {
                   menuClassName="bg-secondary-100 p-4"
                 >
                   <MenuItem className="p-0 hover:bg-transparent">
-                    <p
+                    <Link
                       to={`/dashboard/see-quote/${item.quotation.id}`}
                       className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1"
                     >
-                      Ver
-                    </p>
+                      Ver Detalladamente
+                    </Link>
                   </MenuItem>
                 </Menu>
               </div>
