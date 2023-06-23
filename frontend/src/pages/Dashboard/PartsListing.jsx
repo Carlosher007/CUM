@@ -102,6 +102,7 @@ const PartsListing = () => {
     setSearchTerm(searchTerm);
     setCurrentPage(0);
   };
+  
 
   const paginatedPartData = dataParts
     .filter((part) => part.part.name.toLowerCase().includes(searchTerm))

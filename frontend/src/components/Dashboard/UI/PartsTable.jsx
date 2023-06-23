@@ -7,7 +7,6 @@ import { urls } from '../../../assets/urls/urls';
 import { formatPrice } from '../../../assets/general/formatPrice';
 
 const PartsTable = ({ data }) => {
-  console.log(data)
 
   return (
     <div>

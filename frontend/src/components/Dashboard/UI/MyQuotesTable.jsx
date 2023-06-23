@@ -50,9 +50,15 @@ const MyQuotesTable = ({ data }) => {
         <div className="hidden md:grid grid-cols-1 md:grid-cols-6 mb-2 p-4">
           <h5>Estado</h5>
           <h5>Numero Cuotas</h5>
-          <h5>Valor Cutoa</h5>
+          {rol !== 'Gerente' && <h5>Valor Cutoa</h5>}
           <h5>ID Vehiculo</h5>
-          {rol === 'Cliente' ? <h5>ID Vendedor</h5> : <h5>ID Cliente</h5>}
+          {rol !== 'Gerente' &&
+            (rol === 'Cliente' ? <h5>ID Vendedor</h5> : <h5>ID Cliente</h5>)}
+          {rol === 'Gerente' && (
+            <>
+              <h5>ID Vendedor</h5> <h5>ID Cliente</h5>
+            </>
+          )}
           <h5>Acciones</h5>
         </div>
         {data.map((item) => (
@@ -73,12 +79,14 @@ const MyQuotesTable = ({ data }) => {
               </h5>
               <span>{item.quotation.num_installments}</span>
             </div>
-            <div>
-              <h5 className="md:hidden mt-6 text-white font-bold mb-2">
-                Valor de cuotas
-              </h5>
-              <span>{formatPrice(item.quotation.quota_value)}</span>
-            </div>
+            {rol !== 'Gerente' && (
+              <div>
+                <h5 className="md:hidden mt-6 text-white font-bold mb-2">
+                  Valor de cuotas
+                </h5>
+                <span>{formatPrice(item.quotation.quota_value)}</span>
+              </div>
+            )}
             <div>
               <h5 className="md:hidden mt-6 text-white font-bold mb-2">
                 Vehiculo
@@ -90,15 +98,34 @@ const MyQuotesTable = ({ data }) => {
                 <h5 className="md:hidden mt-6 text-white font-bold mb-2">
                   Vendedor
                 </h5>
-                <span>{data.seller}</span>
+                <span>{item.seller}</span>
               </div>
             ) : (
-              <div>
-                <h5 className="md:hidden mt-6 text-white font-bold mb-2">
-                  Cliente
-                </h5>
-                <span>{item.quotation.client}</span>
-              </div>
+              rol === 'Vendedor' && (
+                <div>
+                  <h5 className="md:hidden mt-6 text-white font-bold mb-2">
+                    Cliente
+                  </h5>
+                  <span>{item.quotation.client}</span>
+                </div>
+              )
+            )}
+            {rol === 'Gerente' && (
+              <>
+                {' '}
+                <div>
+                  <h5 className="md:hidden mt-6 text-white font-bold mb-2">
+                    Vendedor
+                  </h5>
+                  <span>{item.seller}</span>
+                </div>
+                <div>
+                  <h5 className="md:hidden mt-6 text-white font-bold mb-2">
+                    Cliente
+                  </h5>
+                  <span>{item.quotation.client}</span>
+                </div>
+              </>
             )}
 
             <div>

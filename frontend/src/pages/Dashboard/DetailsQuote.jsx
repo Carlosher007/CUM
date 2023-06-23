@@ -4,11 +4,16 @@ import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
 import { getCar } from '../../assets/api/cars';
-import { getQuotesByClient, getQuotesBySeller } from '../../assets/api/quote';
+import {
+  getQuote,
+  getQuotesByClient,
+  getQuotesBySeller,
+} from '../../assets/api/quote';
 import { getUser } from '../../assets/api/user.api';
 import { renderCState } from '../../assets/general/cotizationState';
 import { formatPrice } from '../../assets/general/formatPrice';
 import { urls } from '../../assets/urls/urls';
+import { quoteValidation } from '../../assets/validation/QuoteValidation';
 
 const DetailsQuote = () => {
   const cookies = new Cookies();
@@ -19,21 +24,21 @@ const DetailsQuote = () => {
   const [client, setClient] = useState({});
   const [car, setCar] = useState({});
   const [isPagar, setIsPagar] = useState(false);
-  const typesOfPay = ['Tarjeta de Credito', 'Efecty', 'Banco'];
-  const bankCount = '91838282'
+  const typesOfPay = ['CreditCard', 'Efecty', 'Bank'];
+  const bankCount = '91838282';
   const effectyCount = '2836342';
 
-  
   const [quote, setQuote] = useState([]);
+  const [errorShown, setErrorShown] = useState(false);
 
   const formik = useFormik({
     initialValues: {
-      wayPay:'',
-      numberCC:'',
-      dateExpectedCC:'',
-      segurityCodeCC:'',
+      wayPay: typesOfPay[0],
+      numberCC: '',
+      dateExpectedCC: '',
+      segurityCodeCC: '',
     },
-    // validationSchema: createProfileValidation,
+    validationSchema: quoteValidation,
     onSubmit: (values) => {
       console.log(values);
     },
@@ -63,7 +68,21 @@ const DetailsQuote = () => {
 
       const ucli = await getUser(parseInt(idClient));
       setClient(ucli.data);
-      console.log(ucli.data);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
+  };
+
+  const getQuoteGerente = async () => {
+    try {
+      const { data } = await getQuote(idQuote);
+      setQuote(data);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
@@ -114,8 +133,10 @@ const DetailsQuote = () => {
   const getQuoteDataByRol = () => {
     if (rol === 'Cliente') {
       getQuoteClient();
-    } else {
+    } else if (rol === 'Vendedor') {
       getQuoteSeller();
+    } else {
+      getQuoteGerente();
     }
   };
 
@@ -137,6 +158,15 @@ const DetailsQuote = () => {
   const acceptQuote = async () => {};
 
   const declineQuote = async () => {};
+
+  const showErrorToast = (message) => {
+    if (!errorShown) {
+      toast.error(message, {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      setErrorShown(true);
+    }
+  };
 
   return (
     <div>
@@ -189,7 +219,8 @@ const DetailsQuote = () => {
             </tbody>
           </table>
           <div className="mt-6">
-            {/* {rol !== 'Cliente' && quote.state === 'IN_PROGRESS' && (
+            <hr className="my-8 border-gray-500/30" />
+            {rol !== 'Cliente' && quote.state === 'IN_PROGRESS' && (
               <div>
                 <div className="flex justify-center space-x-4">
                   <button
@@ -206,41 +237,44 @@ const DetailsQuote = () => {
                   </button>
                 </div>
               </div>
-            )} */}
-            {/* {rol === 'Cliente' && quote.state === 'IN_PROGRESS' && (
+            )}
+            {rol === 'Cliente' && quote.state === 'IN_PROGRESS' && (
               <div>
                 <div className="flex justify-center space-x-4">
-                  <p
-                    className="text-primary/80 text-[20px] py-2 px-4 rounded-lg hover:text-primary/80 transition-colors"
-                  >
+                  <p className="text-primary/80 text-[20px] py-2 px-4 rounded-lg hover:text-primary/80 transition-colors">
                     A la espera de que el vendedor decida
                   </p>
                 </div>
               </div>
-            )} */}
-            {/* {quote.state === 'CANCELLED' && (
+            )}
+            {quote.state === 'CANCELLED' && (
               <div>
                 <div className="flex justify-center space-x-4">
-                  <p
-                    className="text-primary/80 text-[20px] py-2 px-4 rounded-lg hover:text-primary/80 transition-colors"
-                  >
+                  <p className="text-primary/80 text-[20px] py-2 px-4 rounded-lg hover:text-primary/80 transition-colors">
                     La cotizacion ha sido cancelada por parte del vendedor
                   </p>
                 </div>
               </div>
-            )} */}
-            {/* {rol!=='Cliente' && quote.state === 'ACCEPTED' && (
+            )}
+            {rol !== 'Cliente' && quote.state === 'ACCEPTED' && (
               <div>
                 <div className="flex justify-center space-x-4">
-                  <p
-                    className="text-primary/80 text-[20px] py-2 px-4 rounded-lg hover:text-primary/80 transition-colors"
-                  >
+                  <p className="text-primary/80 text-[20px] py-2 px-4 rounded-lg hover:text-primary/80 transition-colors">
                     La cotizacion ha sido aceptada y aun no se ha pagado
                   </p>
                 </div>
               </div>
-            )}  */}
-            {rol !== 'Cliente' && quote.state === 'IN_PROGRESS' && (
+            )}
+            {quote.state === 'FINISHED' && (
+              <div>
+                <div className="flex justify-center space-x-4">
+                  <p className="text-primary/80 text-[20px] py-2 px-4 rounded-lg hover:text-primary/80 transition-colors">
+                    El vehiculo se ha comprado
+                  </p>
+                </div>
+              </div>
+            )}
+            {rol === 'Cliente' && !isPagar && quote.state === 'ACCEPTED' && (
               <div>
                 <div className="flex justify-center space-x-4">
                   <button
@@ -265,76 +299,133 @@ const DetailsQuote = () => {
                     <div className="flex-1">
                       <select
                         className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                        value={values.rol}
+                        name="wayPay"
+                        value={values.wayPay}
                         onChange={handleChange}
                       >
-                        <option value="">Seleccione un rol</option>
-                        {rols.map((rol) => (
-                          <option value={rol} key={rol}>
-                            {rol}
+                        {/* <option value="">Seleccione un rol</option> */}
+                        {typesOfPay.map((way) => (
+                          <option value={way} key={way}>
+                            {way}
                           </option>
                         ))}
                       </select>
-                      {touched.rol && errors.rol && showErrorToast(errors.rol)}
+                      {touched.wayPay &&
+                        errors.wayPay &&
+                        showErrorToast(errors.wayPay)}
                     </div>
                   </div>
-                  {/* CC */}
-                  <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-                    <div className="w-full md:w-1/4">
-                      <p>Cedula</p>
+
+                  {values.wayPay === 'CreditCard' && (
+                    <>
+                      <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+                        <div className="w-full md:w-1/4">
+                          <p>Numero de la tarjeta</p>
+                        </div>
+                        <div className="flex-1">
+                          <input
+                            type="text"
+                            className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+                            placeholder="Numero de la tarjeta"
+                            name="numberCC"
+                            value={values.numberCC}
+                            onChange={handleChange}
+                          />
+                          {touched.numberCC &&
+                            errors.numberCC &&
+                            showErrorToast(errors.numberCC)}
+                        </div>
+                      </div>
+                      <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+                        <div className="w-full md:w-1/4">
+                          <p>Fecha de expedicion</p>
+                        </div>
+                        <div className="flex-1">
+                          <input
+                            type="date"
+                            className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+                            placeholder="Fecha de expedicion"
+                            name="dateExpectedCC"
+                            value={values.dateExpectedCC}
+                            onChange={handleChange}
+                          />
+                          {touched.dateExpectedCC &&
+                            errors.dateExpectedCC &&
+                            showErrorToast(errors.dateExpectedCC)}
+                        </div>
+                      </div>
+                      <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+                        <div className="w-full md:w-1/4">
+                          <p>Codigo de seguridad</p>
+                        </div>
+                        <div className="flex-1">
+                          <input
+                            type="text"
+                            className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+                            placeholder="Codigo de seguridad"
+                            name="segurityCodeCC"
+                            value={values.segurityCodeCC}
+                            onChange={handleChange}
+                            maxLength={4}
+                          />
+                          {touched.segurityCodeCC &&
+                            errors.segurityCodeCC &&
+                            showErrorToast(errors.segurityCodeCC)}
+                        </div>
+                      </div>
+                    </>
+                  )}
+
+                  {values.wayPay === 'Efecty' && (
+                    <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+                      <div className="w-full md:w-1/4">
+                        <p>Numero de Cuenta a consignar</p>
+                      </div>
+                      <div className="flex-1">
+                        <input
+                          type="text"
+                          className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+                          value={effectyCount}
+                          disabled={true}
+                        />
+                      </div>
                     </div>
-                    <div className="flex-1">
-                      <input
-                        type="text"
-                        className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                        placeholder="Cedula"
-                        name="id"
-                        value={values.id}
-                        onChange={handleChange}
-                      />
-                      {touched.id && errors.id && showErrorToast(errors.id)}
+                  )}
+
+                  {values.wayPay === 'Bank' && (
+                    <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
+                      <div className="w-full md:w-1/4">
+                        <p>Numero de Cuenta a consignar</p>
+                      </div>
+                      <div className="flex-1">
+                        <input
+                          type="text"
+                          className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+                          value={bankCount}
+                          disabled={true}
+                        />
+                      </div>
                     </div>
-                  </div>
-                  {/* FULL NAME */}
-                  <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-                    <div className="w-full md:w-1/4">
-                      <p>Nombre Completo</p>
-                    </div>
-                    <div className="flex-1">
-                      <input
-                        type="text"
-                        className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                        placeholder="Nombre(s)"
-                        name="full_name"
-                        value={values.full_name}
-                        onChange={handleChange}
-                      />
-                      {touched.full_name &&
-                        errors.full_name &&
-                        showErrorToast(errors.full_name)}
-                    </div>
-                  </div>
-                  {/* EMAIL */}
-                  <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
-                    <div className="w-full md:w-1/4">
-                      <p>
-                        Email <span className="text-red-500">*</span>
-                      </p>
-                    </div>
-                    <div className="flex-1">
-                      <input
-                        type="text"
-                        className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                        placeholder="Email"
-                        name="email"
-                        value={values.email}
-                        onChange={handleChange}
-                      />
-                      {touched.email &&
-                        errors.email &&
-                        showErrorToast(errors.email)}
-                    </div>
-                  </div>
+                  )}
+                  {rol !== 'Cliente' &&
+                    isPagar &&
+                    quote.state === 'IN_PROGRESS' && (
+                      <div>
+                        <div className="flex justify-center space-x-4">
+                          <button
+                            type="submit"
+                            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+                            // onClick={() => console.log('ooo')}
+                            onClick={(event) => {
+                              event.preventDefault(); // Evita el comportamiento predeterminado del botón
+                              handleSubmit(); // Ejecuta la función handleSubmit
+                            }}
+                          >
+                            Proceder con el pago
+                          </button>
+                        </div>
+                      </div>
+                    )}
                 </form>
               </div>
             )}
@@ -413,14 +504,25 @@ const DetailsQuote = () => {
         </div>
       </div>
 
-      <div className="flex justify-start">
-        <Link
-          className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
-          to={urls.myQuotes}
-        >
-          <i class="ri-arrow-left-line"></i> Volver
-        </Link>
-      </div>
+      {rol !== 'Gerente' ? (
+        <div className="flex justify-start">
+          <Link
+            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+            to={urls.myQuotes}
+          >
+            <i className="ri-arrow-left-line"></i> Volver
+          </Link>
+        </div>
+      ) : (
+        <div className="flex justify-start">
+          <Link
+            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+            to={urls.allQuotes}
+          >
+            <i className="ri-arrow-left-line"></i> Volver
+          </Link>
+        </div>
+      )}
     </div>
   );
 };

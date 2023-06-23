@@ -1,7 +1,10 @@
 import React, { useEffect, useState } from 'react';
+import { BsSearch } from 'react-icons/bs';
 import ReactPaginate from 'react-paginate';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Cookies from 'universal-cookie';
+
 import {
   Col,
   Container,
@@ -10,27 +13,27 @@ import {
   InputGroupText,
   Row,
 } from 'reactstrap';
-import Cookies from 'universal-cookie';
 import {
   getQuotes,
   getQuotesByClient,
   getQuotesBySeller,
+  getQuotesBySucursal,
 } from '../../assets/api/quote';
 import { getSucursal, getUsersBySucursal } from '../../assets/api/sucursal.api';
+import { listState } from '../../assets/general/cotizationState';
 import { urls } from '../../assets/urls/urls';
 import MyQuotesTable from '../../components/Dashboard/UI/MyQuotesTable';
 import UsersTable from '../../components/Dashboard/UI/UsersTable';
-import { listState } from '../../assets/general/cotizationState';
 
-const MyQuotes = () => {
+const AllQuotes = () => {
   const ITEMS_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState(0);
-  const [idStateSelectedValue, setIdStateSelectedValue] = useState('');
   const cookies = new Cookies();
   const idSucursal = cookies.get('sucursal');
   const rol = cookies.get('rol');
   const id = cookies.get('id');
   const [quotes, setQuotes] = useState([]);
+  const [idStateSelectedValue, setIdStateSelectedValue] = useState('');
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
@@ -45,14 +48,14 @@ const MyQuotes = () => {
 
   const paginatedQuotesData = quotes.slice(offset, offset + ITEMS_PER_PAGE);
 
-  const getQuoteClient = async () => {
+  const getQuoteSucursal = async () => {
     try {
       let response;
 
       if (idStateSelectedValue === '') {
-        response = await getQuotesByClient(idSucursal, 'ALL');
+        response = await getQuotesBySucursal(idSucursal, 'ALL');
       } else {
-        response = await getQuotesByClient(idSucursal, idStateSelectedValue);
+        response = await getQuotesBySucursal(idSucursal, idStateSelectedValue);
       }
 
       const { data } = response;
@@ -69,46 +72,14 @@ const MyQuotes = () => {
     }
   };
 
-  const getQuoteSeller = async () => {
-    try {
-      let response;
-
-      if (idStateSelectedValue === '') {
-        response = await getQuotesBySeller(idSucursal, 'ALL');
-      } else {
-        response = await getQuotesBySeller(idSucursal, idStateSelectedValue);
-      }
-
-      const { data } = response;
-      setQuotes(data);
-      console.log(data);
-    } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      }
-    }
-  };
-
-  const getQuoteDataByRol = () => {
-    if (rol === 'Cliente') {
-      getQuoteClient();
-    } else {
-      getQuoteSeller();
-    }
-  };
-
-useEffect(() => {
-  getQuoteDataByRol();
-}, [idStateSelectedValue]);
+  useEffect(() => {
+    getQuoteSucursal();
+  }, [idStateSelectedValue]);
 
   return (
     <div className="bookings">
       <div className="text-center font-bold text-3xl bg-secondary-100 p-8 rounded-xl mb-8 booking__wrapper">
-        <h1>Mis Cotizaciones</h1>
+        <h1>Todas las cotizacioens</h1>
       </div>
       <div className="bg-secondary-100 p-8 rounded-xl mb-8">
         <div className="flex flex-col md:flex-row items-center md:gap-16">
@@ -180,4 +151,4 @@ useEffect(() => {
   );
 };
 
-export default MyQuotes;
+export default AllQuotes;

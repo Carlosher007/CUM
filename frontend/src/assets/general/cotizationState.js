@@ -1,4 +1,4 @@
-const listState = [
+export const listState = [
   {
     value: 'IN_PROGRESS',
     return: 'En Progreso',
