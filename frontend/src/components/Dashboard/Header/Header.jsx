@@ -11,7 +11,8 @@ import {
   RiSettings3Line,
   RiThumbUpLine,
 } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
 import { logout } from '../../../assets/api/login.api';
@@ -25,6 +26,7 @@ const Header = () => {
   const email = cookies.get('email');
   const rol = cookies.get('rol');
   const token = cookies.get('token');
+  const navigate = useNavigate();
 
   const deleteCookies = () => {
     Object.keys(cookies.getAll()).forEach((cookieName) => {
@@ -37,8 +39,7 @@ const Header = () => {
       const response = await logout(token);
       const { data } = response;
       deleteCookies();
-      console.log('Se borro las cookies');
-      console.log(data);
+      navigate(urls.home)
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
@@ -58,44 +59,6 @@ const Header = () => {
   return (
     <header className="h-[7vh] md:h-[10vh] border-b border-secondary-100 p-8 flex items-center justify-end">
       <nav className="flex items-center gap-2">
-        <Menu
-          menuButton={
-            <MenuButton className="relative hover:bg-secondary-100 p-2 rounded-lg transition-colors">
-              <RiNotification3Line />
-              <span className="absolute -top-0.5 right-0 bg-primary py-0.5 px-[5px] box-content text-black rounded-full text-[8px] font-bold">
-                {/* {notificationsData.length} */}2
-              </span>
-            </MenuButton>
-          }
-          align="end"
-          arrow
-          transition
-          arrowClassName="bg-secondary-100"
-          menuClassName="bg-secondary-100 p-4"
-        >
-          <h1 className="text-gray-300 text-center font-medium">
-            Notificaciones ({notificationsData.length})
-          </h1>
-          <hr className="my-6 border-gray-500" />
-          {notificationsData
-            .sort((a, b) => convertToDate(b.fecha) - convertToDate(a.fecha))
-            .slice(0, 2)
-            .map((notification, index) => (
-              <MenuItem key={index} className="p-0 hover:bg-transparent">
-                <NotificationItem notification={notification} />
-              </MenuItem>
-            ))}
-          ;
-          <hr className="my-6 border-gray-500" />
-          {/* <MenuItem className="p-0 hover:bg-transparent flex justify-center cursor-default">
-            <Link
-              to="/"
-              className="text-gray-400 text-sm hover:text-white transition-colors"
-            >
-              Todas las notificaciones
-            </Link>
-          </MenuItem> */}
-        </Menu>
         <Menu
           menuButton={
             <MenuButton className="flex items-center gap-x-2 hover:bg-secondary-100 p-2 rounded-lg transition-colors">

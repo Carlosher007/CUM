@@ -51,7 +51,7 @@
 .hero__slider-section {
   position: relative;
   z-index: 10;
-  margin-bottom: 200px;
+  margin-bottom: 80px;
 }
 
 .hero__form {
@@ -73,12 +73,53 @@
 }
 
 .find__car-btn {
-  background: #000d6b !important;
+  background:  #000c6b!important;
   color: #fff !important;
   padding: 8px 15px;
-  width: 100%;
+  width: 110%;
   border: none;
   outline: none;
+}
+
+.find__car-btn2 {
+  background: #7c0b0b !important;
+  color: #fff !important;
+  /* padding: 8px 15px;
+  width: 50%;
+  border: none;
+  outline: none; */
+  min-width: 200px;
+}
+
+.find__car-btn2:hover {
+  background: #7c0b0bb7 !important;
+  color: #fff !important; /* Nuevo color del texto al estar encima */
+}
+
+.find__car-btn3 {
+  background: #116e09 !important;
+  color: #fff !important;
+  /* padding: 8px 15px;
+  width: 50%;
+  border: none;
+  outline: none; */
+    min-width: 200px;
+}
+
+.find__car-btn3:hover {
+  background: #116e09be !important;
+  color: #fff !important; /* Nuevo color del texto al estar encima */
+}
+
+.find__car-btn:hover {
+  background: #000c6bce !important; /* Nuevo color de fondo al estar encima */
+  color: #fff !important; /* Nuevo color del texto al estar encima */
+}
+
+
+.find__car-btn:hover {
+  background: #000c6bce !important; /* Nuevo color de fondo al estar encima */
+  color: #fff !important; /* Nuevo color del texto al estar encima */
 }
 
 @media only screen and (max-width: 992px) {

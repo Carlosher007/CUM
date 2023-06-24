@@ -5,3 +5,7 @@
 ::-webkit-scrollbar {
   width: 0px;
 }
+
+.pagination .active {
+  color: rgba(255, 255, 0, 0.473);
+}

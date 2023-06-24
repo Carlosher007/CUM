@@ -15,16 +15,16 @@ import Cookies from 'universal-cookie';
 import { getCars } from '../../assets/api/cars';
 import { getCarsBySucursal, getSucursal } from '../../assets/api/sucursal.api';
 import carData from '../../assets/data/carData';
+import { formatPrice } from '../../assets/general/formatPrice';
 import { urls } from '../../assets/urls/urls';
 import CarItemD from '../../components/Dashboard/UI/CarItemD';
-import { formatPrice } from '../../assets/general/formatPrice';
 
 const CarListingD = () => {
   const ITEMS_PER_PAGE = 4;
 
   const cookies = new Cookies();
   const idSucursal = cookies.get('sucursal');
-  const rol = cookies.get('rol')
+  const rol = cookies.get('rol');
   const [citySucursal, setCitySucursal] = useState();
   const [currentPage, setCurrentPage] = useState(0);
   const [dataCars, setDataCars] = useState([]);
@@ -53,8 +53,15 @@ const CarListingD = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-          toast.error(data.error, {
+          let errorMessage = '';
+
+          // Construir el mensaje de error con los detalles del error
+          Object.keys(data).forEach((key) => {
+            errorMessage += `${key}: ${data[key][0]}\n`;
+          });
+
+          // Mostrar mensaje de error al usuario utilizando toast
+          toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         }
@@ -69,8 +76,15 @@ const CarListingD = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-          toast.error(data.error, {
+          let errorMessage = '';
+
+          // Construir el mensaje de error con los detalles del error
+          Object.keys(data).forEach((key) => {
+            errorMessage += `${key}: ${data[key][0]}\n`;
+          });
+
+          // Mostrar mensaje de error al usuario utilizando toast
+          toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         }
@@ -96,7 +110,6 @@ const CarListingD = () => {
     setSearchTerm(searchTerm);
     setCurrentPage(0);
   };
-  
 
   const paginatedCarData = sortedCarData
     .filter(
@@ -175,7 +188,7 @@ const CarListingD = () => {
             />
           </div>
         </div>
-        {rol !== 'Cliente' && rol !== 'Jefe_Taller' && (
+        {rol !== 'Cliente' && rol !== 'JefeTaller' && (
           <div className="flex justify-end mt-5">
             <Link to={urls.newVehicle}>
               <button className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors">

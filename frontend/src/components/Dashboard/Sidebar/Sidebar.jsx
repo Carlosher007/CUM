@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 import { toast } from 'react-toastify';
 // Icons
 import {
@@ -18,6 +19,8 @@ const Sidebar = () => {
   const cookies = new Cookies();
   const userRole = cookies.get('rol');
   const token = cookies.get('token');
+  const navigate = useNavigate();
+
 
   const handleLogout = async () => {
     try {
@@ -32,6 +35,7 @@ const Sidebar = () => {
       cookies.remove('address');
       cookies.remove('sucursal');
       cookies.remove('is_superuser');
+      navigate(urls.home);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
@@ -78,6 +82,16 @@ const Sidebar = () => {
           display: 'Cotizar Presencialmente',
           role: ['Anyone'],
         },
+        {
+          path: urls.myQuotes,
+          display: 'Mis cotizaciones ',
+          role: ['Anyone'],
+        },
+        {
+          path: urls.allQuotes,
+          display: 'Todas las cotizaciones ',
+          role: ['Anyone'],
+        },
       ],
     },
     {
@@ -113,6 +127,22 @@ const Sidebar = () => {
         {
           path: urls.newVehicle,
           display: 'Añadir un vehiculo',
+          role: ['Anyone'],
+        },
+      ],
+    },
+    {
+      display: 'Repuestos',
+      role: ['Anyone'],
+      sublinks: [
+        {
+          path: urls.seeParts,
+          display: 'Ver repuestos',
+          role: ['Anyone'],
+        },
+        {
+          path: urls.newPart,
+          display: 'Añadir reuestos',
           role: ['Anyone'],
         },
       ],

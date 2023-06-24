@@ -76,8 +76,15 @@ const NewVehicle = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
@@ -108,10 +115,8 @@ const NewVehicle = () => {
       quantity: '',
     });
     setIdCarSelectedValue(''); // Set the state value to ""
-    setPreviewImage('')
+    setPreviewImage('');
   };
-
-
 
   const getAllVehicles = async () => {
     try {
@@ -120,8 +125,15 @@ const NewVehicle = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
@@ -158,8 +170,15 @@ const NewVehicle = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
@@ -204,8 +223,15 @@ const NewVehicle = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
@@ -287,10 +313,12 @@ const NewVehicle = () => {
   return (
     <div className="bg-secondary-100 p-8 rounded-xl mb-4">
       <div>
-        <h1 className=" text-2xl font-bold">Elegir un Vehiculo Existente</h1>
+        <h1 className=" text-2xl font-bold">
+          Elige un vehiculo existente si desea aumentar su cantidad
+        </h1>
         <div className="mt-5">
           <div style={{ backgroundColor: 'transparent' }} className="">
-            <h2 className=" text-xl mb-4 font-bold">Seleccione</h2>
+            {/* <h2 className=" text-xl mb-4 font-bold">Seleccione</h2> */}
             <FormGroup>
               <Input
                 type="select"

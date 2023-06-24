@@ -20,8 +20,15 @@ const Perfil = ({ user }) => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
@@ -42,7 +49,7 @@ const Perfil = ({ user }) => {
       const selectedValue = parseInt(values.sucursal);
       values.sucursal = isNaN(selectedValue) ? null : selectedValue;
       // console.log(values);
-      updateProfile(values)
+      updateProfile(values);
     },
   });
 
@@ -75,9 +82,17 @@ const Perfil = ({ user }) => {
         const { data } = await getSucursals();
         setSucursals(data);
       } catch (error) {
-        if (error) {
+        if (error.response) {
           const { data } = error.response;
-          toast.error(data.error, {
+          let errorMessage = '';
+
+          // Construir el mensaje de error con los detalles del error
+          Object.keys(data).forEach((key) => {
+            errorMessage += `${key}: ${data[key][0]}\n`;
+          });
+
+          // Mostrar mensaje de error al usuario utilizando toast
+          toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         }

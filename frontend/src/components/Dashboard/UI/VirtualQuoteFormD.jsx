@@ -38,9 +38,17 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
           console.log(data.id);
         }
       } catch (error) {
-        if (error) {
+        if (error.response) {
           const { data } = error.response;
-          toast.error(data.error, {
+          let errorMessage = '';
+
+          // Construir el mensaje de error con los detalles del error
+          Object.keys(data).forEach((key) => {
+            errorMessage += `${key}: ${data[key][0]}\n`;
+          });
+
+          // Mostrar mensaje de error al usuario utilizando toast
+          toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         }
@@ -59,9 +67,17 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
         const { data } = await getSucursals();
         setSucursals(data);
       } catch (error) {
-        if (error) {
+        if (error.response) {
           const { data } = error.response;
-          toast.error(data.error, {
+          let errorMessage = '';
+
+          // Construir el mensaje de error con los detalles del error
+          Object.keys(data).forEach((key) => {
+            errorMessage += `${key}: ${data[key][0]}\n`;
+          });
+
+          // Mostrar mensaje de error al usuario utilizando toast
+          toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         }
@@ -84,6 +100,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     const roundedTotalValue = parseInt(Math.ceil(totalValue));
 
     setLifeSegure(segureLife);
+    console.log(roundedDueValue)
     setValueMensualDue(roundedDueValue);
     setValueTotal(roundedTotalValue);
     setShowValueCotization(true);
@@ -102,7 +119,6 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     },
     validationSchema: virtualQuoteValidation,
     onSubmit: (values) => {
-      console.log('submit');
       calculateQuote(values);
     },
   });
@@ -139,9 +155,17 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
         });
         navigate(urls.seeCars);
       } catch (error) {
-        if (error) {
+        if (error.response) {
           const { data } = error.response;
-          toast.error(data.error, {
+          let errorMessage = '';
+
+          // Construir el mensaje de error con los detalles del error
+          Object.keys(data).forEach((key) => {
+            errorMessage += `${key}: ${data[key][0]}\n`;
+          });
+
+          // Mostrar mensaje de error al usuario utilizando toast
+          toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         }
@@ -244,9 +268,9 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
             </div>
             <div>
               <p>
-                Valor total:{' '}
+                Valor total de la cuota:{' '}
                 <span className="text-primary/60">
-                  {formatPrice(valueTotal)}
+                  {formatPrice(values.quota_value)}
                 </span>
               </p>
             </div>

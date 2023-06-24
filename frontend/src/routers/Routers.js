@@ -15,6 +15,8 @@ import HomeD from '../pages/Dashboard/HomeD';
 import NewSucursal from '../pages/Dashboard/NewSucursal';
 import NewUser from '../pages/Dashboard/NewUser';
 import NewVehicle from '../pages/Dashboard/NewVehicle';
+import NewPart from '../pages/Dashboard/NewPart';
+import PartsListing from '../pages/Dashboard/PartsListing';
 import PresentialQuoteD from '../pages/Dashboard/PresentialQuoteD';
 import Profile from '../pages/Dashboard/Profile';
 import CarDetails from '../pages/Landing/CarDetails';
@@ -24,6 +26,10 @@ import Home from '../pages/Landing/Home';
 import NotFound from '../pages/Landing/NotFound';
 import Offices from '../pages/Landing/Offices';
 import PresentialQuote from '../pages/Landing/PresentialQuote';
+import EditPart from '../pages/Dashboard/EditPart';
+import MyQuotes from '../pages/Dashboard/MyQuotes';
+import DetailsQuote from '../pages/Dashboard/DetailsQuote';
+import AllQuotes from '../pages/Dashboard/AllQuotes';
 
 const Routers = () => {
   const cookies = new Cookies();
@@ -212,6 +218,54 @@ const Routers = () => {
           element={
             <FilterPage roles={[]}>
               <EditVehicle />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.seeParts}
+          element={
+            <FilterPage roles={[]}>
+              <PartsListing />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.newPart}
+          element={
+            <FilterPage roles={[]}>
+              <NewPart />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.editPart}
+          element={
+            <FilterPage roles={[]}>
+              <EditPart />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.myQuotes}
+          element={
+            <FilterPage roles={[]}>
+              <MyQuotes />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.seeQuote}
+          element={
+            <FilterPage roles={[]}>
+              <DetailsQuote />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.allQuotes}
+          element={
+            <FilterPage roles={[]}>
+              <AllQuotes />
             </FilterPage>
           }
         />

@@ -4,7 +4,7 @@
 
 .about__section-item p i {
   color: #f9a826;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
 }
 
 @media only screen and (max-width: 992px) {
@@ -12,15 +12,15 @@
     font-size: 1.5rem;
   }
   .about__section-item {
-    column-gap: 3rem;
+    /* column-gap: 3rem; */
   }
   .about__section-item p {
-    font-size: 0.6rem;
+    font-size: 1rem;
     margin-bottom: 0;
   }
 
   .section__description i {
-    font-size: 0.8rem !important;
+    font-size: 1rem !important;
   }
 }
 
@@ -32,6 +32,6 @@
 
 @media only screen and (max-width: 576px) {
   .about__section {
-    margin-top: 280px;
+    margin-top: 0px;
   }
 }

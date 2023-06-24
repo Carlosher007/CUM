@@ -11,9 +11,14 @@ import {
   Row,
 } from 'reactstrap';
 import { getCars } from '../../assets/api/cars';
+import {
+  getCarsBySucursal,
+  getSucursalsStaff,
+} from '../../assets/api/sucursal.api';
 import Helmet from '../../components/Landing/Helmet/Helmet';
 import CarItem from '../../components/Landing/UI/CarItem';
 import CommonSection from '../../components/Landing/UI/CommonSection';
+import '../../styles/pagination.css';
 
 const CarListing = () => {
   const ITEMS_PER_PAGE = 5;
@@ -24,12 +29,95 @@ const CarListing = () => {
   const [sortOrder, setSortOrder] = useState({
     price: null,
   });
+  const [sucursals, setSucursals] = useState([]);
+  const [selectedSucursal, setSelectedSucursal] = useState('');
 
   const handlePageChange = ({ selected }) => {
     setCurrentPage(selected);
   };
 
+
+  const sortedCarData = [...dataCars].sort((a, b) => {
+    let result = 0;
+
+    if (sortOrder.price === 'low') {
+      result = a.price - b.price;
+    } else if (sortOrder.price === 'high') {
+      result = b.price - a.price;
+    }
+
+    return result;
+  });
+
   const offset = currentPage * ITEMS_PER_PAGE;
+
+  const getCarData = async () => {
+    try {
+      const { data } = await getCars();
+      setDataCars(data);
+      console.log(data)
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
+  };
+
+  const getSucursalsData = async () => {
+    try {
+      const { data } = await getSucursalsStaff();
+      setSucursals(data);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
+  };
+
+  const getCarDataBySucursal = async () => {
+    try {
+      const { data } = await getCarsBySucursal(selectedSucursal);
+      console.log(data);
+      setDataCars(data.map((item) => item.vehicle));
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
+  };
 
   const handleSortChange = (event, property) => {
     const newSortOrder = { ...sortOrder };
@@ -38,44 +126,30 @@ const CarListing = () => {
   };
 
   useEffect(() => {
-    const getCarData = async () => {
-      try {
-        const { data } = await getCars();
-        setDataCars(data);
-      } catch (error) {
-        if (error.response) {
-          const { data } = error.response;
-          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-          toast.error(data.error, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        }
-      }
-    };
     getCarData();
+    getSucursalsData();
   }, []);
-
-  const sortedCarData = [...dataCars].sort((a, b) => {
-    let result = 0;
-
-    if (sortOrder.price === 'low') {
-      result = a.price - b.price;
-    } else if (sortOrder.price === 'high') {
-      result = b.price - a.precio;
-    }
-
-    return result;
-  });
 
   const handleSearch = (event) => {
     const searchTerm = event.target.value.toLowerCase();
     setSearchTerm(searchTerm);
-    setCurrentPage(0);
   };
 
   const paginatedCarData = sortedCarData
-    .filter((car) => car.model.toLowerCase().includes(searchTerm))
+    .filter(
+      (car) =>
+        car.model.toLowerCase().includes(searchTerm) ||
+        (car.year && car.year.toString().includes(searchTerm))
+    )
     .slice(offset, offset + ITEMS_PER_PAGE);
+
+  useEffect(() => {
+    if (selectedSucursal !== '') {
+      getCarDataBySucursal(selectedSucursal); // Llama a la función getCarDataBySucursal
+    } else {
+      getCarData();
+    }
+  }, [selectedSucursal]);
 
   return (
     <div className="bg-white">
@@ -83,9 +157,9 @@ const CarListing = () => {
         <CommonSection title="Lista de Carros" />
         <section className="bg-white">
           <Container>
-            <Row className="gap-20">
-              <Col lg="4" className="mb-5">
-                <div className="flex items-center gap-2">
+            <Row className="gap-2">
+              <Col className="mb-5">
+                <div className="flex items-center">
                   <InputGroup>
                     <InputGroupText>
                       <BsSearch />
@@ -94,11 +168,12 @@ const CarListing = () => {
                       type="text"
                       placeholder="Buscar por modelo"
                       onChange={handleSearch}
+                      style={{ maxWidth: '180px', minWidth: '180px' }}
                     />
                   </InputGroup>
                 </div>
               </Col>
-              <Col lg="4" className="mb-5 ">
+              <Col className="mb-5 ">
                 <div className="flex items-center gap-2 text-black">
                   <span className="flex items-center gap-2">
                     <i className="ri-sort-asc"></i> Ordena por precio
@@ -107,11 +182,33 @@ const CarListing = () => {
                   <Input
                     type="select"
                     onChange={(event) => handleSortChange(event, 'price')}
-                    style={{ maxWidth: '200px' }}
+                    style={{ maxWidth: '160px', minWidth: '160px' }}
                   >
-                    <option>Select</option>
+                    <option value="">Seleccione</option>
                     <option value="low">Ascendente</option>
                     <option value="high">Descendente</option>
+                  </Input>
+                </div>
+              </Col>
+              <Col className="mb-5 ">
+                <div className="flex items-center gap-2 text-black">
+                  <span className="flex items-center gap-2">
+                    <i className="ri-sort-asc"></i> Filtrar por sucursal
+                  </span>
+
+                  <Input
+                    type="select"
+                    onChange={(event) =>
+                      setSelectedSucursal(event.target.value)
+                    }
+                    style={{ maxWidth: '160px', minWidth: '160px' }}
+                  >
+                    <option value="">Todas</option>
+                    {sucursals.map((office) => (
+                      <option value={office.id} key={office.id}>
+                        {office.city}
+                      </option>
+                    ))}
                   </Input>
                 </div>
               </Col>
@@ -119,10 +216,10 @@ const CarListing = () => {
             <Row>
               {paginatedCarData.length > 0 ? (
                 paginatedCarData.map((item) => (
-                  <CarItem item={item} key={item.model} />
+                  <CarItem item={item} key={item.id} />
                 ))
               ) : (
-                <div>No se encontraron resultados.</div>
+                <div>No se encontraron resultados o seleccione el numero de pagina</div>
               )}
             </Row>
           </Container>
@@ -143,7 +240,7 @@ const CarListing = () => {
               pageRangeDisplayed={5}
               onPageChange={handlePageChange}
               containerClassName={'pagination flex gap-2'}
-              activeClassName={'active'}
+              activeClassName={'active-page'}
               pageClassName={'text-black'} // Agrega esta línea para cambiar el color de los números
             />
           </div>

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Col, Container, Row } from 'reactstrap';
 import { getCar } from '../../assets/api/cars';
+import { getCarsWithSucursal } from '../../assets/api/sucursal.api';
 import { codeToColorName, colorOptions } from '../../assets/color/colorUtils';
 import Helmet from '../../components/Landing/Helmet/Helmet';
 import VirtualQuoteForm from '../../components/Landing/UI/VirtualQuoteForm';
@@ -12,30 +13,107 @@ const CarDetails = () => {
   const { id } = useParams();
 
   const [car, setCar] = useState({});
-  const [selectedColor, setSelectedColor] = useState(colorOptions[0]);
+  const [avalaibleSucursals, setAvalaibleSucursals] = useState([]);
+  const [colors, setColors] = useState([]);
+  const [selectedColor, setSelectedColor] = useState("");
 
   const handleColorChange = (color) => {
     setSelectedColor(color.hex.toUpperCase());
   };
 
-  useEffect(() => {
-    const getCarData = async () => {
-      try {
-        const { data } = await getCar(id);
-        setCar(data);
-        console.log(data);
-      } catch (error) {
-        if (error.response) {
-          const { data } = error.response;
-          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-          toast.error(data.error, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        }
+  const getAvailableColors = async () => {
+    try {
+      const { data } = await getCarsWithSucursal();
+      const allColors = [
+        ...new Set(
+          data
+            .filter(
+              (item) =>
+                item.vehicle === parseInt(id))
+            .map((item) => item.color)
+        ),
+      ];
+      setColors(allColors)
+      setSelectedColor(allColors[0])
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
-    };
+    }
+  };
+
+  const getAvailableSucursals = async () => {
+    try {
+      const { data } = await getCarsWithSucursal();
+      const allSucursals = [
+        ...new Set(
+          data
+            .filter((item) => item.vehicle === parseInt(id) && item.color===selectedColor)
+            .map((item) => item.sucursal)
+        ),
+      ];
+      setAvalaibleSucursals(allSucursals);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
+  };
+
+  const getCarData = async () => {
+    try {
+      const { data } = await getCar(id);
+      setCar(data);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
     getCarData();
+    getAvailableColors();
   }, []);
+
+  useEffect(() => {
+    if(selectedColor!==""){
+      getAvailableSucursals();
+    }
+  }, [selectedColor]);
 
   return (
     <div className="bg-white">
@@ -67,7 +145,7 @@ const CarDetails = () => {
                     <div className="my-4">
                       <div className="color__options">
                         <CirclePicker
-                          colors={colorOptions}
+                          colors={colors}
                           color={selectedColor}
                           onChangeComplete={handleColorChange}
                           circleSize={30}
@@ -155,7 +233,12 @@ const CarDetails = () => {
               <div className="bg-gray-100 w-full max-w-2xl rounded-lg shadow-md mt-5">
                 <div className="booking-info mt-5">
                   <h4 className=" font-bold">Cotice su vehiculo ahora</h4>
-                  <VirtualQuoteForm slug={id} selectedColor={selectedColor} />
+                  <VirtualQuoteForm
+                    slug={id}
+                    selectedColor={selectedColor}
+                    price={car.price}
+                    sucursalsAvalaible={avalaibleSucursals}
+                  />
                 </div>
               </div>
             </Row>

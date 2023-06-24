@@ -32,7 +32,6 @@ const Login = () => {
 
   const sendVerificationCodeToEmail = async (email) => {
     try {
-      console.log(email);
       const response = await sendEmail(email);
       const { code } = response.data;
       setVerificationCode(code);
@@ -48,8 +47,9 @@ const Login = () => {
 
   const handleResendEmail = async () => {
     try {
-      // Volver a enviar el código de verificación al correo electrónico del usuario
-      await sendVerificationCodeToEmail(values.email);
+      const response = await sendEmail(values.email);
+      const { code } = response.data;
+      setVerificationCode(code);
 
       // Mostrar notificación para indicar que se ha enviado el correo nuevamente
       toast.success('Se ha enviado el correo de verificación nuevamente', {
@@ -207,7 +207,7 @@ const Login = () => {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
+    <div className="min-h-screen flex items-center justify-center p-4 bg-secondary-200">
       <div className="bg-secondary-100 p-8 rounded-xl shadow-2xl w-auto lg:w-[450px]">
         <h1 className="text-3xl text-center uppercase font-bold tracking-[5px] text-white mb-8">
           Iniciar <span className="text-primary">sesión</span>
@@ -219,7 +219,7 @@ const Login = () => {
                 <RiMailLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
                 <input
                   type="email"
-                  className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg"
+                  className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none text-white rounded-lg"
                   placeholder="Email"
                   name="email"
                   value={values.email}
@@ -235,7 +235,7 @@ const Login = () => {
                 <RiLockLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
                 <input
                   type={showPassword ? 'text' : 'password'}
-                  className="py-3 px-8 bg-secondary-900 w-full outline-none rounded-lg"
+                  className="py-3 px-8 bg-secondary-900 w-full outline-none rounded-lg text-white"
                   placeholder="Contraseña"
                   name="password"
                   value={values.password}
@@ -278,8 +278,8 @@ const Login = () => {
                 </button>
               </FormGroup>
             </div>
-            <div className="flex flex-col items-center gap-4">
-              <span className="flex items-center gap-2">
+            <div className="flex flex-col items-center gap-4 text-white">
+              <span className="flex items-center gap-2 text-white">
                 ¿Deseas regresar?{' '}
                 <Link
                   to={urls.home}
@@ -297,7 +297,7 @@ const Login = () => {
                 <RiMailLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
                 <input
                   type="text"
-                  className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none rounded-lg"
+                  className="py-3 pl-8 pr-4 bg-secondary-900 w-full outline-none text-white rounded-lg"
                   placeholder="Código de verificación"
                   value={codeUser}
                   onChange={(e) => setCodeUser(e.target.value)}
@@ -316,7 +316,7 @@ const Login = () => {
               </FormGroup>
             </div>
             <div className="flex flex-col items-center gap-4">
-              <span className="flex items-center gap-2">
+              <span className="flex items-center gap-2 text-white">
                 ¿Deseas regresar?{' '}
                 <Link
                   to={urls.login}
@@ -332,7 +332,7 @@ const Login = () => {
               <button
                 type="button"
                 className="text-primary hover:text-gray-100 transition-colors"
-                onClick={() => sendVerificationCodeToEmail(usernameG)}
+                onClick={() => handleResendEmail()}
               >
                 Enviar correo nuevamente
               </button>

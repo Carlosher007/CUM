@@ -12,13 +12,20 @@ export const urls = {
   // Dashboard
   home2: '/dashboard/home2',
   profile: '/dashboard/perfil',
-  seeCarsD: '/dashboard/cars',
-  seeCarD: '/dashboard/cars/:id',
-  presentialquoteD: '/dashboard/pquote',
+  newUser: '/dashboard/new-user',
   allUsers: '/dashboard/all-users',
   editUser: '/dashboard/edit-user/:id',
-  newUser: '/dashboard/new-user',
-  newSucursal: '/dashboard/new-sucursal',
+  seeCarsD: '/dashboard/cars',
+  seeCarD: '/dashboard/cars/:id',
   newVehicle:'/dashboard/new-vehicle',
-  editVehicle:'/dashboard/edit-vehicle/:idVehicle'
+  editVehicle:'/dashboard/edit-vehicle/:idVehicle',
+  presentialquoteD: '/dashboard/pquote',
+  newSucursal: '/dashboard/new-sucursal',
+  newPart:'/dashboard/new-part',
+  editPart:'/dashboard/edit-part/:idPart',
+  seeParts:'/dashboard/parts',
+  seePart:'/dashboard/parts/:id',
+  myQuotes:'/dashboard/my-quotes/',
+  allQuotes:'/dashboard/all-quotes/',
+  seeQuote:'/dashboard/see-quote/:idQuote'
 };
