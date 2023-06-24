@@ -189,7 +189,6 @@ const VirtualQuoteForm = ({
     },
     // validationSchema: virtualQuoteValidation,
     onSubmit: async (values) => {
-      console.log('ooooo');
       try {
         const data = await createUser();
         if (data !== undefined) {
