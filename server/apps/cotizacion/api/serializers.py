@@ -15,8 +15,13 @@ class ListQuotationSerializer(serializers.ModelSerializer):
         fields = '__all__'
         read_only_fields = ['id']
 
-class AssignedQuoteSerializer(serializers.ModelSerializer):
+class ListAssignedQuoteSerializer(serializers.ModelSerializer):
     quotation = ListQuotationSerializer()
+    class Meta:
+        model = AssignedQuote
+        fields = '__all__'
+
+class CreateAssignedQuoteSerializer(serializers.ModelSerializer):
     class Meta:
         model = AssignedQuote
         fields = '__all__'

@@ -4,15 +4,22 @@ from rest_framework.response import Response
 from rest_framework.decorators import action
 
 from ..models import Quotation, AssignedQuote
-from .serializers import QuotationSerializer, AssignedQuoteSerializer
+from .serializers import (QuotationSerializer, CreateAssignedQuoteSerializer,
+                          ListAssignedQuoteSerializer)
 
 class QuotationApiView(viewsets.ModelViewSet):
     serializer_class = QuotationSerializer
     queryset = Quotation.objects.all()
 
 class AssignedQuoteApiView(viewsets.ModelViewSet):
-    serializer_class = AssignedQuoteSerializer
+    serializer_class = CreateAssignedQuoteSerializer
     queryset = AssignedQuote.objects.all()
+
+    def get_serializer_class(self):
+        print(self.action)
+        if self.action == "list" or self.action == "retrieve":
+            return ListAssignedQuoteSerializer
+        return CreateAssignedQuoteSerializer
 
     @action(detail=False, methods=['GET'], url_path='assigned-quotes-seller/(?P<seller>\w+)/(?P<state>\w+)')
     def get_assigned_quotes_seller(self, request, seller:str, state:str):
@@ -23,7 +30,7 @@ class AssignedQuoteApiView(viewsets.ModelViewSet):
                 assigned_quotes = AssignedQuote.objects.filter(seller=seller)
             else:
                 assigned_quotes = AssignedQuote.objects.filter(seller=seller, state=state)
-            assigned_quote_serializer = AssignedQuoteSerializer(assigned_quotes, many=True)
+            assigned_quote_serializer = ListAssignedQuoteSerializer(assigned_quotes, many=True)
             return Response(assigned_quote_serializer.data,
                             status=status.HTTP_200_OK)
         
@@ -39,7 +46,7 @@ class AssignedQuoteApiView(viewsets.ModelViewSet):
                 assigned_quotes = AssignedQuote.objects.filter(quotation__client=client)
             else:
                 assigned_quotes = AssignedQuote.objects.filter(quotation__client=client, state=state)
-            assigned_quote_serializer = AssignedQuoteSerializer(assigned_quotes, many=True)
+            assigned_quote_serializer = ListAssignedQuoteSerializer(assigned_quotes, many=True)
             return Response(assigned_quote_serializer.data,
                             status=status.HTTP_200_OK)
         
@@ -55,7 +62,7 @@ class AssignedQuoteApiView(viewsets.ModelViewSet):
                 assigned_quotes = AssignedQuote.objects.filter(seller__sucursal=sucursal)
             else:
                 assigned_quotes = AssignedQuote.objects.filter(seller__sucursal=sucursal, state=state)
-            assigned_quote_serializer = AssignedQuoteSerializer(assigned_quotes, many=True)
+            assigned_quote_serializer = ListAssignedQuoteSerializer(assigned_quotes, many=True)
             return Response(assigned_quote_serializer.data,
                             status=status.HTTP_200_OK)
         
