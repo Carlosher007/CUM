@@ -9,8 +9,8 @@ import { formatPrice } from '../../../assets/general/formatPrice';
 
 const CarItemD = (props) => {
   const cookies = new Cookies();
-  const rol = cookies.get('rol');
-  // const rol = 'Cliente'
+  // const rol = cookies.get('rol');
+  const rol = 'Cliente'
 
   const {
     model,
