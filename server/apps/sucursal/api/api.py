@@ -180,3 +180,32 @@ class SucursalPartApiView(viewsets.ModelViewSet):
             return ListSucursalPartSerializer
         return CreateSucursalPartSerializer
     
+    def create(self, request):
+        create_sucursal_part_serializer = CreateSucursalPartSerializer(data=request.data)
+        if create_sucursal_part_serializer.is_valid():
+            create_sucursal_part_serializer.save()
+            return Response(create_sucursal_part_serializer.data,
+                            status=status.HTTP_201_CREATED) 
+        else:
+            if 'non_field_errors' in create_sucursal_part_serializer.errors:
+                if create_sucursal_part_serializer.errors['non_field_errors'][0].code == 'unique':
+                    try:
+                        sucursal_part = SucursalPart.objects.filter(
+                            sucursal=create_sucursal_part_serializer.data['sucursal'],
+                            part=create_sucursal_part_serializer.data['part']
+                        ).first()
+
+                        sucursal_part.quantity = sucursal_part.quantity+create_sucursal_part_serializer.data['quantity']
+                        sucursal_part.save()
+
+                        return Response(CreateSucursalPartSerializer(sucursal_part).data,
+                                        status=status.HTTP_200_OK)
+                    except:
+                        return Response({'error':'Datos invalidos o faltantes'},
+                                        status=status.HTTP_400_BAD_REQUEST)
+                else:
+                    return Response(create_sucursal_part_serializer.errors,
+                                    status=status.HTTP_400_BAD_REQUEST)
+            return Response(create_sucursal_part_serializer.errors,
+                            status=status.HTTP_400_BAD_REQUEST)
+    
