@@ -6,6 +6,7 @@ from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser
 from rest_framework import viewsets, status
 
+from .. import views
 from ..models import Sucursal, Vehicle, VehicleSucursal, User, Part, SucursalPart
 from .serializer import (SucursalSerializer, VehicleSerializer, 
                          SucursalVehiclesSerializer, VehicleSucursalsSerializer, 
@@ -112,6 +113,18 @@ class SucursalApiView(viewsets.ModelViewSet):
             sucursal_parts, many=True
         )
         return Response(list_sucursal_part_serializer.data,
+                        status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['GET'], url_path='sold-vehicles-sucursal/(?P<sucursal>\w+)')
+    def get_sold_vehicles_sucursal(self, request, sucursal:int):
+        sold_vehicles_sucursal = views.sold_vehicles_sucursal(sucursal)
+        return Response(sold_vehicles_sucursal,
+                        status=status.HTTP_200_OK)
+
+    @action(detail=False, methods=['GET'], url_path='sold-vehicles-client/(?P<client>\w+)')
+    def get_sold_vehicles_client(self, request, client:str):
+        sold_vehicles_client = views.sold_vehicles_client(client)
+        return Response(sold_vehicles_client,
                         status=status.HTTP_200_OK)
         
 class VehicleApiView(viewsets.ModelViewSet):
