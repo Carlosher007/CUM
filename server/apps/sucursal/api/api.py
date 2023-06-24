@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.db.models import F 
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
@@ -215,3 +216,12 @@ class SucursalPartApiView(viewsets.ModelViewSet):
             return Response(create_sucursal_part_serializer.errors,
                             status=status.HTTP_400_BAD_REQUEST)
     
+    @action(detail=False, methods=['GET'], url_path='sucursal-parts/(?P<sucursal>\w+)')
+    def get_sucursal_parts(self, request, sucursal:int):
+        sucursal_parts = SucursalPart.objects.filter(
+            sucursal=sucursal).annotate(
+            part_name=F('part__name')).order_by('part_name').distinct(
+            'part_name').values('part_name')
+        return Response(sucursal_parts,
+                        status=status.HTTP_200_OK)
+        
