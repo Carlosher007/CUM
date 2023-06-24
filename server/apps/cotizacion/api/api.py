@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.core.mail import send_mail
 
 from rest_framework import status
 from rest_framework import viewsets
@@ -76,7 +77,11 @@ class AssignedQuoteApiView(viewsets.ModelViewSet):
         
         if assigned_quote.state == 'FINISHED':
             return Response({'error':'This assigned-quote is already finished'},
-                            status=status.HTTP_405_METHOD_NOT_ALLOWED)       
+                            status=status.HTTP_405_METHOD_NOT_ALLOWED) 
+
+        if assigned_quote.state != 'ACCEPTED':
+            return Response({'error':'This assigned-quote is not ACCEPTED'},
+                            status=status.HTTP_405_METHOD_NOT_ALLOWED)        
         
         vehicle_sucursal = assigned_quote.quotation.vehicle_sucursal
         if vehicle_sucursal.quantity <= 0:
@@ -88,6 +93,37 @@ class AssignedQuoteApiView(viewsets.ModelViewSet):
         assigned_quote.state = 'FINISHED'
 
         vehicle_sucursal.save()
+        assigned_quote.save()
+        return Response(CreateAssignedQuoteSerializer(assigned_quote).data,
+                        status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['GET'], url_path='cancel-assigned-quote')
+    def cancel_assigned_quote(self, request, pk:int):
+        assigned_quote = get_object_or_404(AssignedQuote, pk=pk)
+        
+        if assigned_quote.state == 'CANCELLED':
+            return Response({'error':'This assigned-quote is already CANCELLED'},
+                            status=status.HTTP_405_METHOD_NOT_ALLOWED)    
+
+        if assigned_quote.state != 'IN_PROGRESS':
+            return Response({'error':'This assigned-quote cannot be CANCELLED'},
+                            status=status.HTTP_405_METHOD_NOT_ALLOWED)    
+
+        try:
+            assigned_quote_id = assigned_quote.quotation.id
+            client_email = assigned_quote.quotation.client.email
+            send_mail(
+                    'Cotizacion Cancelada',
+                    f'Su cotizacion con id {assigned_quote_id} fue cancelada',
+                    'settings.EMAIL_HOST_USER',
+                    [client_email],
+                    fail_silently=False,
+                )
+        except:
+            return Response({'error':'No se logro enviar el email'},
+                               status=status.HTTP_400_BAD_REQUEST)
+
+        assigned_quote.state = 'CANCELLED'
         assigned_quote.save()
         return Response(CreateAssignedQuoteSerializer(assigned_quote).data,
                         status=status.HTTP_200_OK)
