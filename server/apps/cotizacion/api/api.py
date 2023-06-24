@@ -1,3 +1,5 @@
+from django.shortcuts import get_object_or_404
+
 from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
@@ -16,7 +18,6 @@ class AssignedQuoteApiView(viewsets.ModelViewSet):
     queryset = AssignedQuote.objects.all()
 
     def get_serializer_class(self):
-        print(self.action)
         if self.action == "list" or self.action == "retrieve":
             return ListAssignedQuoteSerializer
         return CreateAssignedQuoteSerializer
@@ -68,3 +69,25 @@ class AssignedQuoteApiView(viewsets.ModelViewSet):
         
         return Response({'error':'invalid state', 'states':states},
                         status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=True, methods=['GET'], url_path='finish-assigned-quote')
+    def finish_assigned_quote(self, request, pk:int):
+        assigned_quote = get_object_or_404(AssignedQuote, pk=pk)
+        
+        if assigned_quote.state == 'FINISHED':
+            return Response({'error':'This assigned-quote is already finished'},
+                            status=status.HTTP_405_METHOD_NOT_ALLOWED)       
+        
+        vehicle_sucursal = assigned_quote.quotation.vehicle_sucursal
+        if vehicle_sucursal.quantity <= 0:
+            return Response({'error':'El vehiculo correspondiente a la cotizacion no tiene unidades disponibles'},
+                            status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        
+        vehicle_sucursal.quantity = vehicle_sucursal.quantity - 1
+
+        assigned_quote.state = 'FINISHED'
+
+        vehicle_sucursal.save()
+        assigned_quote.save()
+        return Response(CreateAssignedQuoteSerializer(assigned_quote).data,
+                        status=status.HTTP_200_OK)
