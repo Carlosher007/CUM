@@ -32,7 +32,6 @@ const Login = () => {
 
   const sendVerificationCodeToEmail = async (email) => {
     try {
-      console.log(email);
       const response = await sendEmail(email);
       const { code } = response.data;
       setVerificationCode(code);
@@ -48,8 +47,9 @@ const Login = () => {
 
   const handleResendEmail = async () => {
     try {
-      // Volver a enviar el código de verificación al correo electrónico del usuario
-      await sendVerificationCodeToEmail(values.email);
+      const response = await sendEmail(values.email);
+      const { code } = response.data;
+      setVerificationCode(code);
 
       // Mostrar notificación para indicar que se ha enviado el correo nuevamente
       toast.success('Se ha enviado el correo de verificación nuevamente', {
@@ -332,7 +332,7 @@ const Login = () => {
               <button
                 type="button"
                 className="text-primary hover:text-gray-100 transition-colors"
-                onClick={() => sendVerificationCodeToEmail(usernameG)}
+                onClick={() => handleResendEmail()}
               >
                 Enviar correo nuevamente
               </button>

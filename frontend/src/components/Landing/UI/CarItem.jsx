@@ -18,13 +18,15 @@ const CarItem = (props) => {
     id,
   } = props.item;
 
-  console.log(image)
-
   return (
     <Col lg="4" md="4" sm="6" className="mb-5">
       <div className="car__item">
         <div className="car__img">
-          <img src={image} alt="" className="w-100" />
+          <img
+            src={image}
+            alt=""
+            className="w-full max-h-[160px] object-cover"
+          />
         </div>
 
         <div className="car__item-content mt-4">
@@ -44,15 +46,15 @@ const CarItem = (props) => {
                 {battery_capacity} kWh
               </span>
               <span className=" d-flex align-items-center gap-1">
-                <i class="ri-battery-2-charge-fill"></i> {charging_time} hr
+                <i className="ri-battery-2-charge-fill"></i> {charging_time} hr
               </span>
             </div>
             <div>
               <span className=" d-flex align-items-center gap-1">
-                <i class="ri-speed-fill"></i> {top_speed} km/h
+                <i className="ri-speed-fill"></i> {top_speed} km/h
               </span>
               <span className=" d-flex align-items-center gap-1">
-                <i class="ri-door-fill"></i> {doors} 
+                <i className="ri-door-fill"></i> {doors}
               </span>
             </div>
           </div>

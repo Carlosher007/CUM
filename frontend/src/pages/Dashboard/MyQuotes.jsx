@@ -17,10 +17,10 @@ import {
   getQuotesBySeller,
 } from '../../assets/api/quote';
 import { getSucursal, getUsersBySucursal } from '../../assets/api/sucursal.api';
+import { listState } from '../../assets/general/cotizationState';
 import { urls } from '../../assets/urls/urls';
 import MyQuotesTable from '../../components/Dashboard/UI/MyQuotesTable';
 import UsersTable from '../../components/Dashboard/UI/UsersTable';
-import { listState } from '../../assets/general/cotizationState';
 
 const MyQuotes = () => {
   const ITEMS_PER_PAGE = 5;
@@ -61,8 +61,15 @@ const MyQuotes = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
@@ -85,8 +92,15 @@ const MyQuotes = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
@@ -101,9 +115,9 @@ const MyQuotes = () => {
     }
   };
 
-useEffect(() => {
-  getQuoteDataByRol();
-}, [idStateSelectedValue]);
+  useEffect(() => {
+    getQuoteDataByRol();
+  }, [idStateSelectedValue]);
 
   return (
     <div className="bookings">

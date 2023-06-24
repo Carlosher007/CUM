@@ -14,8 +14,7 @@ const Layout = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    if (token !== null || !isNaN(token)) {
-      console.log("oooo")
+    if (token !== undefined ) {
       navigate(urls.home2);
     }
   }, [token, navigate]);

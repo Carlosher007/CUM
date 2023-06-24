@@ -53,8 +53,15 @@ const PartsListing = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-          toast.error(data.error, {
+          let errorMessage = '';
+
+          // Construir el mensaje de error con los detalles del error
+          Object.keys(data).forEach((key) => {
+            errorMessage += `${key}: ${data[key][0]}\n`;
+          });
+
+          // Mostrar mensaje de error al usuario utilizando toast
+          toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         }
@@ -70,8 +77,15 @@ const PartsListing = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-          toast.error(data.error, {
+          let errorMessage = '';
+
+          // Construir el mensaje de error con los detalles del error
+          Object.keys(data).forEach((key) => {
+            errorMessage += `${key}: ${data[key][0]}\n`;
+          });
+
+          // Mostrar mensaje de error al usuario utilizando toast
+          toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         }
@@ -86,8 +100,15 @@ const PartsListing = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-          toast.error(data.error, {
+          let errorMessage = '';
+
+          // Construir el mensaje de error con los detalles del error
+          Object.keys(data).forEach((key) => {
+            errorMessage += `${key}: ${data[key][0]}\n`;
+          });
+
+          // Mostrar mensaje de error al usuario utilizando toast
+          toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         }
@@ -102,12 +123,10 @@ const PartsListing = () => {
     setSearchTerm(searchTerm);
     setCurrentPage(0);
   };
-  
 
   const paginatedPartData = dataParts
     .filter((part) => part.part.name.toLowerCase().includes(searchTerm))
     .slice(offset, offset + ITEMS_PER_PAGE);
-    
 
   return (
     <div className="bookings">

@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
 import { getCar, getColorsCar } from '../../assets/api/cars';
+import { getCarsWithSucursal } from '../../assets/api/sucursal.api';
 import { codeToColorName, colorOptions } from '../../assets/color/colorUtils';
 import { formatPrice } from '../../assets/general/formatPrice';
 import VirtualQuoteFormD from '../../components/Dashboard/UI/VirtualQuoteFormD';
@@ -16,45 +17,61 @@ const CarDetailsD = () => {
   const [car, setCar] = useState({});
   const [selectedColor, setSelectedColor] = useState('');
   const [availableColors, setAvailableColors] = useState([]);
+  const [availableSucursals, setAvailableSucursals] = useState([]);
 
   const handleColorChange = (color) => {
     setSelectedColor(color.hex.toUpperCase());
   };
 
-  useEffect(() => {
-    const getCarData = async () => {
-      try {
-        const { data } = await getCar(id);
-        setCar(data);
-      } catch (error) {
-        if (error.response) {
-          const { data } = error.response;
-          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-          toast.error(data.error, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        }
-      }
-    };
-    getCarData();
+  const getCarData = async () => {
+    try {
+      const { data } = await getCar(id);
+      setCar(data);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        let errorMessage = '';
 
-    const getAvailableColors = async () => {
-      try {
-        console.log(idSucursal+" "+id)
-        const { data } = await getColorsCar(idSucursal, id);
-        const colors = data.map((obj) => obj.color);
-        setAvailableColors(colors);
-        setSelectedColor(colors[0])
-      } catch (error) {
-        if (error.response) {
-          const { data } = error.response;
-          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-          toast.error(data.error, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        }
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
-    };
+    }
+  };
+
+  const getAvailableColors = async () => {
+    try {
+      console.log(idSucursal + ' ' + id);
+      const { data } = await getColorsCar(idSucursal, id);
+      const colors = data.map((obj) => obj.color);
+      setAvailableColors(colors);
+      setSelectedColor(colors[0]);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    getCarData();
     getAvailableColors();
   }, []);
 

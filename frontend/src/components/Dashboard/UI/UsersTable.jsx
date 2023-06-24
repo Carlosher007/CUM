@@ -6,7 +6,6 @@ import { deleteUser } from '../../../assets/api/user.api';
 import { urls } from '../../../assets/urls/urls';
 
 const UsersTable = ({ data, updateUserList }) => {
-
   function convertToDate(dateString) {
     const parts = dateString.split('/');
     const formattedDate = `${parts[2]}-${parts[1]}-${parts[0]}`;
@@ -24,8 +23,15 @@ const UsersTable = ({ data, updateUserList }) => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
           position: toast.POSITION.TOP_RIGHT,
         });
       }

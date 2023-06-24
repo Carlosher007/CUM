@@ -10,12 +10,12 @@ const AboutSection = ({ aboutClass }) => {
       style={
         aboutClass === 'aboutPage'
           ? { marginTop: '0px' }
-          : { marginTop: '280px' }
+          : { marginTop: '0px' }
       }
     >
       <Container>
         <Row>
-          <Col lg="6" md="6">
+          <Col>
             <div className="about__section-content text-black">
               <h4 className="section__subtitle">Sobre nosotros</h4>
               <h2 className="section__title">Bienvenido a CUM</h2>
@@ -28,34 +28,34 @@ const AboutSection = ({ aboutClass }) => {
                 calidad. ¡Únete a la movilidad sostenible con nosotros!
               </p>
 
-              <div className="about__section-item d-flex align-items-start ">
+              <div className="about__section-item d-flex align-items-center ">
                 <p className="section__description d-flex align-items-center gap-2 text-black">
-                  <i class="ri-checkbox-circle-line"></i> 10 años de experiencia
+                  <i className="ri-checkbox-circle-line"></i> 10 años de experiencia
                 </p>
 
                 <p className="section__description d-flex align-items-center gap-2 text-black">
-                  <i class="ri-checkbox-circle-line"></i> Servicio de calidad
+                  <i className="ri-checkbox-circle-line"></i> Servicio de calidad
                 </p>
               </div>
 
               <div className="about__section-item d-flex align-items-center">
                 <p className="section__description d-flex align-items-center gap-2 text-black">
-                  <i class="ri-checkbox-circle-line"></i> Amplia selección de
+                  <i className="ri-checkbox-circle-line"></i> Amplia selección de
                   modelos
                 </p>
 
                 <p className="section__description d-flex align-items-center gap-2 text-black">
-                  <i class="ri-checkbox-circle-line"></i> Precios competitivos
+                  <i className="ri-checkbox-circle-line"></i> Precios competitivos
                 </p>
               </div>
             </div>
           </Col>
 
-          <Col lg="6" md="6">
+          {/* <Col lg="6" md="6">
             <div className="about__img">
               <img src={aboutImg} alt="" className="w-100" />
             </div>
-          </Col>
+          </Col> */}
         </Row>
       </Container>
     </section>

@@ -17,9 +17,17 @@ const PresentialQuoteForm = () => {
         setSucursals(data);
         console.log(data);
       } catch (error) {
-        if (error) {
+        if (error.response) {
           const { data } = error.response;
-          toast.error(data.error, {
+          let errorMessage = '';
+
+          // Construir el mensaje de error con los detalles del error
+          Object.keys(data).forEach((key) => {
+            errorMessage += `${key}: ${data[key][0]}\n`;
+          });
+
+          // Mostrar mensaje de error al usuario utilizando toast
+          toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         }

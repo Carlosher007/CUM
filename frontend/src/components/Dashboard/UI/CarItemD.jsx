@@ -60,6 +60,7 @@ const CarItemD = (props) => {
           <img src={image} alt="" className="w-full max-h-[120px] object-cover" />
         </div>
 
+
         <div className="mt-4">
           <h4 className="text-center text-xl font-semibold">
             {model} - {year}

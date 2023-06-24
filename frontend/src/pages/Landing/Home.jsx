@@ -31,8 +31,9 @@ const Home = () => {
     getCarData();
   }, []);
 
+  
   return (
-    <div className="bg-white ">
+    <div className="bg-white">
       <Helmet title="Home">
         {/* ============= hero section =========== */}
         <section className="p-0 hero__slider-section">
@@ -75,7 +76,7 @@ const Home = () => {
                 <h2 className="font-bold">Mejores Ofertas</h2>
               </Col>
 
-              {dataCars.slice(0, 6).map((item) => (
+              {dataCars.slice(0, 3).map((item) => (
                 <CarItem item={item} key={item.id} />
               ))}
             </Row>

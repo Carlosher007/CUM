@@ -18,6 +18,7 @@ import {
   motorData,
   suspensionData,
 } from '../../assets/api/defaultData';
+import { getPart } from '../../assets/api/parts';
 import { getCarsBySucursal } from '../../assets/api/sucursal.api';
 import {
   codeToColorName,
@@ -25,25 +26,20 @@ import {
   colorOptions,
 } from '../../assets/color/colorUtils';
 import { urls } from '../../assets/urls/urls';
-import { getPart } from '../../assets/api/parts';
 import VehiclesWithPartTable from '../../components/Dashboard/UI/VehiclesWithPartTable';
 
 const EditPart = () => {
   const { idPart } = useParams();
 
   const [partData, setPartData] = useState({});
-  const [vehiclesWithPart, setVehiclesWithPart] = useState({})
+  const [vehiclesWithPart, setVehiclesWithPart] = useState({});
 
   useEffect(() => {
     const getPartData = async () => {
       try {
         const { data } = await getPart(idPart);
         setPartData(data);
-        const {
-          name,
-          vehicle,
-          price,
-        } = data;
+        const { name, vehicle, price } = data;
         formik.setValues({
           ...formik.values,
           name,
@@ -53,8 +49,15 @@ const EditPart = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-          toast.error(data.error, {
+          let errorMessage = '';
+
+          // Construir el mensaje de error con los detalles del error
+          Object.keys(data).forEach((key) => {
+            errorMessage += `${key}: ${data[key][0]}\n`;
+          });
+
+          // Mostrar mensaje de error al usuario utilizando toast
+          toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         }
@@ -75,8 +78,15 @@ const EditPart = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
+        let errorMessage = '';
+
+        // Construir el mensaje de error con los detalles del error
+        Object.keys(data).forEach((key) => {
+          errorMessage += `${key}: ${data[key][0]}\n`;
+        });
+
+        // Mostrar mensaje de error al usuario utilizando toast
+        toast.error(errorMessage, {
           position: toast.POSITION.TOP_RIGHT,
         });
       }
@@ -86,8 +96,8 @@ const EditPart = () => {
   const formik = useFormik({
     initialValues: {
       name: '',
-      price:'',
-      vehicle:'',
+      price: '',
+      vehicle: '',
     },
     // validationSchema: editVehicleValidation,
     onSubmit: async (values) => {

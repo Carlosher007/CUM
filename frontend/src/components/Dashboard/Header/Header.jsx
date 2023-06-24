@@ -11,7 +11,8 @@ import {
   RiSettings3Line,
   RiThumbUpLine,
 } from 'react-icons/ri';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
+
 import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
 import { logout } from '../../../assets/api/login.api';
@@ -25,6 +26,7 @@ const Header = () => {
   const email = cookies.get('email');
   const rol = cookies.get('rol');
   const token = cookies.get('token');
+  const navigate = useNavigate();
 
   const deleteCookies = () => {
     Object.keys(cookies.getAll()).forEach((cookieName) => {
@@ -37,8 +39,7 @@ const Header = () => {
       const response = await logout(token);
       const { data } = response;
       deleteCookies();
-      console.log('Se borro las cookies');
-      console.log(data);
+      navigate(urls.home)
     } catch (error) {
       if (error.response) {
         const { data } = error.response;

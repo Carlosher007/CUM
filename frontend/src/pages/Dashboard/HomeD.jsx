@@ -8,6 +8,7 @@ import CardTicket from '../../components/Dashboard/Ticket/CardTicket';
 // import { useSelector } from 'react-redux';
 import SimpleTable from '../../components/Dashboard/UI/SimpleTable';
 
+
 const Home = () => {
   // const usuario = useSelector(state => state.app.usuario);
   // const token = useSelector(state => state.app.token);
