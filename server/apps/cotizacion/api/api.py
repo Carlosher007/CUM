@@ -127,3 +127,34 @@ class AssignedQuoteApiView(viewsets.ModelViewSet):
         assigned_quote.save()
         return Response(CreateAssignedQuoteSerializer(assigned_quote).data,
                         status=status.HTTP_200_OK)
+    
+    @action(detail=True, methods=['GET'], url_path='accept-assigned-quote')
+    def accept_assigned_quote(self, request, pk:int):
+        assigned_quote = get_object_or_404(AssignedQuote, pk=pk)
+        
+        if assigned_quote.state == 'ACCEPTED':
+            return Response({'error':'This assigned-quote is already ACCEPTED'},
+                            status=status.HTTP_405_METHOD_NOT_ALLOWED)    
+
+        if assigned_quote.state != 'IN_PROGRESS':
+            return Response({'error':'This assigned-quote cannot be ACCEPTED'},
+                            status=status.HTTP_405_METHOD_NOT_ALLOWED)    
+
+        try:
+            assigned_quote_id = assigned_quote.quotation.id
+            client_email = assigned_quote.quotation.client.email
+            send_mail(
+                    'Cotizacion Aceptada',
+                    f'Su cotizacion con id {assigned_quote_id} fue aceptada',
+                    'settings.EMAIL_HOST_USER',
+                    [client_email],
+                    fail_silently=False,
+                )
+        except:
+            return Response({'error':'No se logro enviar el email'},
+                               status=status.HTTP_400_BAD_REQUEST)
+
+        assigned_quote.state = 'ACCEPTED'
+        assigned_quote.save()
+        return Response(CreateAssignedQuoteSerializer(assigned_quote).data,
+                        status=status.HTTP_200_OK)
