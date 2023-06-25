@@ -1,25 +1,28 @@
 import { Menu, MenuButton, MenuItem } from '@szhsin/react-menu';
 import React, { useEffect, useState } from 'react';
+import { BsCloudFog } from 'react-icons/bs';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { number } from 'yup';
 import { deleteUser } from '../../../assets/api/user.api';
-import { urls } from '../../../assets/urls/urls';
 import { formatPrice } from '../../../assets/general/formatPrice';
+import { urls } from '../../../assets/urls/urls';
 
 const PartsTable = ({ data }) => {
-
   return (
     <div>
       <div className="bg-secondary-100 p-6 rounded-xl">
-        <div className="hidden md:grid grid-cols-1 md:grid-cols-3 mb-2 p-4">
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-5 mb-2 p-4">
           <h5>Nombre</h5>
           <h5>Precio</h5>
+          <h5>Vehiculo</h5>
+          <h5>Cantidad</h5>
           <h5>Acciones</h5>
         </div>
         {data.map((item) => (
           <div
             key={item.id}
-            className="grid grid-cols-1 md:grid-cols-3 items-center mb-4 bg-secondary-900 p-4 rounded-xl"
+            className="grid grid-cols-1 md:grid-cols-5 items-center mb-4 bg-secondary-900 p-4 rounded-xl"
           >
             <div>
               <h5 className="md:hidden mt-6 text-white font-bold mb-2">
@@ -31,6 +34,23 @@ const PartsTable = ({ data }) => {
             <div>
               <h5 className="md:hidden text-white font-bold mb-2">Precio</h5>
               <span>{formatPrice(item.part.price)}</span>
+            </div>
+            <div>
+              <h5 className="md:hidden text-white font-bold mb-2">Vehiculo</h5>
+              <span>
+                {item.part.vehicle === null ? (
+                  'Generico'
+                ) : (
+                  <>
+                    {' '}
+                    {item.part.vehicle.model} - {item.part.vehicle.year}
+                  </>
+                )}
+              </span>
+            </div>
+            <div>
+              <h5 className="md:hidden text-white font-bold mb-2">Cantidad</h5>
+              <span>{item.quantity}</span>
             </div>
             <div>
               <div>

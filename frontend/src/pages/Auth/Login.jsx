@@ -38,9 +38,7 @@ const Login = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -58,9 +56,7 @@ const Login = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -156,9 +152,7 @@ const Login = () => {
       });
     } catch (error) {
       const { data } = error.response;
-      toast.error(data.error, {
-        position: toast.POSITION.TOP_RIGHT,
-      });
+      console.log(data)
     }
   };
 

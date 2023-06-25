@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { Helmet } from 'react-helmet';
 import { Outlet, useNavigate } from 'react-router-dom';
-import 'tailwindcss/tailwind.css';
 import Cookies from 'universal-cookie';
 import { urls } from '../../../assets/urls/urls';
 import Header from '../Header/Header';
 import Sidebar from '../Sidebar/Sidebar';
+import 'tailwindcss/tailwind.css';
 
 const LayoutAdmin = () => {
   const cookies = new Cookies();

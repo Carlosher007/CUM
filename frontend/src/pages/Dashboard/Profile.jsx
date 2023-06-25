@@ -26,9 +26,7 @@ const Profile = () => {
       } catch (error) {
         const { data } = error.response;
         // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     };
     getUserData();
@@ -41,9 +39,7 @@ const Profile = () => {
       } catch (error) {
         const { data } = error.response;
         // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     };
     getSucursalData();

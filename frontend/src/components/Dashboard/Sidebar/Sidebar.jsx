@@ -21,7 +21,6 @@ const Sidebar = () => {
   const token = cookies.get('token');
   const navigate = useNavigate();
 
-
   const handleLogout = async () => {
     try {
       const response = await logout(token);
@@ -39,9 +38,7 @@ const Sidebar = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };

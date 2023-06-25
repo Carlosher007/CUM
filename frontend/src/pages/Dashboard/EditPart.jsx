@@ -18,7 +18,7 @@ import {
   motorData,
   suspensionData,
 } from '../../assets/api/defaultData';
-import { getPart } from '../../assets/api/parts';
+import { getPart, partialUpdatePart } from '../../assets/api/parts';
 import { getCarsBySucursal } from '../../assets/api/sucursal.api';
 import {
   codeToColorName,
@@ -38,12 +38,12 @@ const EditPart = () => {
     const getPartData = async () => {
       try {
         const { data } = await getPart(idPart);
+        console.log(data);
         setPartData(data);
-        const { name, vehicle, price } = data;
+        const { name, price } = data;
         formik.setValues({
           ...formik.values,
           name,
-          vehicle,
           price,
         });
       } catch (error) {
@@ -57,20 +57,17 @@ const EditPart = () => {
   }, []);
 
   const updateSelectedPart = async (values, id) => {
+    console.log(values);
+    console.log(id);
     try {
-      const body = values;
-      console.log(body);
-      // const { data } = await updateCar(body, id);
-      // console.log(data);
-      toast.success('Vehiculo actualizado', {
+      await partialUpdatePart(id, values);
+      toast.success('Repuesto actualizado', {
         position: toast.POSITION.TOP_RIGHT,
       });
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        toast.error(data, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -79,11 +76,10 @@ const EditPart = () => {
     initialValues: {
       name: '',
       price: '',
-      vehicle: '',
     },
     // validationSchema: editVehicleValidation,
     onSubmit: async (values) => {
-      updateSelectedPart(values, values.id);
+      updateSelectedPart(values, idPart);
     },
   });
 

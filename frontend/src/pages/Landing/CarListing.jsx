@@ -58,9 +58,7 @@ const CarListing = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        toast.error(data, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -72,9 +70,7 @@ const CarListing = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        toast.error(data, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -87,9 +83,7 @@ const CarListing = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        toast.error(data, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
