@@ -10,7 +10,11 @@ import {
   getPartsInSucursal,
 } from '../../assets/api/parts';
 import { getCarsWithSucursal } from '../../assets/api/sucursal.api';
-import { createWorkOrder } from '../../assets/api/workOrder';
+import {
+  cancelWorkOrder,
+  createWorkOrder,
+  getStateWorkOrder,
+} from '../../assets/api/workOrder';
 import { codeToColorName, colorOptions } from '../../assets/color/colorUtils';
 import { formatPrice } from '../../assets/general/formatPrice';
 import { urls } from '../../assets/urls/urls';
@@ -30,7 +34,19 @@ const MyCar = () => {
   const [selectedPartID, setSelectedPartID] = useState('');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
-  const [isQ, setState] = useState('ACEEPTS');
+  const [state, setState] = useState(false);
+
+  const getState = async () => {
+    try {
+      const { data } = await getStateWorkOrder(idQ);
+      setState(data.response);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        console.log(data);
+      }
+    }
+  };
 
   const getCarData = async () => {
     try {
@@ -65,6 +81,7 @@ const MyCar = () => {
 
   useEffect(() => {
     getCarData();
+    getState();
   }, []);
 
   const handleSelectedPart = (e) => {
@@ -105,8 +122,19 @@ const MyCar = () => {
   };
 
   const handleCancel = async () => {
-    console.log("cancelao")
-  }
+    try {
+      await cancelWorkOrder(parseInt(idQ));
+      toast.success('La orden ha sido cancelada', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      await getState();
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        console.log(data);
+      }
+    }
+  };
 
   const handleSendWorkShop = async () => {
     if (date === '' || date === null) {
@@ -130,7 +158,7 @@ const MyCar = () => {
       const partIDs = selectedParts.map((part) => part.part.id);
       const body = {
         date: date,
-        total_price:totalPrice,
+        total_price: totalPrice,
         parts: partIDs,
         client_vehicle: idQ,
         description: description,
@@ -142,7 +170,7 @@ const MyCar = () => {
       });
       setSelectedParts([]);
       getPartsData();
-      setState('')
+      await getState();
       // setParts(data);
       // console.log(data);
     } catch (error) {
@@ -238,7 +266,7 @@ const MyCar = () => {
       <div>
         <div className="bg-secondary-100 p-8 rounded-xl mb-8">
           <h2 className="text-3xl font-bold mb-4">Llevar a mantenimiento</h2>
-          {state !== '' && state !== null && (
+          {state && (
             <>
               {parts.length === 0 ? (
                 selectedParts.length === 0 ? (
@@ -352,20 +380,20 @@ const MyCar = () => {
               )}
             </>
           )}
-          {(state === '' || state === null) && (
+          {!state && (
             <>
               <p className="text-[18px]">
                 El carro ya esta en mantenimiento, debe cancelar o esperar a que
                 el Jefe de taller termine
               </p>
-              <div className="flex justify-end mt-10">
+              {/* <div className="flex justify-end mt-10">
                 <button
                   className="bg-quaternary/70 text-black py-2 px-4 rounded-lg hover:bg-quaternary transition-colors"
                   onClick={handleCancel}
                 >
                   Cancelar
                 </button>
-              </div>
+              </div> */}
             </>
           )}
         </div>

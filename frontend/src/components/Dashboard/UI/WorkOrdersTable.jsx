@@ -63,7 +63,8 @@ const WorkOrdersTable = ({ data }) => {
               <h5 className="md:hidden mt-6 text-white font-bold mb-2">
                 Vehiculo
               </h5>
-              {'Sin definir'}
+              {item.client_vehicle.quotation.vehicle_sucursal.vehicle.model} -{' '}
+              {item.client_vehicle.quotation.vehicle_sucursal.vehicle.year}
             </div>
             <div>
               <h5 className="md:hidden mt-6 text-white font-bold mb-2">

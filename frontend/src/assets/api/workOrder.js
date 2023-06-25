@@ -14,3 +14,5 @@ export const cancelWorkOrder = (id) =>
 export const finishWorkOrder = (id) =>
   path.get(`work_order/${id}/finish-order-work`);
 export const getWorkOrder = (id) => path.get(`work_order/${id}/`);
+export const getStateWorkOrder = (id) =>
+  path.get(`work_order/client-has-order-work/${id}/`);

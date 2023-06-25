@@ -38,7 +38,7 @@ const WorkOrderDetails = () => {
 
   const getQuoteData = async () => {
     try {
-      const { data } = await getQuote(workOrder.client_vehicle);
+      const { data } = await getQuote(workOrder.client_vehicle.quotation.id);
       setQuote(data);
     } catch (error) {
       if (error.response) {
