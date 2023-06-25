@@ -10,6 +10,7 @@ import {
   getPartsInSucursal,
 } from '../../assets/api/parts';
 import { getCarsWithSucursal } from '../../assets/api/sucursal.api';
+import { createWorkOrder } from '../../assets/api/workOrder';
 import { codeToColorName, colorOptions } from '../../assets/color/colorUtils';
 import { formatPrice } from '../../assets/general/formatPrice';
 import { urls } from '../../assets/urls/urls';
@@ -27,6 +28,9 @@ const MyCar = () => {
   const [selectedParts, setSelectedParts] = useState([]);
   const [totalPrice, setTotalPrice] = useState(0);
   const [selectedPartID, setSelectedPartID] = useState('');
+  const [date, setDate] = useState('');
+  const [description, setDescription] = useState('');
+  const [state, setState] = useState('ACEEPTS');
 
   const getCarData = async () => {
     try {
@@ -63,10 +67,20 @@ const MyCar = () => {
     getCarData();
   }, []);
 
-  const handleSelectedPart = async (e) => {
+  const handleSelectedPart = (e) => {
     const selectedPartID_ = e.target.value;
     console.log(selectedPartID_);
     setSelectedPartID(parseInt(selectedPartID_));
+  };
+
+  const handleDate = (e) => {
+    const date_ = e.target.value;
+    setDate(date_);
+  };
+
+  const handleTextArea = (e) => {
+    const description_ = e.target.value;
+    setDescription(description_);
   };
 
   const handleAddPart = () => {
@@ -90,9 +104,52 @@ const MyCar = () => {
     setSelectedPartID('');
   };
 
+  const handleCancel = async () => {
+    console.log("cancelao")
+  }
+
   const handleSendWorkShop = async () => {
-    console.log(selectedParts);
-    console.log(totalPrice);
+    if (date === '' || date === null) {
+      toast.error('Debes elegir una fecha', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      return;
+    }
+
+    const selectedDate = new Date(date);
+    const currentDate = new Date();
+
+    if (selectedDate <= currentDate) {
+      toast.error('La fecha debe ser posterior a la fecha actual', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      return;
+    }
+
+    try {
+      const partIDs = selectedParts.map((part) => part.part.id);
+      const body = {
+        date: date,
+        partIDs: partIDs,
+        client_vehicle: id,
+        description: description,
+      };
+      console.log(body);
+      await createWorkOrder(body);
+      toast.success('Orden realizada satisfactoriamente', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      setSelectedParts([]);
+      getPartsData();
+      setState('')
+      // setParts(data);
+      // console.log(data);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        console.log(data);
+      }
+    }
   };
 
   return (
@@ -180,89 +237,133 @@ const MyCar = () => {
       <div>
         <div className="bg-secondary-100 p-8 rounded-xl mb-8">
           <h2 className="text-3xl font-bold mb-4">Llevar a mantenimiento</h2>
-          {parts.length === 0 ? (
-            selectedParts.length === 0 ? (
-              <p>
-                Lo siento, por el momento no tenemos repuestos de este carro
-              </p>
-            ) : (
-              <p>Ya no hay mas repuestos</p>
-            )
-          ) : (
+          {state !== '' && state !== null && (
             <>
-              <p>Elige los repuestos que deseas para llevar a mantenimiento</p>
-              <div className="flex flex-col items-center md:flex-row gap-3 md:items-center mt-6">
-                <div className="flex-1 md:order-2 md:w-auto flex items-center">
-                  <Input
-                    type="select"
-                    name="idCarSelected"
-                    onChange={handleSelectedPart}
-                    className=" py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
-                  >
-                    <option value="">Elije uno</option>
-                    {parts.map((part) => (
-                      <option value={part.part.id} key={part.part.id}>
-                        {part.part.name} - {formatPrice(part.part.price)}
-                      </option>
-                    ))}
-                  </Input>
-                  <button onClick={handleAddPart}>
-                    <i className="ri-add-circle-fill ml-10 text-2xl text-primary"></i>
-                  </button>
-                </div>
-              </div>
+              {parts.length === 0 ? (
+                selectedParts.length === 0 ? (
+                  <p>
+                    Lo siento, por el momento no tenemos repuestos de este carro
+                  </p>
+                ) : (
+                  <p>Ya no hay mas repuestos</p>
+                )
+              ) : (
+                <>
+                  <p>
+                    Elige los repuestos que deseas para llevar a mantenimiento
+                  </p>
+                  <div className="flex flex-col items-center md:flex-row gap-3 md:items-center mt-6">
+                    <div className="flex-1 md:order-2 md:w-auto flex items-center">
+                      <Input
+                        type="select"
+                        name="idCarSelected"
+                        onChange={handleSelectedPart}
+                        className=" py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
+                      >
+                        <option value="">Elije uno</option>
+                        {parts.map((part) => (
+                          <option value={part.part.id} key={part.part.id}>
+                            {part.part.name} - {formatPrice(part.part.price)}
+                          </option>
+                        ))}
+                      </Input>
+                      <button onClick={handleAddPart}>
+                        <i className="ri-add-circle-fill ml-10 text-2xl text-primary"></i>
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
+              {selectedParts.length !== 0 && (
+                <>
+                  <div className="bg-secondary-100 rounded-xl mt-20">
+                    <h2 className="text-3xl font-bold mb-4">
+                      Lista de repuestos para el mantenimiento
+                    </h2>
+                    <h2 className="text-[18px] font-bold mb-6 mt-4">
+                      Precio:{' '}
+                      <span className="text-primary">
+                        {formatPrice(totalPrice)}
+                      </span>{' '}
+                    </h2>
+                    <Input
+                      type="date"
+                      className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 mb-4"
+                      placeholder="Fecha"
+                      name="date"
+                      value={date}
+                      onChange={handleDate}
+                    />
+                    <Input
+                      type="textarea"
+                      className="w-full py-2 px-4 outline-none mb-4 rounded-lg bg-secondary-900"
+                      placeholder="Descripcion"
+                      name="description"
+                      value={description}
+                      onChange={handleTextArea}
+                    />
+                    <table className="w-full ">
+                      <tbody>
+                        {selectedParts.map((part) => (
+                          <tr
+                            key={part.part.id}
+                            className="hover:bg-secondary-200"
+                          >
+                            <td className="py-2">{part.part.name}</td>
+                            <td className="py-2">
+                              {formatPrice(part.part.price)}
+                            </td>
+                            <td className="py-2">
+                              <button
+                                onClick={() => {
+                                  // Agregar la parte eliminada a la lista 'parts'
+                                  setParts([...parts, part]);
+
+                                  // Restar el precio de la parte eliminada de 'totalPrice'
+                                  setTotalPrice(totalPrice - part.part.price);
+
+                                  // Eliminar la parte seleccionada de la lista 'selectedParts'
+                                  const updatedSelectedParts =
+                                    selectedParts.filter(
+                                      (selectedPart) =>
+                                        selectedPart.part.id !== part.part.id
+                                    );
+                                  setSelectedParts(updatedSelectedParts);
+                                }}
+                              >
+                                <i className="ri-close-circle-fill ml-10 text-2xl text-primary"></i>
+                              </button>
+                            </td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                    <div className="flex justify-end mt-10">
+                      <button
+                        className="bg-terciary/70 text-black py-2 px-4 rounded-lg hover:bg-terciary transition-colors"
+                        onClick={handleSendWorkShop}
+                      >
+                        Aceptar
+                      </button>
+                    </div>
+                  </div>
+                </>
+              )}
             </>
           )}
-          {selectedParts.length !== 0 && (
+          {(state === '' || state === null) && (
             <>
-              <div className="bg-secondary-100 rounded-xl mt-20">
-                <h2 className="text-3xl font-bold mb-4">
-                  Lista de repuestos para el mantenimiento
-                </h2>
-                <h2 className="text-2xl font-bold mb-6 mt-10">
-                  Precio:{' '}
-                  <span className="text-primary">
-                    {formatPrice(totalPrice)}
-                  </span>{' '}
-                </h2>
-                <table className="w-full ">
-                  <tbody>
-                    {selectedParts.map((part) => (
-                      <tr key={part.part.id} className="hover:bg-secondary-200">
-                        <td className="py-2">{part.part.name}</td>
-                        <td className="py-2">{formatPrice(part.part.price)}</td>
-                        <td className="py-2">
-                          <button
-                            onClick={() => {
-                              // Agregar la parte eliminada a la lista 'parts'
-                              setParts([...parts, part]);
-
-                              // Restar el precio de la parte eliminada de 'totalPrice'
-                              setTotalPrice(totalPrice - part.part.price);
-
-                              // Eliminar la parte seleccionada de la lista 'selectedParts'
-                              const updatedSelectedParts = selectedParts.filter(
-                                (selectedPart) =>
-                                  selectedPart.part.id !== part.part.id
-                              );
-                              setSelectedParts(updatedSelectedParts);
-                            }}
-                          >
-                            <i className="ri-close-circle-fill ml-10 text-2xl text-primary"></i>
-                          </button>
-                        </td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-                <div className="flex justify-end mt-10">
-                  <button
-                    className="bg-terciary/70 text-black py-2 px-4 rounded-lg hover:bg-terciary transition-colors"
-                    onClick={handleSendWorkShop}
-                  >
-                    Aceptar
-                  </button>
-                </div>
+              <p className="text-[18px]">
+                El carro ya esta en mantenimiento, debe cancelar o esperar a que
+                el Jefe de taller termine
+              </p>
+              <div className="flex justify-end mt-10">
+                <button
+                  className="bg-quaternary/70 text-black py-2 px-4 rounded-lg hover:bg-quaternary transition-colors"
+                  onClick={handleCancel}
+                >
+                  Cancelar
+                </button>
               </div>
             </>
           )}
