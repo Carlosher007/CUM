@@ -130,7 +130,8 @@ const MyCar = () => {
       const partIDs = selectedParts.map((part) => part.part.id);
       const body = {
         date: date,
-        partIDs: partIDs,
+        total_price:totalPrice,
+        parts: partIDs,
         client_vehicle: id,
         description: description,
       };

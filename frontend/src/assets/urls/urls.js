@@ -30,4 +30,5 @@ export const urls = {
   seeQuote: '/dashboard/see-quote/:idQuote',
   myCars: '/dashboard/myCars',
   myCar: '/dashboard/myCar/:id/:color',
+  allWorkOrders: '/dasboard/allWorkOrders/'
 };
