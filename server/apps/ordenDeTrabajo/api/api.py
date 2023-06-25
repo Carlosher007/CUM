@@ -1,3 +1,4 @@
+from django.shortcuts import get_object_or_404
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -52,19 +53,66 @@ class WorkOrderApiView(viewsets.ModelViewSet):
         return Response(create_work_order_serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
     
-    @action(detail=False, methods=['GET'], url_path='work-orders-sucursal/(?P<sucursal>\w+)')
-    def get_work_orders_sucursal(self, request, sucursal:int):
-        work_orders_sucursal = WorkOrder.objects.filter(
-            client_vehicle__quotation__vehicle_sucursal__sucursal=sucursal
-        )
-        data = ListWorkOrderSerializer(work_orders_sucursal, many=True).data
-        jefe_taller = User.objects.filter(
-            sucursal=sucursal, rol='JefeTaller'
-        ).first()
-        jefe_taller = UserSerializer(jefe_taller).data
-        data = {
-            'work_orders':data,
-            'jefe_taller':jefe_taller
-        }
-        return Response(data,
-                        status=status.HTTP_200_OK)
+    @action(detail=False, methods=['GET'], url_path='work-orders-sucursal/(?P<sucursal>\w+)/(?P<state>\w+)')
+    def get_work_orders_sucursal(self, request, sucursal:int, state:str):
+        states = ["SENT","CANCELLED", "FINISHED", "ALL"]
+        if state in states:
+            jefe_taller = User.objects.filter(
+                    sucursal=sucursal, rol='JefeTaller'
+                ).first()
+            jefe_taller = UserSerializer(jefe_taller).data
+
+            if state == "ALL":
+                work_orders_sucursal = WorkOrder.objects.filter(
+                    client_vehicle__quotation__vehicle_sucursal__sucursal=sucursal
+                )
+                work_orders = ListWorkOrderSerializer(work_orders_sucursal, many=True).data
+            else:
+                work_orders_sucursal = WorkOrder.objects.filter(
+                    client_vehicle__quotation__vehicle_sucursal__sucursal=sucursal,
+                    state=state
+                )
+                work_orders = ListWorkOrderSerializer(work_orders_sucursal, many=True).data
+
+            data = {
+                'work_orders':work_orders,
+                'jefe_taller':jefe_taller
+            }
+            return Response(data,
+                            status=status.HTTP_200_OK)
+        
+        return Response({'error':'invalid state', 'states':states},
+                        status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=False, methods=['GET'], url_path='work-orders-client/(?P<client>\w+)/(?P<state>\w+)')
+    def get_work_orders_client(self, request, client:str, state:str):
+        states = ["SENT","CANCELLED", "FINISHED", "ALL"]
+        if state in states:
+            jefe_taller = None
+            if state == "ALL":
+                work_orders_sucursal = WorkOrder.objects.filter(
+                    client_vehicle__quotation__client=client
+                )
+                work_orders = ListWorkOrderSerializer(work_orders_sucursal, many=True).data
+            else:
+                work_orders_sucursal = WorkOrder.objects.filter(
+                    client_vehicle__quotation__client=client,
+                    state=state
+                )
+                work_orders = ListWorkOrderSerializer(work_orders_sucursal, many=True).data
+            if work_orders_sucursal.exists():
+                sucursal = work_orders_sucursal.first().client_vehicle.quotation.vehicle_sucursal.sucursal
+                jefe_taller = User.objects.filter(
+                        sucursal=sucursal, rol='JefeTaller'
+                    ).first()
+                jefe_taller = UserSerializer(jefe_taller).data
+
+            data = {
+                'work_orders':work_orders,
+                'jefe_taller':jefe_taller
+            }
+            return Response(data,
+                            status=status.HTTP_200_OK)
+        
+        return Response({'error':'invalid state', 'states':states},
+                        status=status.HTTP_400_BAD_REQUEST)
