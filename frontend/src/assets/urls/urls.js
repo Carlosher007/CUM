@@ -29,6 +29,7 @@ export const urls = {
   allQuotes: '/dashboard/all-quotes/',
   seeQuote: '/dashboard/see-quote/:idQuote',
   myCars: '/dashboard/myCars',
-  myCar: '/dashboard/myCar/:id/:color',
-  allWorkOrders: '/dasboard/allWorkOrders/'
+  myCar: '/dashboard/myCar/:id/:color/:idQ',
+  allWorkOrders: '/dashboard/allWorkOrders/',
+  seeWorkOrder: '/dashboard/workOrder/:id',
 };

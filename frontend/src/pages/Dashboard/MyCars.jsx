@@ -1,20 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
-import {
-  Col,
-  Container,
-  Input,
-  InputGroup,
-  InputGroupText,
-  Row,
-} from 'reactstrap';
 import Cookies from 'universal-cookie';
 import { getCarsSoldByClient } from '../../assets/api/cars';
 import MyCarsTable from '../../components/Dashboard/UI/MyCarsTable';
 
 const MyCars = () => {
   const cookies = new Cookies();
-  const id = cookies.get('id');
+  // const id = cookies.get('id');
+  const id = '9999'
   const ITEMS_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState(0);
   const [cars, setCars] = useState([]);

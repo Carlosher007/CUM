@@ -32,6 +32,8 @@ import DetailsQuote from '../pages/Dashboard/DetailsQuote';
 import AllQuotes from '../pages/Dashboard/AllQuotes';
 import MyCars from '../pages/Dashboard/MyCars';
 import MyCar from '../pages/Dashboard/MyCar';
+import AllWorkOrders from '../pages/Dashboard/AllWorkOrders';
+import WorkOrderDetails from '../pages/Dashboard/WorkOrderDetails';
 
 const Routers = () => {
   const cookies = new Cookies();
@@ -284,6 +286,22 @@ const Routers = () => {
           element={
             <FilterPage roles={[]}>
               <MyCar />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.allWorkOrders}
+          element={
+            <FilterPage roles={[]}>
+              <AllWorkOrders />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.seeWorkOrder}
+          element={
+            <FilterPage roles={[]}>
+              <WorkOrderDetails />
             </FilterPage>
           }
         />

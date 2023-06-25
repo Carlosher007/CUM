@@ -5,55 +5,79 @@ import { toast } from 'react-toastify';
 import { deleteUser } from '../../../assets/api/user.api';
 import { urls } from '../../../assets/urls/urls';
 import { formatPrice } from '../../../assets/general/formatPrice';
+import { renderWOState } from '../../../assets/general/workOrders';
 
-const MyCarsTable = ({ data}) => {
+const WorkOrdersTable = ({ data }) => {
+  console.log(data);
 
-  console.log(data)
+  const renderStatus = (state) => {
+    if (state === 'SENT') {
+      return (
+        <span className="py-1 px-2 bg-yellow-500/10 text-yellow-500 rounded-lg">
+          {renderWOState(state)}
+        </span>
+      );
+    } else if (state === 'CANCELLED') {
+      return (
+        <span className="py-1 px-2 bg-red-500/10 text-red-500 rounded-lg">
+          {renderWOState(state)}
+        </span>
+      );
+      //FINISHED
+    } else {
+      return (
+        <span className="py-1 px-2 bg-green-500/10 text-green-500 rounded-lg">
+          {renderWOState(state)}
+        </span>
+      );
+    }
+  };
 
   return (
     <div>
       <div className="bg-secondary-100 p-6 rounded-xl">
         <div className="hidden md:grid grid-cols-1 md:grid-cols-6 mb-2 p-4">
-          <h5>Id Vehiculo</h5>
-          <h5>Color</h5>
-          <h5>Cuota Inicial</h5>
-          <h5>Numero de cutoas</h5>
-          <h5>Valor de cutoas</h5>
+          <h5>Estado</h5>
+          <h5>Fecha</h5>
+          <h5>Vehiculo</h5>
+          <h5>#Partes</h5>
+          <h5>Precio total</h5>
           <h5>Acciones</h5>
         </div>
         {data.map((item) => (
           <div
-            key={item.quotation.id}
+            key={item.id}
             className="grid grid-cols-1 md:grid-cols-6 items-center mb-4 bg-secondary-900 p-4 rounded-xl"
           >
             <div>
               <h5 className="md:hidden mt-6 text-white font-bold mb-2">
-                ID Vehiculo
+                Estado
               </h5>
-              <span>{item.quotation.vehicle_sucursal.id}</span>
-              <span></span>
+              <span>{renderStatus(item.state)}</span>
             </div>
             <div>
-              <h5 className="md:hidden text-white font-bold mb-2">Color</h5>
-              <span>{item.quotation.vehicle_sucursal.color}</span>
-            </div>
-            <div>
-              <h5 className="md:hidden mt-6 text-white font-bold mb-2">
-                Cuota Inicial
-              </h5>
-              <span>{formatPrice(item.quotation.initial_fee)}</span>
+              <h5 className="md:hidden text-white font-bold mb-2">Fecha</h5>
+              <span>{item.date}</span>
             </div>
             <div>
               <h5 className="md:hidden mt-6 text-white font-bold mb-2">
-                # Cuotas
+                Vehiculo
               </h5>
-              <p>{item.quotation.num_installments}</p>
+              {'Sin definir'}
             </div>
             <div>
               <h5 className="md:hidden mt-6 text-white font-bold mb-2">
-                Valor de cutoas
+                # Partes
               </h5>
-              <span>{formatPrice(item.quotation.quota_value)}</span>
+              <p>
+                {item.parts.length === 0 ? 'Sin partes' : item.parts.length}
+              </p>
+            </div>
+            <div>
+              <h5 className="md:hidden mt-6 text-white font-bold mb-2">
+                Precio Total
+              </h5>
+              <span>{formatPrice(item.total_price)}</span>
             </div>
             <div>
               <div>
@@ -74,7 +98,7 @@ const MyCarsTable = ({ data}) => {
                 >
                   <MenuItem className="p-0 hover:bg-transparent">
                     <Link
-                      to={`/dashboard/myCar/${item.quotation.vehicle_sucursal.vehicle}/${(item.quotation.vehicle_sucursal.color).slice(1)}/${item.quotation.id}`}
+                      to={`/dashboard/workOrder/${item.id}`}
                       className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1"
                     >
                       Ver detalladamente
@@ -90,4 +114,4 @@ const MyCarsTable = ({ data}) => {
   );
 };
 
-export default MyCarsTable;
+export default WorkOrdersTable;

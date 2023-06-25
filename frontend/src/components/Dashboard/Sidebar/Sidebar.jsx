@@ -149,6 +149,17 @@ const Sidebar = () => {
         },
       ],
     },
+    {
+      display: 'Ordenes de trabjo',
+      role: ['Anyone'],
+      sublinks: [
+        {
+          path: urls.allWorkOrders,
+          display: 'Ver Ordenes de Trabajo',
+          role: ['Anyone'],
+        },
+      ],
+    },
   ];
 
   const filteredNavLinks = navLinks.filter((link) => {

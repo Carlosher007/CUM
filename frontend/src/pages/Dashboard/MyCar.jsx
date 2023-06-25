@@ -19,7 +19,7 @@ import VirtualQuoteFormD from '../../components/Dashboard/UI/VirtualQuoteFormD';
 const MyCar = () => {
   const cookies = new Cookies();
   const idSucursal = cookies.get('sucursal');
-  const { id, color } = useParams();
+  const { id, color, idQ } = useParams();
   let colorN = '#' + color;
   const rol = cookies.get('rol');
 
@@ -30,7 +30,7 @@ const MyCar = () => {
   const [selectedPartID, setSelectedPartID] = useState('');
   const [date, setDate] = useState('');
   const [description, setDescription] = useState('');
-  const [state, setState] = useState('ACEEPTS');
+  const [isQ, setState] = useState('ACEEPTS');
 
   const getCarData = async () => {
     try {
@@ -132,7 +132,7 @@ const MyCar = () => {
         date: date,
         total_price:totalPrice,
         parts: partIDs,
-        client_vehicle: id,
+        client_vehicle: idQ,
         description: description,
       };
       console.log(body);
