@@ -157,3 +157,33 @@ class WorkOrderApiView(viewsets.ModelViewSet):
 
         return Response(CreateWorkOrderSerializer(work_order).data,
                         status=status.HTTP_200_OK)
+    
+
+    @action(detail=True, methods=['GET'], url_path='finish-order-work')
+    def finish_order_work(self, request, pk:int):
+        work_order = get_object_or_404(WorkOrder, pk=pk)
+
+        if work_order.state != 'SENT':
+            return Response({'error':'Accion no permitida debido a que '
+                             +'la orden esta {}'.format(work_order.state)},
+                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        email_client = work_order.client_vehicle.quotation.client.email
+        
+        encabezado_email = 'Orden de Trabajo Finalizada'
+        mensaje = 'Su orden de trabajo con id {} fue finalizada'.format(work_order.id)
+        try:
+            send_mail(
+                encabezado_email,
+                mensaje,
+                'settings.EMAIL_HOST_USER',
+                [email_client],
+                fail_silently=False,
+            )
+        except:
+            print('No logro enviar los emails')
+
+        work_order.state = 'FINISHED'
+        work_order.save()
+
+        return Response(CreateWorkOrderSerializer(work_order).data,
+                        status=status.HTTP_200_OK)
