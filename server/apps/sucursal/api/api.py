@@ -185,12 +185,6 @@ class PartApiView(viewsets.ModelViewSet):
             return ListPartSerializer
         return CreatePartSerializer
     
-    @action(detail=False, methods=['GET'], url_path='vehicle-parts/(?P<vehicle>\w+)')
-    def get_vehicle_parts(self, request, vehicle:int):
-        vehicle_parts = Part.objects.filter(vehicle__id=vehicle)
-        return Response(ListPartSerializer(vehicle_parts, many=True).data,
-                        status=status.HTTP_200_OK)
-    
 class SucursalPartApiView(viewsets.ModelViewSet):
     serializer_class = CreateSucursalPartSerializer
     queryset = SucursalPart.objects.all()
@@ -238,3 +232,10 @@ class SucursalPartApiView(viewsets.ModelViewSet):
         return Response(sucursal_parts,
                         status=status.HTTP_200_OK)
         
+    @action(detail=False, methods=['GET'], url_path='sucursal-vehicle-parts/(?P<sucursal>\w+)/(?P<vehicle>\w+)')
+    def get_sucursal_vehicle_parts(self, request, sucursal:int, vehicle:int):
+        vehicle_parts = SucursalPart.objects.filter(
+            sucursal=sucursal, part__vehicle=vehicle
+        )
+        return Response(ListSucursalPartSerializer(vehicle_parts, many=True).data,
+                        status=status.HTTP_200_OK)
