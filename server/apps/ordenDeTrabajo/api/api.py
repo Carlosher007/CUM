@@ -4,7 +4,9 @@ from rest_framework.decorators import action
 from rest_framework.response import Response
 
 from ..models import WorkOrder
-from .serializers import CreateWorkOrderSerializer
+from .serializers import CreateWorkOrderSerializer, ListWorkOrderSerializer, UserSerializer
+
+from apps.usuario.models import User
 
 class WorkOrderApiView(viewsets.ModelViewSet):
     serializer_class = CreateWorkOrderSerializer
@@ -49,3 +51,20 @@ class WorkOrderApiView(viewsets.ModelViewSet):
 
         return Response(create_work_order_serializer.errors,
                         status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=False, methods=['GET'], url_path='work-orders-sucursal/(?P<sucursal>\w+)')
+    def get_work_orders_sucursal(self, request, sucursal:int):
+        work_orders_sucursal = WorkOrder.objects.filter(
+            client_vehicle__quotation__vehicle_sucursal__sucursal=sucursal
+        )
+        data = ListWorkOrderSerializer(work_orders_sucursal, many=True).data
+        jefe_taller = User.objects.filter(
+            sucursal=sucursal, rol='JefeTaller'
+        ).first()
+        jefe_taller = UserSerializer(jefe_taller).data
+        data = {
+            'work_orders':data,
+            'jefe_taller':jefe_taller
+        }
+        return Response(data,
+                        status=status.HTTP_200_OK)
