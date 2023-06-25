@@ -3,7 +3,7 @@ from rest_framework import serializers
 
 from ..models import WorkOrder
 
-from apps.sucursal.models import SucursalPart
+from apps.sucursal.models import SucursalPart, VehicleSucursal
 from apps.cotizacion.models import AssignedQuote, Quotation
 from apps.usuario.api.serializers import UserSerializer
 
@@ -12,11 +12,17 @@ class CreateWorkOrderSerializer(serializers.ModelSerializer):
         model = WorkOrder
         fields = '__all__'
 
+class WorkOrderVehicleSucursalSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = VehicleSucursal
+        fields = ['vehicle', 'color']
+        depth = 1
+
 class WorkOrderQuotationSerializer(serializers.ModelSerializer):
-    client = UserSerializer()
+    vehicle_sucursal = WorkOrderVehicleSucursalSerializer()
     class Meta:
         model = Quotation
-        fields = ['client']
+        fields = ['vehicle_sucursal', 'id']
 
 class WorkOrderAssignedQuoteSerializer(serializers.ModelSerializer):
     quotation = WorkOrderQuotationSerializer()

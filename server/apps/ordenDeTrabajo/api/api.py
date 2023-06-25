@@ -14,6 +14,11 @@ class WorkOrderApiView(viewsets.ModelViewSet):
     serializer_class = CreateWorkOrderSerializer
     queryset = WorkOrder.objects.all()
 
+    def get_serializer_class(self):
+        if self.action == "list" or self.action == "retrieve":
+            return ListWorkOrderSerializer
+        return CreateWorkOrderSerializer
+
     def create(self, request):
         create_work_order_serializer = CreateWorkOrderSerializer(data=request.data)
         if create_work_order_serializer.is_valid():
@@ -187,3 +192,20 @@ class WorkOrderApiView(viewsets.ModelViewSet):
 
         return Response(CreateWorkOrderSerializer(work_order).data,
                         status=status.HTTP_200_OK)
+    
+    @action(detail=False, methods=['GET'], url_path='client-has-order-work/(?P<client_vehicle>\w+)')
+    def client_has_order_work(self, request, client_vehicle:str):
+        work_orders = WorkOrder.objects.filter(
+                    client_vehicle=client_vehicle,
+                    state='SENT'
+                )
+        response = True
+        message = 'El cliente no tiene ninguna orden de trabajo en curso con este carro'
+        if work_orders.exists():
+            response = False
+            message = 'El cliente ya tiene una orden de trabajo en curso con este carro'
+
+        return Response({
+            'response':response,
+            'message':message
+        }, status=status.HTTP_200_OK)
