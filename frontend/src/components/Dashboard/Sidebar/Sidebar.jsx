@@ -126,6 +126,11 @@ const Sidebar = () => {
           display: 'Añadir un vehiculo',
           role: ['Anyone'],
         },
+        {
+          path: urls.myCars,
+          display: 'Mis Carros',
+          role: ['Anyone'],
+        },
       ],
     },
     {
