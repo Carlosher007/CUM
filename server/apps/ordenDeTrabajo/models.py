@@ -16,6 +16,7 @@ class WorkOrder(models.Model):
                                    blank=True)
     state = models.CharField(max_length=100, choices=STATE_CHOICES,
                              default='SENT')
+    total_price = models.PositiveIntegerField(default=0)
 
     class Meta:
         db_table = 'work_order'
