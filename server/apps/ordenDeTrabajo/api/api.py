@@ -1,4 +1,5 @@
 from django.shortcuts import get_object_or_404
+from django.core.mail import send_mail
 
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
@@ -116,3 +117,43 @@ class WorkOrderApiView(viewsets.ModelViewSet):
         
         return Response({'error':'invalid state', 'states':states},
                         status=status.HTTP_400_BAD_REQUEST)
+    
+    @action(detail=True, methods=['GET'], url_path='cancel-order-work')
+    def cancel_order_work(self, request, pk:int):
+        work_order = get_object_or_404(WorkOrder, pk=pk)
+
+        if work_order.state != 'SENT':
+            return Response({'error':'Accion no permitida debido a que '
+                             +'la orden esta {}'.format(work_order.state)},
+                             status=status.HTTP_405_METHOD_NOT_ALLOWED)
+        email_client = work_order.client_vehicle.quotation.client.email
+        sucursal = work_order.client_vehicle.quotation.vehicle_sucursal.sucursal
+        email_jefe_taller = User.objects.filter(
+                        sucursal=sucursal, rol='JefeTaller'
+                    ).first().email
+        
+        encabezado_email = 'Orden de Trabajo Cancelada'
+        mensaje = 'Su orden de trabajo con id {} fue cancelada'.format(work_order.id)
+        try:
+            send_mail(
+                encabezado_email,
+                mensaje,
+                'settings.EMAIL_HOST_USER',
+                [email_client],
+                fail_silently=False,
+            )
+            send_mail(
+                encabezado_email,
+                mensaje,
+                'settings.EMAIL_HOST_USER',
+                [email_jefe_taller],
+                fail_silently=False,
+            )
+        except:
+            print('No logro enviar los emails')
+
+        work_order.state = 'CANCELLED'
+        work_order.save()
+
+        return Response(CreateWorkOrderSerializer(work_order).data,
+                        status=status.HTTP_200_OK)
