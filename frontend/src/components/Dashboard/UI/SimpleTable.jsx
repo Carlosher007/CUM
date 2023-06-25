@@ -1,120 +1,61 @@
 import { Menu, MenuButton, MenuItem } from '@szhsin/react-menu';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { getCar } from '../../../assets/api/cars';
+import { formatPrice } from '../../../assets/general/formatPrice';
+import { codeToColorName } from '../../../assets/color/colorUtils';
 
 const SimpleTable = ({ data }) => {
-  const renderStatus = (status) => {
-    if (status === 'Abierto') {
-      return (
-        <span className="py-1 px-2 bg-yellow-500/10 text-yellow-500 rounded-lg">
-          {status}
-        </span>
-      );
-    } else if (status === 'Pendiente') {
-      return (
-        <span className="py-1 px-2 bg-blue-500/10 text-blue-500 rounded-lg">
-          {status}
-        </span>
-      );
-    } else if (status === 'Cerrado') {
-      return (
-        <span className="py-1 px-2 bg-red-500/10 text-red-500 rounded-lg">
-          {status}
-        </span>
-      );
-    } else {
-      return (
-        <span className="py-1 px-2 bg-purple-500/10 text-purple-500 rounded-lg">
-          {status}
-        </span>
-      );
-    }
-  };
-
+  console.log(data)
   return (
     <div>
       <div className="bg-secondary-100 p-8 rounded-xl">
-        <div className="hidden md:grid grid-cols-1 md:grid-cols-5 gap-4 mb-10 p-4">
-          <h5>ID</h5>
-          <h5>Descripción</h5>
-          <h5>Estatus</h5>
-          <h5>Fecha</h5>
-          <h5>Acciones</h5>
+        <div className="hidden md:grid grid-cols-1 md:grid-cols-6 gap-4 mb-10 p-4">
+          <h5>ID Vehiculo</h5>
+          <h5>Color</h5>
+          <h5>ID Cliente</h5>
+          <h5>ID Vendedor</h5>
+          <h5># Cuotas</h5>
+          <h5>Valor de cuotas</h5>
         </div>
         {data.map((item) => (
           <div
-            key={item.id}
-            className="grid grid-cols-1 md:grid-cols-5 gap-4 items-center mb-4 bg-secondary-900 p-4 rounded-xl"
+            key={item.quotation.id}
+            className="grid grid-cols-1 md:grid-cols-6 gap-4 items-center mb-4 bg-secondary-900 p-4 rounded-xl"
           >
             <div>
-              <h5 className="md:hidden text-white font-bold mb-2">ID</h5>
-              <span>#{item.id}</span>
+              <h5 className="md:hidden text-white font-bold mb-2">
+                ID del Vehiculo
+              </h5>
+              <span>{item.quotation.vehicle_sucursal.vehicle}</span>
+            </div>
+            <div>
+              <h5 className="md:hidden text-white font-bold mb-2">Color</h5>
+              <p>{codeToColorName(item.quotation.vehicle_sucursal.color)}</p>
             </div>
             <div>
               <h5 className="md:hidden text-white font-bold mb-2">
-                Descripción
+                ID CLiente
               </h5>
-              <p>{item.descripcion}</p>
+              <p>{item.quotation.client}</p>
             </div>
             <div>
-              <h5 className="md:hidden text-white font-bold mb-2">Estatus</h5>
-              {renderStatus(item.estatus)}
+              <h5 className="md:hidden text-white font-bold mb-2">
+                ID Vendedor
+              </h5>
+              <span>{item.seller}</span>
             </div>
             <div>
-              <h5 className="md:hidden text-white font-bold mb-2">Fecha</h5>
-              <span>{item.fecha}</span>
+              <h5 className="md:hidden text-white font-bold mb-2">
+                Numero de cutoas
+              </h5>
+              <span>{item.quotation.num_installments}</span>
             </div>
             <div>
-              <div>
-                <h5 className="md:hidden text-white font-bold mb-2">
-                  Acciones
-                </h5>
-                <Menu
-                  menuButton={
-                    <MenuButton className="flex items-center gap-x-2 bg-secondary-100 p-2 rounded-lg transition-colors">
-                      Acciones
-                    </MenuButton>
-                  }
-                  align="end"
-                  arrow
-                  arrowClassName="bg-secondary-100"
-                  transition
-                  menuClassName="bg-secondary-100 p-4"
-                >
-                  <MenuItem className="p-0 hover:bg-transparent">
-                    <Link
-                      to="/perfil"
-                      className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1"
-                    >
-                      Dashboard tickets
-                    </Link>
-                  </MenuItem>
-                  <MenuItem className="p-0 hover:bg-transparent">
-                    <Link
-                      to="/perfil"
-                      className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1"
-                    >
-                      Información
-                    </Link>
-                  </MenuItem>
-                  <MenuItem className="p-0 hover:bg-transparent">
-                    <Link
-                      to="/perfil"
-                      className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1"
-                    >
-                      Información
-                    </Link>
-                  </MenuItem>
-                  <MenuItem className="p-0 hover:bg-transparent">
-                    <Link
-                      to="/perfil"
-                      className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1"
-                    >
-                      Información
-                    </Link>
-                  </MenuItem>
-                </Menu>
-              </div>
+              <h5 className="md:hidden text-white font-bold mb-2">
+                Valord de cuotas
+              </h5>
+              <span>{formatPrice(item.quotation.quota_value)}</span>
             </div>
           </div>
         ))}

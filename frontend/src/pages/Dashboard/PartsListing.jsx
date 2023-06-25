@@ -13,7 +13,7 @@ import {
 } from 'reactstrap';
 import Cookies from 'universal-cookie';
 import { getCars } from '../../assets/api/cars';
-import { getParts, getPartsInSucursal } from '../../assets/api/parts';
+import { getParts, getPartsByCarInSucursal, getPartsInSucursal } from '../../assets/api/parts';
 import { getCarsBySucursal, getSucursal } from '../../assets/api/sucursal.api';
 import carData from '../../assets/data/carData';
 import { formatPrice } from '../../assets/general/formatPrice';
@@ -84,13 +84,8 @@ const PartsListing = () => {
 
   const getPartData3 = async () => {
     try {
-      const { data } = await getPartsInSucursal(idSucursal);
-      const filteredData = data.filter(
-        (item) =>
-          item.part.vehicle &&
-          item.part.vehicle.id === parseInt(idCarSelectedValue)
-      );
-      setDataParts(filteredData);
+      const { data } = await getPartsByCarInSucursal(idSucursal,idCarSelectedValue);
+      setDataParts(data);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;

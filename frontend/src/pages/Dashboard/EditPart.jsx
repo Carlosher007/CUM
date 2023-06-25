@@ -154,15 +154,6 @@ const EditPart = () => {
           </div>
         </div>
 
-        <div className="mb-10 mt-3">
-          <h2 className=" text-xl mb-4 font-bold">
-            Lista de vehiculos que tienen este repuesto
-          </h2>
-          <div>
-            <VehiclesWithPartTable data={vehiclesWithPart} />
-          </div>
-        </div>
-
         <hr className="my-8 border-gray-500/30" />
         <div className="flex justify-between">
           <div className="flex justify-start">

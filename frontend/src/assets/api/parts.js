@@ -14,3 +14,5 @@ export const getPartsInSucursal = (id) => path.get(`sucursal/${id}/sucursal-part
 export const getPartsInSucursalWithinRepeat = (id) =>
   path.get(`sucursal-part/sucursal-parts/${id}/`);
 export const partialUpdatePart = (id,body) => path.patch(`part/${id}/`,body)
+export const getPartsByCarInSucursal = (sucursal, vehicle) =>
+  path.get(`sucursal-part/sucursal-vehicle-parts/${sucursal}/${vehicle}/`);

@@ -21,3 +21,4 @@ export const getColorsCar = (id, vehicle) =>
   path.get(`sucursal/${id}/${vehicle}/vehicle-colors/`);
 export const getCarByColor = (id, vehicle, color) =>
   path.get(`sucursal/${id}/${vehicle}/${color}/vehicle-sucursal-id/`);
+export const getCarsSoldBySucursal = (id) => path.get(`sucursal/sold-vehicles-sucursal/${id}`)
