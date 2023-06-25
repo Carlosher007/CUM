@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { CirclePicker } from 'react-color';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
 import { getCar, getColorsCar } from '../../assets/api/cars';
@@ -8,11 +8,13 @@ import { getCarsWithSucursal } from '../../assets/api/sucursal.api';
 import { codeToColorName, colorOptions } from '../../assets/color/colorUtils';
 import { formatPrice } from '../../assets/general/formatPrice';
 import VirtualQuoteFormD from '../../components/Dashboard/UI/VirtualQuoteFormD';
+import { urls } from '../../assets/urls/urls';
 
 const CarDetailsD = () => {
   const cookies = new Cookies();
   const idSucursal = cookies.get('sucursal');
   const { id } = useParams();
+  const rol = cookies.get('rol');
 
   const [car, setCar] = useState({});
   const [selectedColor, setSelectedColor] = useState('');
@@ -30,17 +32,7 @@ const CarDetailsD = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -55,17 +47,7 @@ const CarDetailsD = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -175,16 +157,27 @@ const CarDetailsD = () => {
         </div>
       </div>
 
-      <div>
-        <div className="bg-secondary-100 p-8 rounded-xl mb-8">
-          <h4 className="font-bold text-3xl ">Cotice su vehiculo ahora</h4>
-          <VirtualQuoteFormD
-            slug={id}
-            selectedColor={selectedColor}
-            price={car.price}
-          />
+      {rol === 'Cliente' ? (
+        <div>
+          <div className="bg-secondary-100 p-8 rounded-xl mb-8">
+            <h4 className="font-bold text-3xl ">Cotice su vehiculo ahora</h4>
+            <VirtualQuoteFormD
+              slug={id}
+              selectedColor={selectedColor}
+              price={car.price}
+            />
+          </div>
         </div>
-      </div>
+      ) : (
+        <div className="flex justify-start">
+          {/* <Link
+            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+            to={urls.seeCarsD}
+          >
+            <i className="ri-arrow-left-line"></i> Volver
+          </Link> */}
+        </div>
+      )}
     </div>
   );
 };

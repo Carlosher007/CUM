@@ -13,7 +13,7 @@ import {
 } from 'reactstrap';
 import Cookies from 'universal-cookie';
 import { getCars } from '../../assets/api/cars';
-import { getParts, getPartsInSucursal } from '../../assets/api/parts';
+import { getParts, getPartsByCarInSucursal, getPartsInSucursal } from '../../assets/api/parts';
 import { getCarsBySucursal, getSucursal } from '../../assets/api/sucursal.api';
 import carData from '../../assets/data/carData';
 import { formatPrice } from '../../assets/general/formatPrice';
@@ -45,78 +45,94 @@ const PartsListing = () => {
 
   const offset = currentPage * ITEMS_PER_PAGE;
 
-  useEffect(() => {
-    const getSucursalData = async () => {
-      try {
-        const { data } = await getSucursal(idSucursal);
-        setCitySucursal(data.city);
-      } catch (error) {
-        if (error.response) {
-          const { data } = error.response;
-          let errorMessage = '';
-
-          // Construir el mensaje de error con los detalles del error
-          Object.keys(data).forEach((key) => {
-            errorMessage += `${key}: ${data[key][0]}\n`;
-          });
-
-          // Mostrar mensaje de error al usuario utilizando toast
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        }
-      }
-    };
-    getSucursalData();
-
-    const getPartData = async () => {
-      try {
-        const { data } = await getPartsInSucursal(idSucursal);
-        setDataParts(data);
+  const getSucursalData = async () => {
+    try {
+      const { data } = await getSucursal(idSucursal);
+      setCitySucursal(data.city);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
         console.log(data);
-      } catch (error) {
-        if (error.response) {
-          const { data } = error.response;
-          let errorMessage = '';
-
-          // Construir el mensaje de error con los detalles del error
-          Object.keys(data).forEach((key) => {
-            errorMessage += `${key}: ${data[key][0]}\n`;
-          });
-
-          // Mostrar mensaje de error al usuario utilizando toast
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        }
       }
-    };
-    getPartData();
+    }
+  };
 
-    const getAllVehicles = async () => {
-      try {
-        const { data } = await getCarsBySucursal(idSucursal);
-        setVehicles(data);
-      } catch (error) {
-        if (error.response) {
-          const { data } = error.response;
-          let errorMessage = '';
-
-          // Construir el mensaje de error con los detalles del error
-          Object.keys(data).forEach((key) => {
-            errorMessage += `${key}: ${data[key][0]}\n`;
-          });
-
-          // Mostrar mensaje de error al usuario utilizando toast
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        }
+  const getPartData = async () => {
+    try {
+      const { data } = await getPartsInSucursal(idSucursal);
+      setDataParts(data);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        console.log(data);
       }
-    };
+    }
+  };
 
+  const getPartData2 = async () => {
+    try {
+      const { data } = await getPartsInSucursal(idSucursal);
+      const filteredData = data.filter((item) => item.part.vehicle === null);
+      setDataParts(filteredData);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        console.log(data);
+      }
+    }
+  };
+
+  const getPartData3 = async () => {
+    try {
+      const { data } = await getPartsByCarInSucursal(idSucursal,idCarSelectedValue);
+      setDataParts(data);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        console.log(data);
+      }
+    }
+  };
+
+  const getAllVehicles = async () => {
+    try {
+      const allParts = await getPartsInSucursal(idSucursal);
+      const dataAllParts = allParts.data;
+      const vehicleIDs = [
+        ...new Set(
+          dataAllParts
+            .filter((item) => item.part.vehicle !== null)
+            .map((item) => item.part.vehicle.id)
+        ),
+      ];
+      const { data } = await getCarsBySucursal(idSucursal);
+      const filteredVehicles = data.filter((item) =>
+        vehicleIDs.includes(item.vehicle.id)
+      );
+      setVehicles(filteredVehicles);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        console.log(data);
+      }
+    }
+  };
+
+  useEffect(() => {
+    getSucursalData();
     getAllVehicles();
   }, []);
+
+  useEffect(() => {
+    console.log(idCarSelectedValue);
+    if (idCarSelectedValue === '') {
+      getPartData();
+    } else if (idCarSelectedValue === 'generic') {
+      getPartData2();
+    }else{
+      getPartData3();
+    }
+  }, [idCarSelectedValue]);
 
   const handleSearch = (event) => {
     const searchTerm = event.target.value.toLowerCase();
@@ -158,12 +174,13 @@ const PartsListing = () => {
                 onChange={handleSelectedVehicle} // Usar solo onChange
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
               >
-                <option value="">Seleccione uno</option>
+                <option value="">Todos</option>
                 {vehicles.map((car) => (
                   <option value={car.vehicle.id} key={car.vehicle.id}>
                     {car.vehicle.model} - {car.vehicle.year}
                   </option>
                 ))}
+                <option value="generic">Generico</option>
               </Input>
             </div>
           </div>

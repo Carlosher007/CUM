@@ -21,7 +21,6 @@ const Sidebar = () => {
   const token = cookies.get('token');
   const navigate = useNavigate();
 
-
   const handleLogout = async () => {
     try {
       const response = await logout(token);
@@ -39,9 +38,7 @@ const Sidebar = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -77,11 +74,11 @@ const Sidebar = () => {
           display: 'Ver Carros',
           role: ['Anyone'],
         },
-        {
-          path: urls.presentialquoteD,
-          display: 'Cotizar Presencialmente',
-          role: ['Anyone'],
-        },
+        // {
+        //   path: urls.presentialquoteD,
+        //   display: 'Cotizar Presencialmente',
+        //   role: ['Anyone'],
+        // },
         {
           path: urls.myQuotes,
           display: 'Mis cotizaciones ',
@@ -127,6 +124,11 @@ const Sidebar = () => {
         {
           path: urls.newVehicle,
           display: 'Añadir un vehiculo',
+          role: ['Anyone'],
+        },
+        {
+          path: urls.myCars,
+          display: 'Mis Carros',
           role: ['Anyone'],
         },
       ],

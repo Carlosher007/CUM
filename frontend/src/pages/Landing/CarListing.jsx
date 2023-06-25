@@ -36,7 +36,6 @@ const CarListing = () => {
     setCurrentPage(selected);
   };
 
-
   const sortedCarData = [...dataCars].sort((a, b) => {
     let result = 0;
 
@@ -55,21 +54,11 @@ const CarListing = () => {
     try {
       const { data } = await getCars();
       setDataCars(data);
-      console.log(data)
+      console.log(data);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -81,17 +70,7 @@ const CarListing = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -104,17 +83,7 @@ const CarListing = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -219,7 +188,9 @@ const CarListing = () => {
                   <CarItem item={item} key={item.id} />
                 ))
               ) : (
-                <div>No se encontraron resultados o seleccione el numero de pagina</div>
+                <div>
+                  No se encontraron resultados o seleccione el numero de pagina
+                </div>
               )}
             </Row>
           </Container>

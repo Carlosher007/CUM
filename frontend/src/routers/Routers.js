@@ -30,6 +30,8 @@ import EditPart from '../pages/Dashboard/EditPart';
 import MyQuotes from '../pages/Dashboard/MyQuotes';
 import DetailsQuote from '../pages/Dashboard/DetailsQuote';
 import AllQuotes from '../pages/Dashboard/AllQuotes';
+import MyCars from '../pages/Dashboard/MyCars';
+import MyCar from '../pages/Dashboard/MyCar';
 
 const Routers = () => {
   const cookies = new Cookies();
@@ -266,6 +268,22 @@ const Routers = () => {
           element={
             <FilterPage roles={[]}>
               <AllQuotes />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.myCars}
+          element={
+            <FilterPage roles={[]}>
+              <MyCars />
+            </FilterPage>
+          }
+        />
+        <Route
+          path={urls.myCar}
+          element={
+            <FilterPage roles={[]}>
+              <MyCar />
             </FilterPage>
           }
         />

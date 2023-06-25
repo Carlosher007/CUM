@@ -28,6 +28,7 @@ import {
   colorOptions,
 } from '../../assets/color/colorUtils';
 import { urls } from '../../assets/urls/urls';
+import { createPartValidation } from '../../assets/validation/createPartValidation';
 import { createVehicleValidation } from '../../assets/validation/createVehicleValidation';
 import VehiclesWithPartTable from '../../components/Dashboard/UI/VehiclesWithPartTable';
 
@@ -50,22 +51,12 @@ const NewVehicle = () => {
         ...formik.values,
         name,
         price,
-        vehicle,
+        vehicle:vehicle.id,
       });
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -89,17 +80,7 @@ const NewVehicle = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -113,17 +94,7 @@ const NewVehicle = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -136,56 +107,38 @@ const NewVehicle = () => {
   const createNewPartInSucursal = async (values, partId) => {
     try {
       const body = {
-        sucursal: values.sucursal,
-        quantity: values.quantity,
+        sucursal: parseInt(values.sucursal),
+        quantity: parseInt(values.quantity),
         part: partId,
       };
 
-      const { data } = await newPartInSucursal(body);
-      toast.success('Repuesto añadido a la empresa y la sucursal', {
+      await newPartInSucursal(body);
+      toast.success('Repuesto añadido a la sucursal', {
         position: toast.POSITION.TOP_RIGHT,
       });
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
 
   const addNewPart = async (values) => {
+    console.log(values);
     try {
       const { data } = await newPart(values);
       return data.id; // Devolver el ID del carro añadido
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
 
   const addPartInSucursal = async (values, partId) => {
+    console.log(values);
     try {
       const body = {
         sucursal: parseInt(values.sucursal),
@@ -200,17 +153,27 @@ const NewVehicle = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
+        console.log(data);
+      }
+    }
+  };
 
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
+  const getGeneralPart = async (idPart) => {
+    try {
+      const { data } = await getPartsInSucursal(idSucursal);
+      let id = null;
 
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+      data.map((item) => {
+        if (item.part.id === parseInt(idPart)) {
+          id = item.id;
+        }
+      });
+
+      return id;
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        console.log(data);
       }
     }
   };
@@ -223,7 +186,7 @@ const NewVehicle = () => {
       sucursal: idSucursal,
       quantity: '',
     },
-    // validationSchema: createVehicleValidation,
+    validationSchema: createPartValidation,
     onSubmit: async (values) => {
       if (
         idPartSelectedValue === '' ||
@@ -231,16 +194,18 @@ const NewVehicle = () => {
         isNaN(idPartSelectedValue)
       ) {
         console.log('no existente');
-        // const partId = await addNewPart(values); // Añadir el carro y obtener su ID
-        const partId = 1;
+        const partId = await addNewPart(values); // Añadir el carro y obtener su ID
+        // const partId = 1;
         if (partId) {
-          // await createNewPartInSucursal(values, partId); // Crear el vehículo en la sucursal con el ID del carro
+          await createNewPartInSucursal(values, partId); // Crear el vehículo en la sucursal con el ID del carro
           resetFormik();
           // await getAllVehicles();
         }
       } else {
         console.log('existente');
-        // await addPartInSucursal(values, idPartSelectedValue);
+        // const id = await getGeneralPart(idPartSelectedValue);
+        // console.log(id);
+        await addPartInSucursal(values, idPartSelectedValue);
         resetFormik();
       }
       await getAllVehicles();
@@ -252,6 +217,7 @@ const NewVehicle = () => {
   const [errorShown, setErrorShown] = useState(false);
 
   const showErrorToast = (message) => {
+    console.log(message);
     if (!errorShown) {
       toast.error(message, {
         position: toast.POSITION.TOP_RIGHT,
@@ -264,12 +230,17 @@ const NewVehicle = () => {
     setErrorShown(false);
   };
 
+  useEffect(() => {
+    console.log(values);
+  }, [values]);
+
   const handleSelectedPart = async (e) => {
     resetFormik();
-    const selectedCarId = e.target.value;
-    setIdPartSelectedValue(selectedCarId);
-    if (selectedCarId) {
-      await getPartData(selectedCarId);
+    const selectedPartId = e.target.value;
+    setIdPartSelectedValue(selectedPartId);
+    console.log(selectedPartId);
+    if (selectedPartId) {
+      await getPartData(selectedPartId);
     }
   };
 
@@ -293,7 +264,14 @@ const NewVehicle = () => {
                 <option value="">Seleccione uno</option>
                 {parts.map((part) => (
                   <option value={part.part.id} key={part.part.id}>
-                    {part.part.name}
+                    {part.part.name} :{' '}
+                    {part.part.vehicle === null ? (
+                      'Generico'
+                    ) : (
+                      <>
+                        {part.part.vehicle.model} {part.part.vehicle.year}
+                      </>
+                    )}
                   </option>
                 ))}
               </Input>
@@ -379,15 +357,6 @@ const NewVehicle = () => {
               errors.quantity &&
               showErrorToast(errors.quantity)}
           </FormGroup>
-        </div>
-
-        <div className="mb-10 mt-3">
-          <h2 className=" text-xl mb-4 font-bold">
-            Lista de vehiculos que tienen este repuesto
-          </h2>
-          <div>
-            <VehiclesWithPartTable data={vehiclesWithPart} />
-          </div>
         </div>
 
         <div className="mb-10 mt-3">

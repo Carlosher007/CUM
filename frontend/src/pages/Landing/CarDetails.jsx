@@ -15,7 +15,7 @@ const CarDetails = () => {
   const [car, setCar] = useState({});
   const [avalaibleSucursals, setAvalaibleSucursals] = useState([]);
   const [colors, setColors] = useState([]);
-  const [selectedColor, setSelectedColor] = useState("");
+  const [selectedColor, setSelectedColor] = useState('');
 
   const handleColorChange = (color) => {
     setSelectedColor(color.hex.toUpperCase());
@@ -27,28 +27,16 @@ const CarDetails = () => {
       const allColors = [
         ...new Set(
           data
-            .filter(
-              (item) =>
-                item.vehicle === parseInt(id))
+            .filter((item) => item.vehicle === parseInt(id))
             .map((item) => item.color)
         ),
       ];
-      setColors(allColors)
-      setSelectedColor(allColors[0])
+      setColors(allColors);
+      setSelectedColor(allColors[0]);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -59,7 +47,10 @@ const CarDetails = () => {
       const allSucursals = [
         ...new Set(
           data
-            .filter((item) => item.vehicle === parseInt(id) && item.color===selectedColor)
+            .filter(
+              (item) =>
+                item.vehicle === parseInt(id) && item.color === selectedColor
+            )
             .map((item) => item.sucursal)
         ),
       ];
@@ -67,17 +58,7 @@ const CarDetails = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -89,17 +70,7 @@ const CarDetails = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -110,7 +81,7 @@ const CarDetails = () => {
   }, []);
 
   useEffect(() => {
-    if(selectedColor!==""){
+    if (selectedColor !== '') {
       getAvailableSucursals();
     }
   }, [selectedColor]);

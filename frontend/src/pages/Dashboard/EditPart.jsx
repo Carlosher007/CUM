@@ -18,7 +18,7 @@ import {
   motorData,
   suspensionData,
 } from '../../assets/api/defaultData';
-import { getPart } from '../../assets/api/parts';
+import { getPart, partialUpdatePart } from '../../assets/api/parts';
 import { getCarsBySucursal } from '../../assets/api/sucursal.api';
 import {
   codeToColorName,
@@ -38,28 +38,18 @@ const EditPart = () => {
     const getPartData = async () => {
       try {
         const { data } = await getPart(idPart);
+        console.log(data);
         setPartData(data);
-        const { name, vehicle, price } = data;
+        const { name, price } = data;
         formik.setValues({
           ...formik.values,
           name,
-          vehicle,
           price,
         });
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          let errorMessage = '';
-
-          // Construir el mensaje de error con los detalles del error
-          Object.keys(data).forEach((key) => {
-            errorMessage += `${key}: ${data[key][0]}\n`;
-          });
-
-          // Mostrar mensaje de error al usuario utilizando toast
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
+          console.log(data);
         }
       }
     };
@@ -67,28 +57,17 @@ const EditPart = () => {
   }, []);
 
   const updateSelectedPart = async (values, id) => {
+    console.log(values);
+    console.log(id);
     try {
-      const body = values;
-      console.log(body);
-      // const { data } = await updateCar(body, id);
-      // console.log(data);
-      toast.success('Vehiculo actualizado', {
+      await partialUpdatePart(id, values);
+      toast.success('Repuesto actualizado', {
         position: toast.POSITION.TOP_RIGHT,
       });
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -97,11 +76,10 @@ const EditPart = () => {
     initialValues: {
       name: '',
       price: '',
-      vehicle: '',
     },
     // validationSchema: editVehicleValidation,
     onSubmit: async (values) => {
-      updateSelectedPart(values, values.id);
+      updateSelectedPart(values, idPart);
     },
   });
 
@@ -173,15 +151,6 @@ const EditPart = () => {
               />
               {touched.price && errors.price && showErrorToast(errors.price)}
             </FormGroup>
-          </div>
-        </div>
-
-        <div className="mb-10 mt-3">
-          <h2 className=" text-xl mb-4 font-bold">
-            Lista de vehiculos que tienen este repuesto
-          </h2>
-          <div>
-            <VehiclesWithPartTable data={vehiclesWithPart} />
           </div>
         </div>
 

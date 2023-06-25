@@ -5,6 +5,9 @@ import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
 import { getCar } from '../../assets/api/cars';
 import {
+  acceptQuote,
+  cancelQuote,
+  finishQuote,
   getQuote,
   getQuotesByClient,
   getQuotesBySeller,
@@ -31,6 +34,21 @@ const DetailsQuote = () => {
   const [quote, setQuote] = useState([]);
   const [errorShown, setErrorShown] = useState(false);
 
+  const finishQuoteData = async () => {
+    try {
+      await finishQuote(idQuote);
+      toast.success('Cotización finalizada', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      await getQuoteDataByRol();
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        console.log(data);
+      }
+    }
+  };
+
   const formik = useFormik({
     initialValues: {
       wayPay: typesOfPay[0],
@@ -40,7 +58,7 @@ const DetailsQuote = () => {
     },
     validationSchema: quoteValidation,
     onSubmit: (values) => {
-      console.log(values);
+      finishQuoteData();
     },
   });
 
@@ -53,17 +71,7 @@ const DetailsQuote = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -78,17 +86,7 @@ const DetailsQuote = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -100,17 +98,7 @@ const DetailsQuote = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -125,17 +113,7 @@ const DetailsQuote = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
@@ -150,28 +128,18 @@ const DetailsQuote = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        let errorMessage = '';
-
-        // Construir el mensaje de error con los detalles del error
-        Object.keys(data).forEach((key) => {
-          errorMessage += `${key}: ${data[key][0]}\n`;
-        });
-
-        // Mostrar mensaje de error al usuario utilizando toast
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
+        console.log(data);
       }
     }
   };
 
-  const getQuoteDataByRol = () => {
+  const getQuoteDataByRol = async () => {
     if (rol === 'Cliente') {
-      getQuoteClient();
+      await getQuoteClient();
     } else if (rol === 'Vendedor') {
-      getQuoteSeller();
+      await getQuoteSeller();
     } else {
-      getQuoteGerente();
+      await getQuoteGerente();
     }
   };
 
@@ -190,9 +158,36 @@ const DetailsQuote = () => {
     return null;
   }
 
-  const acceptQuote = async () => {};
+  const acceptQuoteData = async () => {
+    console.log('uyy');
+    try {
+      await acceptQuote(idQuote);
+      toast.success('Cotización aceptada', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      await getQuoteDataByRol();
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        console.log(data);
+      }
+    }
+  };
 
-  const declineQuote = async () => {};
+  const declineQuote = async () => {
+    try {
+      await cancelQuote(idQuote);
+      toast.success('Cotización rechazada', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      await getQuoteDataByRol();
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        console.log(data);
+      }
+    }
+  };
 
   const showErrorToast = (message) => {
     if (!errorShown) {
@@ -260,13 +255,17 @@ const DetailsQuote = () => {
                 <div className="flex justify-center space-x-4">
                   <button
                     className="bg-terciary/80 text-black py-2 px-4 rounded-lg hover:bg-terciary transition-colors"
-                    onClick={acceptQuote}
+                    onClick={() => {
+                      acceptQuoteData();
+                    }}
                   >
                     Aceptar Cotización
                   </button>
                   <button
                     className="bg-quaternary/80 text-black py-2 px-4 rounded-lg hover:bg-quaternary transition-colors"
-                    onClick={declineQuote}
+                    onClick={() => {
+                      declineQuote();
+                    }}
                   >
                     Rechazar Cotización
                   </button>
