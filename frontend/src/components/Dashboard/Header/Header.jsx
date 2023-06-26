@@ -36,10 +36,13 @@ const Header = () => {
 
   const handleLogout = async () => {
     try {
-      const response = await logout(token);
-      const { data } = response;
+      const { data } = await logout(token);
       console.log(data);
-      deleteCookies();
+      await new Promise((resolve) => {
+        deleteCookies();
+        resolve();
+      });
+
       navigate(urls.home);
     } catch (error) {
       if (error.response) {

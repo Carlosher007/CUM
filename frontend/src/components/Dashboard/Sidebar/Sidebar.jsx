@@ -21,18 +21,21 @@ const Sidebar = () => {
   const token = cookies.get('token');
   const navigate = useNavigate();
 
+  const deleteCookies = () => {
+    Object.keys(cookies.getAll()).forEach((cookieName) => {
+      cookies.remove(cookieName, { path: '/' });
+    });
+  };
+
   const handleLogout = async () => {
     try {
       const response = await logout(token);
       const { data } = response;
-      cookies.remove('token');
-      cookies.remove('id');
-      cookies.remove('rol');
-      cookies.remove('email');
-      cookies.remove('full_name');
-      cookies.remove('address');
-      cookies.remove('sucursal');
-      cookies.remove('is_superuser');
+      await new Promise((resolve) => {
+        deleteCookies();
+        resolve();
+      });
+
       navigate(urls.home);
     } catch (error) {
       if (error.response) {

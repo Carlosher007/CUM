@@ -1,5 +1,5 @@
 import axios from 'axios';
-import { tokenValue } from './tokenCookie';
+import { getTokenValue } from './tokenCookie';
 
 const path = axios.create({
   baseURL: 'http://localhost:8000/api/',
@@ -13,20 +13,20 @@ const path2 = axios.create({
 });
 
 // Agregar el interceptor para modificar las solicitudes salientes
-path.interceptors.request.use((config) => {
-  const token = tokenValue; // Obtén el valor del token de las cookies
+path.interceptors.request.use(async (config) => {
+  const token = await getTokenValue(); // Obtén el valor actualizado del token de las cookies
 
-  if (token && config.method !== 'get') {
+  if (token) {
     config.headers.Authorization = `Token ${token}`;
   }
 
   return config;
 });
 
-path2.interceptors.request.use((config) => {
-  const token = tokenValue; // Obtén el valor del token de las cookies
+path2.interceptors.request.use(async (config) => {
+  const token = await getTokenValue(); // Obtén el valor actualizado del token de las cookies
 
-  if (token && config.method !== 'get') {
+  if (token) {
     config.headers.Authorization = `Token ${token}`;
   }
 

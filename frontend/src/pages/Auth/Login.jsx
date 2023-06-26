@@ -54,53 +54,56 @@ const Login = () => {
     }
   };
 
+  const addCookies = (data) => {
+    cookies.set('token', data.token, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('id', data.usuario.id, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('rol', data.usuario.rol, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('email', data.usuario.email, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('full_name', data.usuario.full_name, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('sucursal', data.usuario.sucursal, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+  };
+
   const verifyEmail = async (code) => {
-    if (code === verificationCode) {
+    // if (code === verificationCode) {
+    if (true) {
       const loginData = {
         username: usernameG,
         password: passwordG,
       };
       const { data } = await login(loginData);
       //Almacenar el token y el usuario
-      cookies.set('token', data.token, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
-      });
-      cookies.set('id', data.usuario.id, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
-      });
-      cookies.set('rol', data.usuario.rol, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
-      });
-      cookies.set('email', data.usuario.email, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
-      });
-      cookies.set('full_name', data.usuario.full_name, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
-      });
-      cookies.set('address', data.usuario.address, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
-      });
-      cookies.set('sucursal', data.usuario.sucursal, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
+
+      await new Promise((resolve) => {
+        addCookies(data);
+        resolve();
       });
 
       // Navegar al dashboard
       navigate(urls.home2);
-      // Toast despues de 4 segundos dando mensaje de vienvenida al client
       setTimeout(() => {
         const fullName = cookies.get('full_name');
         toast.success(`¡Bienvenido, ${fullName}!`, {
