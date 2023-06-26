@@ -8,27 +8,16 @@ from rest_framework.views import APIView
 from rest_framework import viewsets
 from rest_framework.authtoken.models import Token
 from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.permissions import IsAuthenticated
 from ..models import User
 from .serializers import ValidateUserSerializer, UserSerializer, UserVerificationCodeSerializer
 from ..views import generate_verification_code
 from django.utils import timezone
-# class UserAPIView(APIView):
-
-#     def get(self, request):
-#         users =User.objects.all()
-#         user_serializer = UserSerializer(users, many=True)
-#         return Response(user_serializer.data)
-    
-#     def post(self, request):
-#         user_serializer = UserSerializer(data=request.data)
-#         if user_serializer.is_valid():
-#             user_serializer.save()
-#             return Response(user_serializer.data)
-#         return Response(user_serializer.errors)
 
 class UserAPIView(viewsets.ModelViewSet):
     serializer_class = UserSerializer
     queryset = User.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def create(self, request):
         password = generate_verification_code()

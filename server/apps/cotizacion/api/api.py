@@ -5,6 +5,7 @@ from rest_framework import status
 from rest_framework import viewsets
 from rest_framework.response import Response
 from rest_framework.decorators import action
+from rest_framework.permissions import IsAuthenticated
 
 from ..models import Quotation, AssignedQuote
 from .serializers import (QuotationSerializer, CreateAssignedQuoteSerializer,
@@ -13,10 +14,12 @@ from .serializers import (QuotationSerializer, CreateAssignedQuoteSerializer,
 class QuotationApiView(viewsets.ModelViewSet):
     serializer_class = QuotationSerializer
     queryset = Quotation.objects.all()
+    permission_classes = [IsAuthenticated]
 
 class AssignedQuoteApiView(viewsets.ModelViewSet):
     serializer_class = CreateAssignedQuoteSerializer
     queryset = AssignedQuote.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == "list" or self.action == "retrieve":
