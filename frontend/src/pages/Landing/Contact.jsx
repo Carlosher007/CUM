@@ -36,7 +36,6 @@ const Contact = () => {
     event.preventDefault();
     const formData = new FormData(event.target);
     const data = Object.fromEntries(formData.entries());
-    console.log(data);
   };
 
   return (

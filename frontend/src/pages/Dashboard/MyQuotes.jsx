@@ -57,7 +57,6 @@ const MyQuotes = () => {
 
       const { data } = response;
       setQuotes(data);
-      console.log(data);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
@@ -78,7 +77,6 @@ const MyQuotes = () => {
 
       const { data } = response;
       setQuotes(data);
-      console.log(data);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;

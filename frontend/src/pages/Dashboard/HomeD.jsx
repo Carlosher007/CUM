@@ -18,15 +18,12 @@ const Home = () => {
   const [cars,setCars] = useState([])
 
   const getCarsSold = async () => {
-    console.log(sucursal)
     try {
       const { data } = await getCarsSoldBySucursal(parseInt(sucursal));
-      console.log(data)
       setCars(data)
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
       }
     }
   }

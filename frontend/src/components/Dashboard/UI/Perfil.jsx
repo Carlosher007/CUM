@@ -38,7 +38,6 @@ const Perfil = ({ user }) => {
     onSubmit: (values) => {
       const selectedValue = parseInt(values.sucursal);
       values.sucursal = isNaN(selectedValue) ? null : selectedValue;
-      // console.log(values);
       updateProfile(values);
     },
   });

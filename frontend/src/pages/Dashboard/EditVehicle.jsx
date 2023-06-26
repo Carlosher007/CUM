@@ -91,13 +91,10 @@ const EditVehicle = () => {
   const updateSelectedCar = async (values, id) => {
     try {
       const body = values;
-      console.log(typeof body.image);
       if (typeof body.image === 'string') {
         delete body.image;
       }
-      console.log(body);
       const { data } = await updateCar(body, id);
-      console.log(data);
       toast.success('Vehiculo actualizado', {
         position: toast.POSITION.TOP_RIGHT,
       });

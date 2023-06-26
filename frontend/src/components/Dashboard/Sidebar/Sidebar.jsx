@@ -25,7 +25,6 @@ const Sidebar = () => {
     try {
       const response = await logout(token);
       const { data } = response;
-      console.log(data);
       cookies.remove('token');
       cookies.remove('id');
       cookies.remove('rol');

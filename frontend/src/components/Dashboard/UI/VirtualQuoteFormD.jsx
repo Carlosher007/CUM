@@ -35,7 +35,6 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
             colorSinNumeral
           );
           formik.setFieldValue('vehicle_sucursal', data.id);
-          console.log(data.id);
         }
       } catch (error) {
         if (error.response) {
@@ -80,7 +79,6 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     const roundedTotalValue = parseInt(Math.ceil(totalValue));
 
     setLifeSegure(segureLife);
-    console.log(roundedDueValue);
     setValueMensualDue(roundedDueValue);
     setValueTotal(roundedTotalValue);
     setShowValueCotization(true);
@@ -122,7 +120,6 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
 
   const handleCancel = () => {
     setShowValueCotization(false);
-    console.log('cancel');
   };
 
   const handleQuote = () => {
@@ -142,7 +139,6 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
       }
     };
     sendQuote();
-    console.log(values);
   };
 
   return (

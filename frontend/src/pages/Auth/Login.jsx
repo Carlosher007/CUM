@@ -68,7 +68,6 @@ const Login = () => {
         password: passwordG,
       };
       const { data } = await login(loginData);
-      console.log(data);
       //Almacenar el token y el usuario
       cookies.set('token', data.token, {
         path: '/',
@@ -134,10 +133,8 @@ const Login = () => {
         username: email,
         password,
       };
-      console.log(loginData);
 
       const response = await validateUser(loginData);
-      console.log(response);
       setUsernameG(email);
       setPasswordG(password);
 

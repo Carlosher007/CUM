@@ -88,7 +88,6 @@ const NewVehicle = () => {
   const getAllParts = async () => {
     try {
       const { data } = await getPartsInSucursal(idSucursal);
-      console.log(data);
       setParts(data);
       //  }
     } catch (error) {
@@ -125,7 +124,6 @@ const NewVehicle = () => {
   };
 
   const addNewPart = async (values) => {
-    console.log(values);
     try {
       const { data } = await newPart(values);
       return data.id; // Devolver el ID del carro añadido
@@ -138,7 +136,6 @@ const NewVehicle = () => {
   };
 
   const addPartInSucursal = async (values, partId) => {
-    console.log(values);
     try {
       const body = {
         sucursal: parseInt(values.sucursal),
@@ -193,7 +190,6 @@ const NewVehicle = () => {
         idPartSelectedValue === null ||
         isNaN(idPartSelectedValue)
       ) {
-        console.log('no existente');
         const partId = await addNewPart(values); // Añadir el carro y obtener su ID
         // const partId = 1;
         if (partId) {
@@ -202,9 +198,7 @@ const NewVehicle = () => {
           // await getAllVehicles();
         }
       } else {
-        console.log('existente');
         // const id = await getGeneralPart(idPartSelectedValue);
-        // console.log(id);
         await addPartInSucursal(values, idPartSelectedValue);
         resetFormik();
       }
@@ -217,7 +211,6 @@ const NewVehicle = () => {
   const [errorShown, setErrorShown] = useState(false);
 
   const showErrorToast = (message) => {
-    console.log(message);
     if (!errorShown) {
       toast.error(message, {
         position: toast.POSITION.TOP_RIGHT,
@@ -230,15 +223,11 @@ const NewVehicle = () => {
     setErrorShown(false);
   };
 
-  useEffect(() => {
-    console.log(values);
-  }, [values]);
 
   const handleSelectedPart = async (e) => {
     resetFormik();
     const selectedPartId = e.target.value;
     setIdPartSelectedValue(selectedPartId);
-    console.log(selectedPartId);
     if (selectedPartId) {
       await getPartData(selectedPartId);
     }

@@ -64,7 +64,6 @@ const MyCar = () => {
     try {
       const { data } = await getPartsByCarInSucursal(idSucursal, id);
       setParts(data);
-      console.log(data);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
@@ -86,7 +85,6 @@ const MyCar = () => {
 
   const handleSelectedPart = (e) => {
     const selectedPartID_ = e.target.value;
-    console.log(selectedPartID_);
     setSelectedPartID(parseInt(selectedPartID_));
   };
 
@@ -163,7 +161,6 @@ const MyCar = () => {
         client_vehicle: idQ,
         description: description,
       };
-      console.log(body);
       await createWorkOrder(body);
       toast.success('Orden realizada satisfactoriamente', {
         position: toast.POSITION.TOP_RIGHT,
@@ -171,8 +168,6 @@ const MyCar = () => {
       setSelectedParts([]);
       getPartsData();
       await getState();
-      // setParts(data);
-      // console.log(data);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;

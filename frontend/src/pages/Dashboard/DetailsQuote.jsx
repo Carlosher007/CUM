@@ -159,7 +159,6 @@ const DetailsQuote = () => {
   }
 
   const acceptQuoteData = async () => {
-    console.log('uyy');
     try {
       await acceptQuote(idQuote);
       toast.success('Cotización aceptada', {
@@ -449,7 +448,6 @@ const DetailsQuote = () => {
                           <button
                             type="submit"
                             className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
-                            // onClick={() => console.log('ooo')}
                             onClick={(event) => {
                               event.preventDefault(); // Evita el comportamiento predeterminado del botón
                               handleSubmit(); // Ejecuta la función handleSubmit

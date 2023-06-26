@@ -28,7 +28,6 @@ const MiPerfil = ({ user }) => {
   }, []);
 
   const updateProfile = async () => {
-    console.log(user.id);
     try {
       const { data } = await updateMyProfile(user.id, values);
       toast.success('Usuario actualizado con exito', {

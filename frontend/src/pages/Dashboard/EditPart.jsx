@@ -38,7 +38,6 @@ const EditPart = () => {
     const getPartData = async () => {
       try {
         const { data } = await getPart(idPart);
-        console.log(data);
         setPartData(data);
         const { name, price } = data;
         formik.setValues({
@@ -57,8 +56,6 @@ const EditPart = () => {
   }, []);
 
   const updateSelectedPart = async (values, id) => {
-    console.log(values);
-    console.log(id);
     try {
       await partialUpdatePart(id, values);
       toast.success('Repuesto actualizado', {

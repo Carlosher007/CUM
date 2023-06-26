@@ -39,7 +39,6 @@ const CarDetailsD = () => {
 
   const getAvailableColors = async () => {
     try {
-      console.log(idSucursal + ' ' + id);
       const { data } = await getColorsCar(idSucursal, id);
       const colors = data.map((obj) => obj.color);
       setAvailableColors(colors);

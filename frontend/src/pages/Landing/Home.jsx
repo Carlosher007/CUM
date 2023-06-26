@@ -22,14 +22,13 @@ const Home = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-        console.log(data)
+          console.log(data);
         }
       }
     };
     getCarData();
   }, []);
 
-  
   return (
     <div className="bg-white">
       <Helmet title="Home">

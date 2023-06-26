@@ -75,8 +75,6 @@ const VirtualQuoteForm = ({
           colorSinNumeral
         );
         formik.setFieldValue('vehicle_sucursal', data.id);
-        console.log(data.id);
-        console.log(values.vehicle_sucursal);
       }
       formik.setFieldValue('client', values.id);
       const { data } = await createQuote(values);
@@ -117,8 +115,6 @@ const VirtualQuoteForm = ({
       if (colorSinNumeral != '') {
         const { data } = await getCarByColor(sucursal, slug, colorSinNumeral);
         formik.setFieldValue('vehicle_sucursal', data.id);
-        console.log(data.id);
-        console.log(values.vehicle_sucursal);
       }
     } catch (error) {
       if (error.response) {

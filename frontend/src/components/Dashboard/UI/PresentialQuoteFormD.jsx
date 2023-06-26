@@ -15,7 +15,6 @@ const PresentialQuoteForm = () => {
       try {
         const { data } = await getSucursals();
         setSucursals(data);
-        console.log(data);
       } catch (error) {
         if (error.response) {
           const { data } = error.response;

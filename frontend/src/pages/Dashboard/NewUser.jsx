@@ -38,7 +38,6 @@ const NewUser = () => {
     onSubmit: (values) => {
       values.sucursal = selectedSucursal; // Asignar el valor seleccionado al campo "sucursal"
       values.sucursal = parseInt(selectedSucursal);
-      console.log(values);
       submitUser(values);
     },
   });

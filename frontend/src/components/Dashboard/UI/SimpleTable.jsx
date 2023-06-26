@@ -6,7 +6,6 @@ import { formatPrice } from '../../../assets/general/formatPrice';
 import { codeToColorName } from '../../../assets/color/colorUtils';
 
 const SimpleTable = ({ data }) => {
-  console.log(data)
   return (
     <div>
       <div className="bg-secondary-100 p-8 rounded-xl">

@@ -24,7 +24,6 @@ const MyCars = () => {
     try {
       const { data } = await getCarsSoldByClient(parseInt(id));
       setCars(data);
-      console.log(data);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;

@@ -12,7 +12,6 @@ const MiSucursal = ({ sucursal }) => {
   const updateSucursalData = async () => {
     try {
       const { data } = await updateSucursal(sucursal.id, values);
-      console.log(data);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;

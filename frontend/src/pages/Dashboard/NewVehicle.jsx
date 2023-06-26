@@ -217,7 +217,6 @@ const NewVehicle = () => {
         idCarSelectedValue === null ||
         isNaN(idCarSelectedValue)
       ) {
-        // console.log('no existente');
         const carId = await addNewVehicle(values); // Añadir el carro y obtener su ID
         // const carId = 1;
         if (carId) {
@@ -226,7 +225,6 @@ const NewVehicle = () => {
           // await getAllVehicles();
         }
       } else {
-        // console.log('existente');
         await addVehicleInSucursal(values, idCarSelectedValue);
         resetFormik();
       }

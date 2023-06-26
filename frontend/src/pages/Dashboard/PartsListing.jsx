@@ -124,7 +124,6 @@ const PartsListing = () => {
   }, []);
 
   useEffect(() => {
-    console.log(idCarSelectedValue);
     if (idCarSelectedValue === '') {
       getPartData();
     } else if (idCarSelectedValue === 'generic') {

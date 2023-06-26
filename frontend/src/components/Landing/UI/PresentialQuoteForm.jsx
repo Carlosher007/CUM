@@ -37,7 +37,6 @@ const PresentialQuoteForm = () => {
     },
     validationSchema: presentialQuoteValidation,
     onSubmit: (values) => {
-      console.log(values);
       navigate(urls.presentialquote, { state: values });
     },
   });

@@ -8,8 +8,6 @@ import { formatPrice } from '../../../assets/general/formatPrice';
 
 const MyCarsTable = ({ data}) => {
 
-  console.log(data)
-
   return (
     <div>
       <div className="bg-secondary-100 p-6 rounded-xl">
