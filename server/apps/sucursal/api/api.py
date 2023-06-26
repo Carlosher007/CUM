@@ -4,6 +4,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework.decorators import action
 from rest_framework.parsers import MultiPartParser, FormParser
+from rest_framework.permissions import IsAuthenticated
 from rest_framework import viewsets, status
 
 from .. import views
@@ -17,31 +18,10 @@ from .serializer import (SucursalSerializer, VehicleSerializer,
                          CreateSucursalPartSerializer)
 from apps.usuario.api.serializers import UserSerializer
 
-# Create your views here.
-# class SucursalAPIView(APIView):
-
-#     def get(self, request):
-#         users = User.objects.all().select_related('cedula')
-#         lista_sucursales = []
-#         for user in users: 
-#             sucursal = user.cedula
-#             jefe_taller = JefeTaller.objects.filter(cedula=sucursal.cedula_jefe_taller).first()
-#             sucursal_ = {
-#                 'id':sucursal.id,
-#                 'ciudad':sucursal.ciudad,
-#                 'direccion':sucursal.direccion,
-#                 'telefono':sucursal.telefono,
-#                 'nombre_User':User.nombre_completo,
-#                 'nombre_jefe_taller':jefe_taller.nombre_completo
-#             }
-#             lista_sucursales.append(sucursal_)
-
-#         return Response(lista_sucursales)
-
-
 class SucursalApiView(viewsets.ModelViewSet):
     serializer_class = SucursalSerializer
     queryset = Sucursal.objects.all()
+    permission_classes = [IsAuthenticated]
 
     @action(detail=False, methods=['GET'], url_path='sucursals-staff')
     def get_sucursals_staff(self, request):
@@ -130,6 +110,7 @@ class SucursalApiView(viewsets.ModelViewSet):
 class VehicleApiView(viewsets.ModelViewSet):
     serializer_class = VehicleSerializer
     queryset = Vehicle.objects.all()
+    permission_classes = [IsAuthenticated]
     parser_classes = (MultiPartParser, FormParser)
 
     @action(detail=True, methods=['GET'], url_path='vehicle-sucursals')
@@ -145,6 +126,7 @@ class VehicleApiView(viewsets.ModelViewSet):
 class VehicleSucursalApiView(viewsets.ModelViewSet):
     serializer_class = VehicleSucursalSerializer
     queryset = VehicleSucursal.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def create(self, request):
         vehicle_sucursal_serializer = VehicleSucursalSerializer(data=request.data)
@@ -179,6 +161,7 @@ class VehicleSucursalApiView(viewsets.ModelViewSet):
 class PartApiView(viewsets.ModelViewSet):
     serializer_class = CreatePartSerializer
     queryset = Part.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == "list" or self.action == "retrieve":
@@ -188,6 +171,7 @@ class PartApiView(viewsets.ModelViewSet):
 class SucursalPartApiView(viewsets.ModelViewSet):
     serializer_class = CreateSucursalPartSerializer
     queryset = SucursalPart.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == "list" or self.action == "retrieve":

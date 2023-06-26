@@ -4,6 +4,7 @@ from django.core.mail import send_mail
 from rest_framework import viewsets, status
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 
 from ..models import WorkOrder
 from .serializers import CreateWorkOrderSerializer, ListWorkOrderSerializer, UserSerializer
@@ -13,6 +14,7 @@ from apps.usuario.models import User
 class WorkOrderApiView(viewsets.ModelViewSet):
     serializer_class = CreateWorkOrderSerializer
     queryset = WorkOrder.objects.all()
+    permission_classes = [IsAuthenticated]
 
     def get_serializer_class(self):
         if self.action == "list" or self.action == "retrieve":
