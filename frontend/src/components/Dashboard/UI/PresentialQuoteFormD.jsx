@@ -15,11 +15,22 @@ const PresentialQuoteForm = () => {
       try {
         const { data } = await getSucursals();
         setSucursals(data);
-        console.log(data);
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          console.log(data);
+          if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
         }
       }
     };
@@ -39,9 +50,7 @@ const PresentialQuoteForm = () => {
       password: '',
     },
     validationSchema: presentialQuoteExtendValidation,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: (values) => {},
   });
 
   const { handleSubmit, handleChange, values, touched, errors } = formik;

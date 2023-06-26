@@ -35,12 +35,23 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
             colorSinNumeral
           );
           formik.setFieldValue('vehicle_sucursal', data.id);
-          console.log(data.id);
         }
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          console.log(data);
+          if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
         }
       }
     };
@@ -59,7 +70,19 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          console.log(data);
+          if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
         }
       }
     };
@@ -80,7 +103,6 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     const roundedTotalValue = parseInt(Math.ceil(totalValue));
 
     setLifeSegure(segureLife);
-    console.log(roundedDueValue);
     setValueMensualDue(roundedDueValue);
     setValueTotal(roundedTotalValue);
     setShowValueCotization(true);
@@ -122,14 +144,12 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
 
   const handleCancel = () => {
     setShowValueCotization(false);
-    console.log('cancel');
   };
 
   const handleQuote = () => {
     const sendQuote = async () => {
       try {
         const { data } = await createQuote(values);
-        console.log(data);
         toast.success('Se agrego la cotizacion del carro', {
           position: toast.POSITION.TOP_RIGHT,
         });
@@ -137,12 +157,23 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          console.log(data);
+          if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
         }
       }
     };
     sendQuote();
-    console.log(values);
   };
 
   return (

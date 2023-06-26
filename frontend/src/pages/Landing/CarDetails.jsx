@@ -34,10 +34,20 @@ const CarDetails = () => {
       setColors(allColors);
       setSelectedColor(allColors[0]);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+       if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -56,10 +66,20 @@ const CarDetails = () => {
       ];
       setAvalaibleSucursals(allSucursals);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+       if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -68,10 +88,20 @@ const CarDetails = () => {
       const { data } = await getCar(id);
       setCar(data);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+       if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 

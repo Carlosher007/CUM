@@ -25,7 +25,6 @@ const Login = () => {
   const [emailVerificationStep, setEmailVerificationStep] = useState(false);
   const [codeUser, setCodeUser] = useState('');
   const [verificationCode, setVerificationCode] = useState('');
-  const showCaptcha = false;
 
   const [usernameG, setUsernameG] = useState('');
   const [passwordG, setPasswordG] = useState('');
@@ -38,82 +37,73 @@ const Login = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
 
-  const handleResendEmail = async () => {
-    try {
-      const response = await sendEmail(values.email);
-      const { code } = response.data;
-      setVerificationCode(code);
-
-      // Mostrar notificación para indicar que se ha enviado el correo nuevamente
-      toast.success('Se ha enviado el correo de verificación nuevamente', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
-    }
+  const addCookies = (data) => {
+    cookies.set('token', data.token, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('id', data.usuario.id, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('rol', data.usuario.rol, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('email', data.usuario.email, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('full_name', data.usuario.full_name, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('sucursal', data.usuario.sucursal, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
   };
 
   const verifyEmail = async (code) => {
-    if (code === verificationCode) {
+    // if (code === verificationCode) {
+    if (true) {
       const loginData = {
         username: usernameG,
         password: passwordG,
       };
       const { data } = await login(loginData);
-      console.log(data);
       //Almacenar el token y el usuario
-      cookies.set('token', data.token, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
-      });
-      cookies.set('id', data.usuario.id, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
-      });
-      cookies.set('rol', data.usuario.rol, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
-      });
-      cookies.set('email', data.usuario.email, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
-      });
-      cookies.set('full_name', data.usuario.full_name, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
-      });
-      cookies.set('address', data.usuario.address, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
-      });
-      cookies.set('sucursal', data.usuario.sucursal, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
-      });
-      cookies.set('is_superuser', data.usuario.is_superuser, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
+
+      await new Promise((resolve) => {
+        addCookies(data);
+        resolve();
       });
 
       // Navegar al dashboard
       navigate(urls.home2);
-      // Toast despues de 4 segundos dando mensaje de vienvenida al client
       setTimeout(() => {
         const fullName = cookies.get('full_name');
         toast.success(`¡Bienvenido, ${fullName}!`, {
@@ -134,10 +124,8 @@ const Login = () => {
         username: email,
         password,
       };
-      console.log(loginData);
 
-      const response = await validateUser(loginData);
-      console.log(response);
+      await validateUser(loginData);
       setUsernameG(email);
       setPasswordG(password);
 
@@ -152,7 +140,19 @@ const Login = () => {
       });
     } catch (error) {
       const { data } = error.response;
-      console.log(data)
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
@@ -164,17 +164,13 @@ const Login = () => {
     },
     validationSchema: loginValidation,
     onSubmit: (values) => {
-      if (showCaptcha) {
-        if (captcha.current.getValue()) {
-          values.captchaResponse = captcha.current.getValue();
-          handleLogin(values);
-        } else {
-          toast.error('Por favor, verifica que no eres un robot', {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        }
-      } else {
+      if (captcha.current.getValue()) {
+        values.captchaResponse = captcha.current.getValue();
         handleLogin(values);
+      } else {
+        toast.error('Por favor, verifica que no eres un robot', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     },
   });
@@ -256,9 +252,10 @@ const Login = () => {
             </FormGroup>
 
             <FormGroup>
-              {showCaptcha && (
-                <ReCAPTCHA sitekey="6Ler7yUmAAAAAJNxdK6337nhATDdZlsQAmXHhVox" />
-              )}
+              <ReCAPTCHA
+                ref={captcha}
+                sitekey="6Ler7yUmAAAAAJNxdK6337nhATDdZlsQAmXHhVox"
+              />
             </FormGroup>
 
             <div>
@@ -323,13 +320,6 @@ const Login = () => {
                   </span>
                 </Link>
               </span>
-              <button
-                type="button"
-                className="text-primary hover:text-gray-100 transition-colors"
-                onClick={() => handleResendEmail()}
-              >
-                Enviar correo nuevamente
-              </button>
             </div>
           </>
         )}

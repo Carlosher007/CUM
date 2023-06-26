@@ -1,8 +1,4 @@
-import axios from 'axios';
-
-const path = axios.create({
-  baseURL: 'http://localhost:8000/api/',
-});
+import { path, path2 } from './api';
 
 export const getSucursals = () => path.get('sucursal/');
 export const getSucursalsStaff = () => path.get('sucursal/sucursals-staff/');

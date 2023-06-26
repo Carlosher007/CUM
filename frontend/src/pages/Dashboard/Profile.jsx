@@ -21,12 +21,14 @@ const Profile = () => {
     const getUserData = async () => {
       try {
         const { data } = await getUser(idUser);
-        console.log(data);
         setUser(data);
       } catch (error) {
-        const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        console.log(data);
+        if (error.response) {
+          const { data } = error.response;
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
     };
     getUserData();
@@ -34,12 +36,14 @@ const Profile = () => {
     const getSucursalData = async () => {
       try {
         const { data } = await getSucursal('1');
-        console.log(data);
         setSucursal(data);
       } catch (error) {
-        const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        console.log(data);
+       if (error.response) {
+         const { data } = error.response;
+         toast.error(data.error, {
+           position: toast.POSITION.TOP_RIGHT,
+         });
+       }
       }
     };
     getSucursalData();

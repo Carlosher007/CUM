@@ -21,7 +21,19 @@ const PresentialQuoteForm = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          console.log(data);
+       if (Array.isArray(data)) {
+         data.forEach((errorMessage) => {
+           toast.error(errorMessage, {
+             position: toast.POSITION.TOP_RIGHT,
+           });
+         });
+       } else {
+         if (data.error) {
+           toast.error(data.error, {
+             position: toast.POSITION.TOP_RIGHT,
+           });
+         }
+       }
         }
       }
     };
@@ -37,7 +49,6 @@ const PresentialQuoteForm = () => {
     },
     validationSchema: presentialQuoteValidation,
     onSubmit: (values) => {
-      console.log(values);
       navigate(urls.presentialquote, { state: values });
     },
   });

@@ -29,10 +29,20 @@ const WorkOrderDetails = () => {
       const { data } = await getWorkOrder(id);
       setWorkOrder(data);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -41,10 +51,20 @@ const WorkOrderDetails = () => {
       const { data } = await getQuote(workOrder.client_vehicle.quotation.id);
       setQuote(data);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -54,10 +74,20 @@ const WorkOrderDetails = () => {
       setParts((prevParts) => new Set([...prevParts, data]));
       setIsDone(true);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -66,10 +96,20 @@ const WorkOrderDetails = () => {
       const { data } = await getCar(quote.quotation.vehicle_sucursal.vehicle);
       setCar(data);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -103,10 +143,20 @@ const WorkOrderDetails = () => {
       });
       await getWorkOrderData();
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -118,10 +168,20 @@ const WorkOrderDetails = () => {
       });
       await getWorkOrderData();
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 

@@ -8,7 +8,6 @@ import Cookies from 'universal-cookie';
 import { urls } from '../../../assets/urls/urls';
 
 const Layout = () => {
-  console.log("sssss")
   const cookies = new Cookies();
   const token = cookies.get('token');
   const navigate = useNavigate();

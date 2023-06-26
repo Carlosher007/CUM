@@ -9,7 +9,6 @@ export const createPartValidation = yup.object().shape({
       'El precio debe ser un número',
       (value) => !isNaN(Number(value))
     ),
-  vehicle: yup.string().required('Seleccione un vehículo'),
   sucursal: yup.string().required('Necesita una sucursal'),
   quantity: yup
     .string()

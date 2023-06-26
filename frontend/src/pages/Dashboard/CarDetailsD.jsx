@@ -7,8 +7,8 @@ import { getCar, getColorsCar } from '../../assets/api/cars';
 import { getCarsWithSucursal } from '../../assets/api/sucursal.api';
 import { codeToColorName, colorOptions } from '../../assets/color/colorUtils';
 import { formatPrice } from '../../assets/general/formatPrice';
-import VirtualQuoteFormD from '../../components/Dashboard/UI/VirtualQuoteFormD';
 import { urls } from '../../assets/urls/urls';
+import VirtualQuoteFormD from '../../components/Dashboard/UI/VirtualQuoteFormD';
 
 const CarDetailsD = () => {
   const cookies = new Cookies();
@@ -30,16 +30,25 @@ const CarDetailsD = () => {
       const { data } = await getCar(id);
       setCar(data);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
+      const { data } = error.response;
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
     }
   };
 
   const getAvailableColors = async () => {
     try {
-      console.log(idSucursal + ' ' + id);
       const { data } = await getColorsCar(idSucursal, id);
       const colors = data.map((obj) => obj.color);
       setAvailableColors(colors);
@@ -47,7 +56,19 @@ const CarDetailsD = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };

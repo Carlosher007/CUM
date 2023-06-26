@@ -23,7 +23,19 @@ const UsersTable = ({ data, updateUserList }) => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
@@ -74,7 +86,7 @@ const UsersTable = ({ data, updateUserList }) => {
     if (typeof windowWidth === 'undefined') {
       return email; // Retornar el email sin cambios si windowWidth es undefined
     }
-    if (windowWidth >= 768 && windowWidth <= 1040) {
+    if (windowWidth >= 768 && windowWidth <= 1050) {
       if (email.length <= 9) {
         return email;
       } else {
@@ -112,7 +124,9 @@ const UsersTable = ({ data, updateUserList }) => {
               <span>{item.id}</span>
             </div>
             <div>
-              <h5 className="md:hidden text-white font-bold mb-2">Nombre</h5>
+              <h5 className="md:hidden mt-6  text-white font-bold mb-2">
+                Nombre
+              </h5>
               <span>{item.full_name}</span>
             </div>
             <div>
@@ -133,9 +147,7 @@ const UsersTable = ({ data, updateUserList }) => {
             </div>
             <div>
               <div>
-                <h5 className="md:hidden mt-6 text-white font-bold mb-2">
-                  Acciones
-                </h5>
+                <div className="md:hidden mt-6 text-white font-bold mb-2"></div>
                 <Menu
                   menuButton={
                     <MenuButton className="flex items-center gap-x-2 bg-secondary-100 p-2 rounded-lg transition-colors">

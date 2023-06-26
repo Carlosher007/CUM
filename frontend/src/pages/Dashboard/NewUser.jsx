@@ -11,8 +11,7 @@ import { createProfileValidation } from '../../assets/validation/CreateProfileVa
 const NewUser = () => {
   const submitUser = async (values) => {
     try {
-      const { data } = await newUser(values);
-      console.log(data);
+      await newUser(values);
       formik.resetForm();
       toast.success('Usuario creado correctamente', {
         position: toast.POSITION.TOP_RIGHT,
@@ -20,10 +19,23 @@ const NewUser = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
+
   const formik = useFormik({
     initialValues: {
       id: '',
@@ -38,7 +50,6 @@ const NewUser = () => {
     onSubmit: (values) => {
       values.sucursal = selectedSucursal; // Asignar el valor seleccionado al campo "sucursal"
       values.sucursal = parseInt(selectedSucursal);
-      console.log(values);
       submitUser(values);
     },
   });
@@ -73,7 +84,9 @@ const NewUser = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          console.log(data);
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         }
       }
     };

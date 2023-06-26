@@ -1,14 +1,9 @@
 import axios from 'axios';
+import { path, path2 } from './api';
 
-const path = axios.create({
-  baseURL: 'http://localhost:8000/api/',
-});
 
-const path2 = axios.create({
+const pathL = axios.create({
   baseURL: 'http://localhost:8000/api/',
-  headers: {
-    'Content-Type': 'multipart/form-data',
-  },
 });
 
 export const getCars = () => path.get('vehicle/');
@@ -21,6 +16,6 @@ export const getColorsCar = (id, vehicle) =>
 export const getCarByColor = (id, vehicle, color) =>
   path.get(`sucursal/${id}/${vehicle}/${color}/vehicle-sucursal-id/`);
 export const getCarsSoldBySucursal = (id) =>
-  path.get(`sucursal/sold-vehicles-sucursal/${id}`);
+  pathL.get(`sucursal/sold-vehicles-sucursal/${id}`);
 export const getCarsSoldByClient = (id) =>
   path.get(`sucursal/sold-vehicles-client/${id}/`);

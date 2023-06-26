@@ -13,7 +13,11 @@ import {
 } from 'reactstrap';
 import Cookies from 'universal-cookie';
 import { getCars } from '../../assets/api/cars';
-import { getParts, getPartsByCarInSucursal, getPartsInSucursal } from '../../assets/api/parts';
+import {
+  getParts,
+  getPartsByCarInSucursal,
+  getPartsInSucursal,
+} from '../../assets/api/parts';
 import { getCarsBySucursal, getSucursal } from '../../assets/api/sucursal.api';
 import carData from '../../assets/data/carData';
 import { formatPrice } from '../../assets/general/formatPrice';
@@ -50,10 +54,20 @@ const PartsListing = () => {
       const { data } = await getSucursal(idSucursal);
       setCitySucursal(data.city);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -62,10 +76,20 @@ const PartsListing = () => {
       const { data } = await getPartsInSucursal(idSucursal);
       setDataParts(data);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -75,22 +99,45 @@ const PartsListing = () => {
       const filteredData = data.filter((item) => item.part.vehicle === null);
       setDataParts(filteredData);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
   const getPartData3 = async () => {
     try {
-      const { data } = await getPartsByCarInSucursal(idSucursal,idCarSelectedValue);
+      const { data } = await getPartsByCarInSucursal(
+        idSucursal,
+        idCarSelectedValue
+      );
       setDataParts(data);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -111,10 +158,20 @@ const PartsListing = () => {
       );
       setVehicles(filteredVehicles);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -124,12 +181,11 @@ const PartsListing = () => {
   }, []);
 
   useEffect(() => {
-    console.log(idCarSelectedValue);
     if (idCarSelectedValue === '') {
       getPartData();
     } else if (idCarSelectedValue === 'generic') {
       getPartData2();
-    }else{
+    } else {
       getPartData3();
     }
   }, [idCarSelectedValue]);

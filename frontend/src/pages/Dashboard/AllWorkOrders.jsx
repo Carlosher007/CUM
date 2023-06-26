@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
+import { toast } from 'react-toastify';
 import { Input } from 'reactstrap';
 import Cookies from 'universal-cookie';
 import { getSucursal } from '../../assets/api/sucursal.api';
@@ -12,6 +13,7 @@ import {
   renderWOState,
 } from '../../assets/general/workOrders';
 import WorkOrdersTable from '../../components/Dashboard/UI/WorkOrdersTable';
+
 const AllWorkOrders = () => {
   const cookies = new Cookies();
   const rol = cookies.get('rol');
@@ -48,9 +50,19 @@ const AllWorkOrders = () => {
       const { data } = response;
       setWorkOrders(data.work_orders);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
+      const { data } = error.response;
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
     }
   };
@@ -73,7 +85,19 @@ const AllWorkOrders = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
@@ -85,7 +109,19 @@ const AllWorkOrders = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };

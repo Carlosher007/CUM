@@ -21,24 +21,38 @@ const Sidebar = () => {
   const token = cookies.get('token');
   const navigate = useNavigate();
 
+  const deleteCookies = () => {
+    Object.keys(cookies.getAll()).forEach((cookieName) => {
+      cookies.remove(cookieName, { path: '/' });
+    });
+  };
+
   const handleLogout = async () => {
     try {
       const response = await logout(token);
       const { data } = response;
-      console.log(data);
-      cookies.remove('token');
-      cookies.remove('id');
-      cookies.remove('rol');
-      cookies.remove('email');
-      cookies.remove('full_name');
-      cookies.remove('address');
-      cookies.remove('sucursal');
-      cookies.remove('is_superuser');
+      await new Promise((resolve) => {
+        deleteCookies();
+        resolve();
+      });
+
       navigate(urls.home);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
@@ -49,11 +63,6 @@ const Sidebar = () => {
   const buttonRef = useRef();
 
   const navLinks = [
-    // {
-    //   path: urls.seeCarsD,
-    //   display: 'Ver Carros',
-    //   role: ['Gerente', 'Vendedor', 'Cliente'],
-    // },
     {
       display: 'Sobre mí',
       role: ['Anyone'],
@@ -63,100 +72,95 @@ const Sidebar = () => {
           display: 'Perfil',
           role: ['Anyone'],
         },
+        {
+          path: urls.myQuotes,
+          display: 'Mis cotizaciones ',
+          role: ['Cliente'],
+        },
+        {
+          path: urls.myCars,
+          display: 'Mis Carros',
+          role: ['Cliente'],
+        },
       ],
     },
     {
-      display: 'Cotizar',
+      display: 'Cotizaciones',
       role: ['Anyone'],
       sublinks: [
         {
           path: urls.seeCarsD,
-          display: 'Ver Carros',
-          role: ['Anyone'],
-        },
-        // {
-        //   path: urls.presentialquoteD,
-        //   display: 'Cotizar Presencialmente',
-        //   role: ['Anyone'],
-        // },
-        {
-          path: urls.myQuotes,
-          display: 'Mis cotizaciones ',
-          role: ['Anyone'],
+          display: 'Cotizar carros',
+          role: ['Cliente'],
         },
         {
           path: urls.allQuotes,
           display: 'Todas las cotizaciones ',
-          role: ['Anyone'],
+          role: ['Gerente', 'Vendedor'],
         },
       ],
     },
     {
-      display: 'Sucursal',
-      role: ['Anyone'],
+      display: 'Mi Sucursal',
+      role: ['Gerente'],
       sublinks: [
         {
           path: urls.allUsers,
-          display: 'Usuarios',
-          role: ['Anyone'],
+          display: 'Ver Usuarios',
+          role: ['Gerente'],
         },
         {
           path: urls.newSucursal,
           display: 'Crear Sucursal',
-          role: ['Anyone'],
+          role: ['Gerente'],
         },
         {
           path: urls.newUser,
           display: 'Crear Usuario',
-          role: ['Anyone'],
+          role: ['Gerente'],
         },
       ],
     },
     {
       display: 'Vehiculos',
-      role: ['Anyone'],
+      role: ['Gerente', 'JefeTaller', 'Vendedor'],
       sublinks: [
         {
           path: urls.seeCarsD,
           display: 'Ver vehiculos',
-          role: ['Anyone'],
+          role: ['Gerente', 'JefeTaller', 'Vendedor'],
         },
         {
           path: urls.newVehicle,
           display: 'Añadir un vehiculo',
-          role: ['Anyone'],
-        },
-        {
-          path: urls.myCars,
-          display: 'Mis Carros',
-          role: ['Anyone'],
+          role: ['Gerente'],
         },
       ],
     },
     {
       display: 'Repuestos',
-      role: ['Anyone'],
+      role: ['Gerente', 'JefeTaller'],
       sublinks: [
         {
           path: urls.seeParts,
           display: 'Ver repuestos',
-          role: ['Anyone'],
+          role: ['Gerente', 'JefeTaller'],
         },
         {
           path: urls.newPart,
           display: 'Añadir reuestos',
-          role: ['Anyone'],
+          role: ['Gerente', 'JefeTaller'],
         },
       ],
     },
     {
-      display: 'Ordenes de trabjo',
-      role: ['Anyone'],
+      display: 'Ordenes T.',
+      role: ['Gerente', 'JefeTaller'],
       sublinks: [
         {
           path: urls.allWorkOrders,
           display: 'Ver Ordenes de Trabajo',
-          role: ['Anyone'],
+          role: ['Gerente', 'JefeTaller'],
         },
       ],
     },

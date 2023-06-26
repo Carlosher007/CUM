@@ -8,7 +8,6 @@ import { formatPrice } from '../../../assets/general/formatPrice';
 import { renderWOState } from '../../../assets/general/workOrders';
 
 const WorkOrdersTable = ({ data }) => {
-  console.log(data);
 
   const renderStatus = (state) => {
     if (state === 'SENT') {

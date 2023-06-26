@@ -60,7 +60,19 @@ const VirtualQuoteForm = ({
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
@@ -75,8 +87,6 @@ const VirtualQuoteForm = ({
           colorSinNumeral
         );
         formik.setFieldValue('vehicle_sucursal', data.id);
-        console.log(data.id);
-        console.log(values.vehicle_sucursal);
       }
       formik.setFieldValue('client', values.id);
       const { data } = await createQuote(values);
@@ -89,7 +99,19 @@ const VirtualQuoteForm = ({
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
@@ -106,7 +128,19 @@ const VirtualQuoteForm = ({
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
@@ -117,13 +151,23 @@ const VirtualQuoteForm = ({
       if (colorSinNumeral != '') {
         const { data } = await getCarByColor(sucursal, slug, colorSinNumeral);
         formik.setFieldValue('vehicle_sucursal', data.id);
-        console.log(data.id);
-        console.log(values.vehicle_sucursal);
       }
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };

@@ -44,7 +44,19 @@ const DetailsQuote = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
@@ -71,7 +83,19 @@ const DetailsQuote = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
@@ -86,7 +110,19 @@ const DetailsQuote = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
@@ -96,10 +132,14 @@ const DetailsQuote = () => {
       const { data } = await getQuote(idQuote);
       setQuote(data);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      });
     }
   };
 
@@ -113,7 +153,19 @@ const DetailsQuote = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
@@ -128,7 +180,19 @@ const DetailsQuote = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
@@ -159,7 +223,6 @@ const DetailsQuote = () => {
   }
 
   const acceptQuoteData = async () => {
-    console.log('uyy');
     try {
       await acceptQuote(idQuote);
       toast.success('Cotización aceptada', {
@@ -167,10 +230,14 @@ const DetailsQuote = () => {
       });
       await getQuoteDataByRol();
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
-      }
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      });
     }
   };
 
@@ -184,7 +251,19 @@ const DetailsQuote = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
@@ -449,7 +528,6 @@ const DetailsQuote = () => {
                           <button
                             type="submit"
                             className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
-                            // onClick={() => console.log('ooo')}
                             onClick={(event) => {
                               event.preventDefault(); // Evita el comportamiento predeterminado del botón
                               handleSubmit(); // Ejecuta la función handleSubmit

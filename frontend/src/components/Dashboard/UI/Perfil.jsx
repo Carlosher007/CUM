@@ -20,7 +20,19 @@ const Perfil = ({ user }) => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
@@ -38,7 +50,6 @@ const Perfil = ({ user }) => {
     onSubmit: (values) => {
       const selectedValue = parseInt(values.sucursal);
       values.sucursal = isNaN(selectedValue) ? null : selectedValue;
-      // console.log(values);
       updateProfile(values);
     },
   });
@@ -74,7 +85,19 @@ const Perfil = ({ user }) => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          console.log(data);
+          if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
         }
       }
     };

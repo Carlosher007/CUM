@@ -8,15 +8,24 @@ const NewSucursal = ({ sucursal }) => {
   const createSucursal = async (values) => {
     try {
       const { data } = await newSucursal(values);
-      console.log(data);
       formik.resetForm();
       toast.success('Sucursal creada correctamente', {
         position: toast.POSITION.TOP_RIGHT,
       });
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
+      const { data } = error.response;
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
     }
   };

@@ -38,7 +38,6 @@ const EditPart = () => {
     const getPartData = async () => {
       try {
         const { data } = await getPart(idPart);
-        console.log(data);
         setPartData(data);
         const { name, price } = data;
         formik.setValues({
@@ -49,7 +48,9 @@ const EditPart = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          console.log(data);
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         }
       }
     };
@@ -57,8 +58,6 @@ const EditPart = () => {
   }, []);
 
   const updateSelectedPart = async (values, id) => {
-    console.log(values);
-    console.log(id);
     try {
       await partialUpdatePart(id, values);
       toast.success('Repuesto actualizado', {
@@ -67,7 +66,19 @@ const EditPart = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };

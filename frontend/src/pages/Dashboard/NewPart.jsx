@@ -35,6 +35,7 @@ import VehiclesWithPartTable from '../../components/Dashboard/UI/VehiclesWithPar
 const NewVehicle = () => {
   const cookies = new Cookies();
   const idSucursal = cookies.get('sucursal');
+  const token = cookies.get('token')
 
   const [vehicles, setVehicles] = useState([]);
   const [parts, setParts] = useState([]);
@@ -51,12 +52,22 @@ const NewVehicle = () => {
         ...formik.values,
         name,
         price,
-        vehicle:vehicle.id,
+        vehicle: vehicle.id,
       });
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
+      const { data } = error.response;
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
     }
   };
@@ -78,9 +89,19 @@ const NewVehicle = () => {
       const { data } = await getCarsBySucursal(idSucursal);
       setVehicles(data);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
+      const { data } = error.response;
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
     }
   };
@@ -88,13 +109,22 @@ const NewVehicle = () => {
   const getAllParts = async () => {
     try {
       const { data } = await getPartsInSucursal(idSucursal);
-      console.log(data);
       setParts(data);
       //  }
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
+      const { data } = error.response;
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
     }
   };
@@ -116,29 +146,48 @@ const NewVehicle = () => {
       toast.success('Repuesto añadido a la sucursal', {
         position: toast.POSITION.TOP_RIGHT,
       });
+      await getAllParts();
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
+      const { data } = error.response;
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
     }
   };
 
   const addNewPart = async (values) => {
-    console.log(values);
     try {
       const { data } = await newPart(values);
       return data.id; // Devolver el ID del carro añadido
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
+      const { data } = error.response;
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
     }
   };
 
   const addPartInSucursal = async (values, partId) => {
-    console.log(values);
     try {
       const body = {
         sucursal: parseInt(values.sucursal),
@@ -151,9 +200,19 @@ const NewVehicle = () => {
         position: toast.POSITION.TOP_RIGHT,
       });
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
+      const { data } = error.response;
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
     }
   };
@@ -171,9 +230,19 @@ const NewVehicle = () => {
 
       return id;
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        console.log(data);
+      const { data } = error.response;
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
     }
   };
@@ -193,7 +262,6 @@ const NewVehicle = () => {
         idPartSelectedValue === null ||
         isNaN(idPartSelectedValue)
       ) {
-        console.log('no existente');
         const partId = await addNewPart(values); // Añadir el carro y obtener su ID
         // const partId = 1;
         if (partId) {
@@ -202,9 +270,7 @@ const NewVehicle = () => {
           // await getAllVehicles();
         }
       } else {
-        console.log('existente');
         // const id = await getGeneralPart(idPartSelectedValue);
-        // console.log(id);
         await addPartInSucursal(values, idPartSelectedValue);
         resetFormik();
       }
@@ -217,7 +283,6 @@ const NewVehicle = () => {
   const [errorShown, setErrorShown] = useState(false);
 
   const showErrorToast = (message) => {
-    console.log(message);
     if (!errorShown) {
       toast.error(message, {
         position: toast.POSITION.TOP_RIGHT,
@@ -230,15 +295,10 @@ const NewVehicle = () => {
     setErrorShown(false);
   };
 
-  useEffect(() => {
-    console.log(values);
-  }, [values]);
-
   const handleSelectedPart = async (e) => {
     resetFormik();
     const selectedPartId = e.target.value;
     setIdPartSelectedValue(selectedPartId);
-    console.log(selectedPartId);
     if (selectedPartId) {
       await getPartData(selectedPartId);
     }
@@ -374,7 +434,7 @@ const NewVehicle = () => {
                 disabled={!!idPartSelectedValue}
                 invalid={touched.vehicle && !!errors.vehicle}
               >
-                <option value="0">Seleccione uno</option>
+                <option value="0">Generico</option>
                 {vehicles.map((car) => (
                   <option value={car.vehicle.id} key={car.vehicle.id}>
                     {car.vehicle.model} - {car.vehicle.year}
