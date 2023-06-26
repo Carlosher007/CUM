@@ -59,8 +59,23 @@ const VirtualQuoteForm = ({
       return data.id;
     } catch (error) {
       if (error.response) {
-        const { data } = error.response;
-        console.log(data);
+        const { data, status } = error.response;
+        if (status === 400) {
+          // Error de solicitud inválida
+          toast.error(data.error);
+        } else if (status === 401) {
+          // Error de autenticación
+          toast.error(data.error);
+        } else if (status === 409) {
+          // Error de conflicto (usuario ya ha iniciado sesión)
+          toast.error(data.error);
+        } else {
+          // Otro error de respuesta del servidor
+          toast.error('Error en la respuesta del servidor');
+        }
+      } else {
+        // Error de conexión o solicitud no alcanzada
+        toast.error('Error de conexión');
       }
     }
   };
@@ -87,7 +102,9 @@ const VirtualQuoteForm = ({
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     }
   };
@@ -104,7 +121,9 @@ const VirtualQuoteForm = ({
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     }
   };
@@ -119,7 +138,9 @@ const VirtualQuoteForm = ({
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     }
   };

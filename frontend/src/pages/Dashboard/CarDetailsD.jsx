@@ -7,8 +7,8 @@ import { getCar, getColorsCar } from '../../assets/api/cars';
 import { getCarsWithSucursal } from '../../assets/api/sucursal.api';
 import { codeToColorName, colorOptions } from '../../assets/color/colorUtils';
 import { formatPrice } from '../../assets/general/formatPrice';
-import VirtualQuoteFormD from '../../components/Dashboard/UI/VirtualQuoteFormD';
 import { urls } from '../../assets/urls/urls';
+import VirtualQuoteFormD from '../../components/Dashboard/UI/VirtualQuoteFormD';
 
 const CarDetailsD = () => {
   const cookies = new Cookies();
@@ -32,7 +32,9 @@ const CarDetailsD = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     }
   };
@@ -46,7 +48,9 @@ const CarDetailsD = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     }
   };

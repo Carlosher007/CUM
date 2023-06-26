@@ -8,7 +8,6 @@ const NewSucursal = ({ sucursal }) => {
   const createSucursal = async (values) => {
     try {
       const { data } = await newSucursal(values);
-      console.log(data);
       formik.resetForm();
       toast.success('Sucursal creada correctamente', {
         position: toast.POSITION.TOP_RIGHT,
@@ -16,7 +15,9 @@ const NewSucursal = ({ sucursal }) => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     }
   };

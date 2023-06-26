@@ -12,7 +12,6 @@ const NewUser = () => {
   const submitUser = async (values) => {
     try {
       const { data } = await newUser(values);
-      console.log(data);
       formik.resetForm();
       toast.success('Usuario creado correctamente', {
         position: toast.POSITION.TOP_RIGHT,
@@ -20,7 +19,9 @@ const NewUser = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     }
   };
@@ -72,7 +73,9 @@ const NewUser = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          console.log(data);
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         }
       }
     };

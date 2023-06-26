@@ -7,7 +7,7 @@ import MyCarsTable from '../../components/Dashboard/UI/MyCarsTable';
 const MyCars = () => {
   const cookies = new Cookies();
   // const id = cookies.get('id');
-  const id = '9999'
+  const id = '9999';
   const ITEMS_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState(0);
   const [cars, setCars] = useState([]);
@@ -27,7 +27,9 @@ const MyCars = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     }
   };

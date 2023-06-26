@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
+import { toast } from 'react-toastify';
 import { Input } from 'reactstrap';
 import Cookies from 'universal-cookie';
 import { getSucursal } from '../../assets/api/sucursal.api';
@@ -12,6 +13,7 @@ import {
   renderWOState,
 } from '../../assets/general/workOrders';
 import WorkOrdersTable from '../../components/Dashboard/UI/WorkOrdersTable';
+
 const AllWorkOrders = () => {
   const cookies = new Cookies();
   const rol = cookies.get('rol');
@@ -50,7 +52,9 @@ const AllWorkOrders = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     }
   };
@@ -73,7 +77,9 @@ const AllWorkOrders = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     }
   };
@@ -85,7 +91,9 @@ const AllWorkOrders = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        console.log(data);
+        toast.error(data.error, {
+          position: toast.POSITION.TOP_RIGHT,
+        });
       }
     }
   };

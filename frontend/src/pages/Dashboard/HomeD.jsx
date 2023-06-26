@@ -35,12 +35,23 @@ const Home = () => {
   return (
     <div>
       <div>
-        <h2 className="text-3xl font-bold mb-4">Bienvenido al dashboard <span className="text-primary">{nombre}</span> </h2>
+        <h2 className="text-3xl font-bold mb-4">
+          Bienvenido al dashboard <span className="text-primary">{nombre}</span>{' '}
+        </h2>
       </div>
-      <h2 className='text-2xl font-bold mt-10 mb-5'>Últimas ventas realizadas</h2>
-      {rol!=='Cliente' && cars.length!==0  &&(
+      {rol !== 'Cliente' && cars.length !== 0 && (
         <>
-        <SimpleTable data={cars}/>
+          <h2 className="text-2xl font-bold mt-10 mb-5">
+            Últimas ventas realizadas
+          </h2>
+          <SimpleTable data={cars} />
+        </>
+      )}
+      {rol !== 'Cliente' && cars.length === 0 && (
+        <>
+          <h2 className="text-2xl mt-10 mb-5">
+            No se han realizado ventas hasta el momento
+          </h2>
         </>
       )}
     </div>

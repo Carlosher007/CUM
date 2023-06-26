@@ -15,9 +15,12 @@ const EditUser = () => {
         const { data } = await getUser(id);
         setUser(data);
       } catch (error) {
-        const { data } = error.response;
-        // Mostrar mensaje de error al usuario o tomar alguna acción según corresponda
-        console.log(data);
+        if (error.response) {
+          const { data } = error.response;
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
       }
     };
     getUserData();

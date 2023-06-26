@@ -39,7 +39,9 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          console.log(data);
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         }
       }
     };
@@ -58,7 +60,9 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          console.log(data);
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         }
       }
     };
@@ -126,7 +130,6 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     const sendQuote = async () => {
       try {
         const { data } = await createQuote(values);
-        console.log(data);
         toast.success('Se agrego la cotizacion del carro', {
           position: toast.POSITION.TOP_RIGHT,
         });
@@ -134,7 +137,9 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          console.log(data);
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         }
       }
     };

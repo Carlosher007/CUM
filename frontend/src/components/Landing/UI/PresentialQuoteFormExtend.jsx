@@ -20,7 +20,9 @@ const PresentialQuoteFormExtend = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          console.log(data);
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         }
       }
     };
@@ -40,9 +42,7 @@ const PresentialQuoteFormExtend = () => {
       password: '',
     },
     validationSchema: presentialQuoteExtendValidation,
-    onSubmit: (values) => {
-      console.log(values);
-    },
+    onSubmit: (values) => {},
   });
 
   const { handleSubmit, handleChange, values, touched, errors } = formik;
