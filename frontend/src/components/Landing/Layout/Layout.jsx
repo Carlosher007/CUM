@@ -9,14 +9,14 @@ import { urls } from '../../../assets/urls/urls';
 
 const Layout = () => {
   const cookies = new Cookies();
-  const token = cookies.get('token');
   const navigate = useNavigate();
+  const token = cookies.get('token');
 
-  useEffect(() => {
-    if (token !== undefined ) {
-      navigate(urls.home2);
-    }
-  }, [token, navigate]);
+  // useEffect(() => {
+  //   if (token !== undefined ) {
+  //     navigate(urls.home2);
+  //   }
+  // }, [token, navigate]);
 
   return (
     <Fragment>

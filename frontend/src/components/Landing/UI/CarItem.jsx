@@ -21,12 +21,8 @@ const CarItem = (props) => {
   return (
     <Col lg="4" md="4" sm="6" className="mb-5">
       <div className="car__item">
-        <div className="car__img">
-          <img
-            src={image}
-            alt=""
-            className="w-full max-h-[160px] object-cover"
-          />
+        <div className="car__img flex justify-center items-center">
+          <img src={image} alt="" className="w-30 h-28 object-cover" />
         </div>
 
         <div className="car__item-content mt-4">

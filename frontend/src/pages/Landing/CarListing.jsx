@@ -53,6 +53,7 @@ const CarListing = () => {
   const getCarData = async () => {
     try {
       const { data } = await getCars();
+      console.log(data);
       setDataCars(data);
     } catch (error) {
       const { data } = error.response;
@@ -97,6 +98,7 @@ const CarListing = () => {
   const getCarDataBySucursal = async () => {
     try {
       const { data } = await getCarsBySucursal(selectedSucursal);
+      console.log(data);
       setDataCars(data.map((item) => item.vehicle));
     } catch (error) {
       const { data } = error.response;

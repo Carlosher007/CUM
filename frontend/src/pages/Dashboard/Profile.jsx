@@ -11,7 +11,6 @@ import MiSucursal from '../../components/Dashboard/UI/MiSucursal';
 const Profile = () => {
   const cookies = new Cookies();
   const idUser = cookies.get('id');
-  const idSucursal = cookies.get('sucursal');
 
   // const idUser = '12332';
   const [user, setUser] = useState(null);

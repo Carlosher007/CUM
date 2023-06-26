@@ -149,6 +149,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
   const handleQuote = () => {
     const sendQuote = async () => {
       try {
+        console.log(values);
         const { data } = await createQuote(values);
         toast.success('Se agrego la cotizacion del carro', {
           position: toast.POSITION.TOP_RIGHT,
@@ -281,6 +282,35 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
         <div></div>
       )}
 
+      {!showValueCotization ? (
+        <div className="flex justify-end">
+          <button
+            type="submit"
+            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+            onClick={resetErrorShown}
+          >
+            Cotizar
+          </button>
+        </div>
+      ) : (
+        <div className="flex justify-end mt-5">
+          <p
+            className="bg-quaternary/80 text-black py-2 px-4 rounded-lg hover:bg-quaternary transition-colors mr-10"
+            onClick={handleCancel}
+            type="button"
+          >
+            Cancelar
+          </p>
+          <p
+            className="bg-terciary/80 text-black py-2 px-4 rounded-lg hover:bg-terciary transition-colors"
+            onClick={handleQuote}
+            type="button"
+          >
+            Enviar
+          </p>
+        </div>
+      )}
+
       <hr className="my-8 border-gray-500/30" />
       <div className="flex justify-between">
         <div className="flex justify-start">
@@ -291,34 +321,6 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
             <i className="ri-arrow-left-line"></i> Volver
           </Link>
         </div>
-        {!showValueCotization ? (
-          <div className="flex justify-end">
-            <button
-              type="submit"
-              className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
-              onClick={resetErrorShown}
-            >
-              Cotizar
-            </button>
-          </div>
-        ) : (
-          <div className="flex">
-            <p
-              className="bg-quaternary/80 text-black py-2 px-4 rounded-lg hover:bg-quaternary transition-colors mr-10"
-              onClick={handleCancel}
-              type="button"
-            >
-              Cancelar
-            </p>
-            <p
-              className="bg-terciary/80 text-black py-2 px-4 rounded-lg hover:bg-terciary transition-colors"
-              onClick={handleQuote}
-              type="button"
-            >
-              Enviar
-            </p>
-          </div>
-        )}
       </div>
     </Form>
   );

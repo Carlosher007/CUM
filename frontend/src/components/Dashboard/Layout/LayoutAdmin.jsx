@@ -9,8 +9,8 @@ import 'tailwindcss/tailwind.css';
 
 const LayoutAdmin = () => {
   const cookies = new Cookies();
-  const token = cookies.get('token');
   const navigate = useNavigate();
+  const token = cookies.get('token');
 
   useEffect(() => {
     if (token === undefined) {

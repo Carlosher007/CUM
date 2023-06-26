@@ -5,28 +5,29 @@ import { companyData } from '../../../assets/data/companyData';
 import { urls } from '../../../assets/urls/urls';
 import '../../../styles/header.css';
 
-
-const navLinks = [
-  {
-    path: urls.home,
-    display: 'Inicio',
-  },
-  {
-    path: urls.seeCars,
-    display: 'Carros',
-  },
-  {
-    path: urls.offices,
-    display: 'Sucursales',
-  },
-  {
-    path: urls.contact,
-    display: 'Contacto',
-  },
-];
+import Cookies from 'universal-cookie';
 
 const Header = () => {
   const menuRef = useRef(null);
+  const cookies = new Cookies();
+  const token = cookies.get('token');
+
+  const urlCars = !token ? urls.seeCars : urls.seeCarsD;
+
+  const navLinks = [
+    {
+      path: urls.home,
+      display: 'Inicio',
+    },
+    {
+      path: urlCars,
+      display: 'Carros',
+    },
+    {
+      path: urls.offices,
+      display: 'Sucursales',
+    },
+  ];
 
   const toggleMenu = () => menuRef.current.classList.toggle('menu__active');
 
@@ -52,9 +53,15 @@ const Header = () => {
                   <i className="ri-login-circle-line"></i> Login
                 </Link> */}
 
-                <Link to={urls.login} className="flex items-center gap-1">
-                  <i className="ri-user-line"></i> Ingresar
-                </Link>
+                {!token ? (
+                  <Link to={urls.login} className="flex items-center gap-1">
+                    <i className="ri-user-line"></i> Ingresar
+                  </Link>
+                ) : (
+                  <Link to={urls.home2} className="flex items-center gap-1">
+                    <i className="ri-user-line"></i> Ir a Dashboard
+                  </Link>
+                )}
               </div>
             </Col>
           </Row>

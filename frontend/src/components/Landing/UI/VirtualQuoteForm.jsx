@@ -56,40 +56,69 @@ const VirtualQuoteForm = ({
   const createUser = async () => {
     try {
       const { data } = await newUser(values);
+      console.log(data);
       return data.id;
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
+
         if (Array.isArray(data)) {
           data.forEach((errorMessage) => {
             toast.error(errorMessage, {
               position: toast.POSITION.TOP_RIGHT,
             });
           });
+        } else if (typeof data === 'object') {
+          Object.values(data).forEach((errorMessages) => {
+            if (Array.isArray(errorMessages)) {
+              errorMessages.forEach((errorMessage) => {
+                toast.error(errorMessage, {
+                  position: toast.POSITION.TOP_RIGHT,
+                });
+              });
+            } else {
+              toast.error(errorMessages, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          });
+        } else if (typeof data === 'string') {
+          toast.error(data, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         } else {
-          if (data.error) {
-            toast.error(data.error, {
-              position: toast.POSITION.TOP_RIGHT,
-            });
-          }
+          toast.error('An error occurred', {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         }
       }
     }
   };
 
-  const handleQuote = async () => {
+  const handleQuote = async (values) => {
+    console.log(values);
     try {
       const colorSinNumeral = selectedColor.slice(1); // Utilizando slice())
+      let idCarSucursal = null;
       if (colorSinNumeral !== '') {
         const { data } = await getCarByColor(
           values.sucursal,
           slug,
           colorSinNumeral
         );
-        formik.setFieldValue('vehicle_sucursal', data.id);
+        idCarSucursal = data.id;
       }
-      formik.setFieldValue('client', values.id);
-      const { data } = await createQuote(values);
+
+      const body = {
+        num_installments: values.num_installments,
+        initial_fee: parseInt(values.initial_fee),
+        quota_value: parseInt(values.quota_value),
+        client: parseInt(values.id),
+        vehicle_sucursal: idCarSucursal,
+      };
+      console.log(body);
+      const { data } = await createQuote(body);
+      console.log(data);
       toast.success(
         'Se agrego la cotizacion del carro y se le registro a la plataforma',
         {
@@ -194,10 +223,17 @@ const VirtualQuoteForm = ({
     // validationSchema: virtualQuoteValidation,
     onSubmit: async (values) => {
       try {
-        const data = await createUser();
-        if (data !== undefined) {
-          await handleQuote();
+        const id = await createUser();
+        console.log(id)
+        if (id !== undefined) {
+          await handleQuote(values);
           navigate(urls.login);
+          toast.success(
+            'Se le ha enviado un correo para que pueda inciar sesion',
+            {
+              position: toast.POSITION.TOP_RIGHT,
+            }
+          );
         }
         // await getVehicleByColor(values.sucursal);
       } catch (error) {}
@@ -478,19 +514,19 @@ const VirtualQuoteForm = ({
           <hr className="border-gray-500/30" />
           {isQuote && (
             <>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg">
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-lg text-black">
                 <div>
                   <p>
-                    <FormText>Valor de la cuota inicial: </FormText>
+                    <FormText className="text-black">
+                      Valor de la cuota inicial:{' '}
+                    </FormText>
                     <span className="">{formatPrice(values.initial_fee)}</span>
                   </p>
                 </div>
                 <div>
                   <p>
                     <FormText>Numero de cutoas: </FormText>
-                    <span className="">
-                      {formatPrice(values.num_installments)}
-                    </span>
+                    <span className="">{values.num_installments}</span>
                   </p>
                 </div>
                 <div>

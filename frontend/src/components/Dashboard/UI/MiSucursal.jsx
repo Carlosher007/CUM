@@ -1,5 +1,5 @@
 import { useFormik } from 'formik';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
 import { updateSucursal } from '../../../assets/api/sucursal.api';
@@ -8,6 +8,18 @@ import { profileValidation } from '../../../assets/validation/ProfileValidation'
 const MiSucursal = ({ sucursal }) => {
   const cookies = new Cookies();
   const rolUser = cookies.get('rol');
+  const [canEdit, setCanEdit] = useState(false);
+
+  useEffect(() => {
+    if (rolUser === 'Gerente') {
+      // setCanEdit(true);
+    }
+  }, [rolUser]);
+
+    useEffect(() => {
+      console.log(canEdit);
+    }, [canEdit]);
+  
 
   const updateSucursalData = async () => {
     try {
@@ -94,6 +106,7 @@ const MiSucursal = ({ sucursal }) => {
               name="address"
               value={values.address}
               onChange={handleChange}
+              disabled={!canEdit}
             />
             {touched.address &&
               errors.address &&
@@ -112,6 +125,7 @@ const MiSucursal = ({ sucursal }) => {
               name="cellphone"
               value={values.cellphone}
               onChange={handleChange}
+              disabled={!canEdit}
             />
             {touched.cellphone &&
               errors.cellphone &&
@@ -121,7 +135,7 @@ const MiSucursal = ({ sucursal }) => {
       </form>
       <hr className="my-8 border-gray-500/30" />
       <div className="flex justify-end">
-        {rolUser === 'Gerente' && (
+        {canEdit && (
           <button
             type="submit"
             className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"

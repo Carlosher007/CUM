@@ -86,7 +86,7 @@ const CarDetailsD = () => {
             <img src={car.image} alt="" className="w-full h-auto" />
           </div>
           <div className="w-1/2">
-            <h2 className="text-4xl font-bold mb-3">
+            <h2 className="text-xl md:text-3xl lg:text-4xl font-bold mb-3">
               {car.model}: {car.year}
             </h2>
             <h2 className="text-2xl font-medium mb-3">

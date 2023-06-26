@@ -1,16 +1,22 @@
 import React, { useEffect, useState } from 'react';
 import { CirclePicker } from 'react-color';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Col, Container, Row } from 'reactstrap';
+import Cookies from 'universal-cookie';
 import { getCar } from '../../assets/api/cars';
 import { getCarsWithSucursal } from '../../assets/api/sucursal.api';
 import { codeToColorName, colorOptions } from '../../assets/color/colorUtils';
 import Helmet from '../../components/Landing/Helmet/Helmet';
 import VirtualQuoteForm from '../../components/Landing/UI/VirtualQuoteForm';
+import { urls } from '../../assets/urls/urls';
+import { formatPrice } from '../../assets/general/formatPrice';
 
 const CarDetails = () => {
+  const cookies = new Cookies();
+  const token = cookies.get('token');
   const { id } = useParams();
+  const navigate = useNavigate();
 
   const [car, setCar] = useState({});
   const [avalaibleSucursals, setAvalaibleSucursals] = useState([]);
@@ -35,19 +41,19 @@ const CarDetails = () => {
       setSelectedColor(allColors[0]);
     } catch (error) {
       const { data } = error.response;
-       if (Array.isArray(data)) {
-            data.forEach((errorMessage) => {
-              toast.error(errorMessage, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            });
-          } else {
-            if (data.error) {
-              toast.error(data.error, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            }
-          }
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
@@ -67,19 +73,19 @@ const CarDetails = () => {
       setAvalaibleSucursals(allSucursals);
     } catch (error) {
       const { data } = error.response;
-       if (Array.isArray(data)) {
-            data.forEach((errorMessage) => {
-              toast.error(errorMessage, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            });
-          } else {
-            if (data.error) {
-              toast.error(data.error, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            }
-          }
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
@@ -89,23 +95,26 @@ const CarDetails = () => {
       setCar(data);
     } catch (error) {
       const { data } = error.response;
-       if (Array.isArray(data)) {
-            data.forEach((errorMessage) => {
-              toast.error(errorMessage, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            });
-          } else {
-            if (data.error) {
-              toast.error(data.error, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            }
-          }
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
   useEffect(() => {
+    if (token) {
+      navigate(urls.seeCarsD)
+    }
     getCarData();
     getAvailableColors();
   }, []);
@@ -139,7 +148,7 @@ const CarDetails = () => {
 
                   <div className="d-flex items-center gap-5 mb-4 mt-3">
                     <h6 className="rent__price font-bold text-lg">
-                      ${car.price}
+                      {formatPrice(car.price)}
                     </h6>
                   </div>
                   <div>
