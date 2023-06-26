@@ -14,7 +14,6 @@ from .serializers import (QuotationSerializer, CreateAssignedQuoteSerializer,
 class QuotationApiView(viewsets.ModelViewSet):
     serializer_class = QuotationSerializer
     queryset = Quotation.objects.all()
-    permission_classes = [IsAuthenticated]
 
 class AssignedQuoteApiView(viewsets.ModelViewSet):
     serializer_class = CreateAssignedQuoteSerializer
