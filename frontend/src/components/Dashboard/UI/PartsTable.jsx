@@ -25,18 +25,22 @@ const PartsTable = ({ data }) => {
             className="grid grid-cols-1 md:grid-cols-5 items-center mb-4 bg-secondary-900 p-4 rounded-xl"
           >
             <div>
-              <h5 className="md:hidden mt-6 text-white font-bold mb-2">
+              <h5 className="md:hidden mt-2 text-white font-bold mb-2">
                 Nombre
               </h5>
               {/* <span>{convertToDate(item.last_login)}</span> */}
               <span>{item.part.name}</span>
             </div>
             <div>
-              <h5 className="md:hidden text-white font-bold mb-2">Precio</h5>
+              <h5 className="md:hidden text-white mt-6  font-bold mb-2">
+                Precio
+              </h5>
               <span>{formatPrice(item.part.price)}</span>
             </div>
             <div>
-              <h5 className="md:hidden text-white font-bold mb-2">Vehiculo</h5>
+              <h5 className="md:hidden text-white mt-6  font-bold mb-2">
+                Vehiculo
+              </h5>
               <span>
                 {item.part.vehicle === null ? (
                   'Generico'
@@ -49,14 +53,15 @@ const PartsTable = ({ data }) => {
               </span>
             </div>
             <div>
-              <h5 className="md:hidden text-white font-bold mb-2">Cantidad</h5>
+              <h5 className="md:hidden mt-6 text-white font-bold mb-2">
+                Cantidad
+              </h5>
               <span>{item.quantity}</span>
             </div>
             <div>
               <div>
-                <h5 className="md:hidden mt-6 text-white font-bold mb-2">
-                  Acciones
-                </h5>
+                <div className="md:hidden mt-6 text-white font-bold mb-2">
+                </div>
                 <Menu
                   menuButton={
                     <MenuButton className="flex items-center gap-x-2 bg-secondary-100 p-2 rounded-lg transition-colors">

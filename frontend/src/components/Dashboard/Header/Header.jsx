@@ -38,11 +38,13 @@ const Header = () => {
     try {
       const response = await logout(token);
       const { data } = response;
+      console.log(data)
       deleteCookies();
       navigate(urls.home);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
+        console.log(data)
         Object.values(data).forEach((errorMessages) => {
           errorMessages.forEach((errorMessage) => {
             toast.error(errorMessage, {
