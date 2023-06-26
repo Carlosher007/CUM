@@ -80,7 +80,13 @@ const AllUsers = () => {
         </h1>
       </div>
       <div>
-        <UsersTable data={users} updateUserList={updateUserList} />
+        {users.length > 0 ? (
+          <UsersTable data={users} updateUserList={updateUserList} />
+        ) : (
+          <div className="bg-secondary-100 p-6 rounded-xl">
+            <p>Sin usuarios</p>
+          </div>
+        )}
       </div>
       <div className="flex justify-end mt-5">
         <Link to={urls.newUser}>
