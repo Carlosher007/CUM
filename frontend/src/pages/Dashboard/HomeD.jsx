@@ -6,10 +6,10 @@ import { RiArrowLeftSLine, RiArrowRightSLine } from 'react-icons/ri';
 import { Link } from 'react-router-dom';
 import CardTicket from '../../components/Dashboard/Ticket/CardTicket';
 // import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
 import { getCarsSoldBySucursal } from '../../assets/api/cars';
 import SimpleTable from '../../components/Dashboard/UI/SimpleTable';
-import { toast } from 'react-toastify';
 
 const Home = () => {
   const cookies = new Cookies();
@@ -25,13 +25,19 @@ const Home = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        Object.values(data).forEach((errorMessages) => {
-          errorMessages.forEach((errorMessage) => {
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
             toast.error(errorMessage, {
               position: toast.POSITION.TOP_RIGHT,
             });
           });
-        });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };

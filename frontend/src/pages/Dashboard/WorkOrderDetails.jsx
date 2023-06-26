@@ -30,13 +30,19 @@ const WorkOrderDetails = () => {
       setWorkOrder(data);
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        });
-      });
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -46,13 +52,19 @@ const WorkOrderDetails = () => {
       setQuote(data);
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        });
-      });
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -63,13 +75,19 @@ const WorkOrderDetails = () => {
       setIsDone(true);
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        });
-      });
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -79,13 +97,19 @@ const WorkOrderDetails = () => {
       setCar(data);
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        });
-      });
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -120,13 +144,19 @@ const WorkOrderDetails = () => {
       await getWorkOrderData();
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        });
-      });
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -139,13 +169,19 @@ const WorkOrderDetails = () => {
       await getWorkOrderData();
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        });
-      });
+     if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 

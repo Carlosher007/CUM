@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import ReactPaginate from 'react-paginate';
+import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
 import { getCarsSoldByClient } from '../../assets/api/cars';
 import MyCarsTable from '../../components/Dashboard/UI/MyCarsTable';
-import { toast } from 'react-toastify';
 
 const MyCars = () => {
   const cookies = new Cookies();
@@ -27,13 +27,19 @@ const MyCars = () => {
       setCars(data);
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
           toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         });
-      });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 

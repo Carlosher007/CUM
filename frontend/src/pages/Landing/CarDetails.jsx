@@ -35,13 +35,19 @@ const CarDetails = () => {
       setSelectedColor(allColors[0]);
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        });
-      });
+       if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -61,13 +67,19 @@ const CarDetails = () => {
       setAvalaibleSucursals(allSucursals);
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        });
-      });
+       if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 
@@ -77,13 +89,19 @@ const CarDetails = () => {
       setCar(data);
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        });
-      });
+       if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
     }
   };
 

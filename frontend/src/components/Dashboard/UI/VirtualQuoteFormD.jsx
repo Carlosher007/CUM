@@ -39,9 +39,19 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          toast.error(data.error, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
+          if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
         }
       }
     };
@@ -59,14 +69,20 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
         setSucursals(data);
       } catch (error) {
         if (error.response) {
-       const { data } = error.response;
-       Object.values(data).forEach((errorMessages) => {
-         errorMessages.forEach((errorMessage) => {
-           toast.error(errorMessage, {
-             position: toast.POSITION.TOP_RIGHT,
-           });
-         });
-       });
+          const { data } = error.response;
+          if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
         }
       }
     };
@@ -140,14 +156,20 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
         navigate(urls.seeCars);
       } catch (error) {
         if (error.response) {
-    const { data } = error.response;
-    Object.values(data).forEach((errorMessages) => {
-      errorMessages.forEach((errorMessage) => {
-        toast.error(errorMessage, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      });
-    });
+          const { data } = error.response;
+          if (Array.isArray(data)) {
+            data.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
+          } else {
+            if (data.error) {
+              toast.error(data.error, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            }
+          }
         }
       }
     };

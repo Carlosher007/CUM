@@ -75,13 +75,19 @@ const NewVehicle = () => {
       });
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
           toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         });
-      });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
@@ -118,13 +124,19 @@ const NewVehicle = () => {
       setVehicles(data);
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
           toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         });
-      });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
@@ -157,13 +169,19 @@ const NewVehicle = () => {
       });
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
           toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         });
-      });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
@@ -173,13 +191,19 @@ const NewVehicle = () => {
       return data.id; // Devolver el ID del carro añadido
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
           toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         });
-      });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
@@ -198,13 +222,19 @@ const NewVehicle = () => {
       });
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
           toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         });
-      });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 

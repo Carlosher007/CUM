@@ -66,13 +66,19 @@ const EditPart = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        Object.values(data).forEach((errorMessages) => {
-          errorMessages.forEach((errorMessage) => {
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
             toast.error(errorMessage, {
               position: toast.POSITION.TOP_RIGHT,
             });
           });
-        });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
       }
     }
   };
