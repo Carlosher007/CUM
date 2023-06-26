@@ -50,12 +50,14 @@ const AllWorkOrders = () => {
       const { data } = response;
       setWorkOrders(data.work_orders);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -77,8 +79,12 @@ const AllWorkOrders = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+        Object.values(data).forEach((errorMessages) => {
+          errorMessages.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
         });
       }
     }
@@ -91,8 +97,12 @@ const AllWorkOrders = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+        Object.values(data).forEach((errorMessages) => {
+          errorMessages.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
         });
       }
     }

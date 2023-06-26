@@ -54,12 +54,14 @@ const PartsListing = () => {
       const { data } = await getSucursal(idSucursal);
       setCitySucursal(data.city);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -68,12 +70,14 @@ const PartsListing = () => {
       const { data } = await getPartsInSucursal(idSucursal);
       setDataParts(data);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -83,12 +87,14 @@ const PartsListing = () => {
       const filteredData = data.filter((item) => item.part.vehicle === null);
       setDataParts(filteredData);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -100,12 +106,14 @@ const PartsListing = () => {
       );
       setDataParts(data);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -126,12 +134,14 @@ const PartsListing = () => {
       );
       setVehicles(filteredVehicles);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 

@@ -54,12 +54,14 @@ const NewVehicle = () => {
         vehicle: vehicle.id,
       });
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -80,12 +82,14 @@ const NewVehicle = () => {
       const { data } = await getCarsBySucursal(idSucursal);
       setVehicles(data);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -95,12 +99,14 @@ const NewVehicle = () => {
       setParts(data);
       //  }
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -121,13 +127,16 @@ const NewVehicle = () => {
       toast.success('Repuesto añadido a la sucursal', {
         position: toast.POSITION.TOP_RIGHT,
       });
+      await getAllParts();
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -136,12 +145,14 @@ const NewVehicle = () => {
       const { data } = await newPart(values);
       return data.id; // Devolver el ID del carro añadido
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -158,12 +169,14 @@ const NewVehicle = () => {
         position: toast.POSITION.TOP_RIGHT,
       });
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -180,12 +193,14 @@ const NewVehicle = () => {
 
       return id;
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -376,7 +391,7 @@ const NewVehicle = () => {
                 disabled={!!idPartSelectedValue}
                 invalid={touched.vehicle && !!errors.vehicle}
               >
-                <option value="0">Seleccione uno</option>
+                <option value="0">Generico</option>
                 {vehicles.map((car) => (
                   <option value={car.vehicle.id} key={car.vehicle.id}>
                     {car.vehicle.model} - {car.vehicle.year}

@@ -3,6 +3,7 @@ import ReactPaginate from 'react-paginate';
 import Cookies from 'universal-cookie';
 import { getCarsSoldByClient } from '../../assets/api/cars';
 import MyCarsTable from '../../components/Dashboard/UI/MyCarsTable';
+import { toast } from 'react-toastify';
 
 const MyCars = () => {
   const cookies = new Cookies();
@@ -25,12 +26,14 @@ const MyCars = () => {
       const { data } = await getCarsSoldByClient(parseInt(id));
       setCars(data);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 

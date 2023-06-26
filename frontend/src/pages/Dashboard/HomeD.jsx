@@ -9,28 +9,36 @@ import CardTicket from '../../components/Dashboard/Ticket/CardTicket';
 import Cookies from 'universal-cookie';
 import { getCarsSoldBySucursal } from '../../assets/api/cars';
 import SimpleTable from '../../components/Dashboard/UI/SimpleTable';
+import { toast } from 'react-toastify';
 
 const Home = () => {
   const cookies = new Cookies();
-  const nombre = cookies.get("full_name")
+  const nombre = cookies.get('full_name');
   const rol = cookies.get('rol');
   const sucursal = cookies.get('sucursal');
-  const [cars,setCars] = useState([])
+  const [cars, setCars] = useState([]);
 
   const getCarsSold = async () => {
     try {
       const { data } = await getCarsSoldBySucursal(parseInt(sucursal));
-      setCars(data)
+      setCars(data);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
+        Object.values(data).forEach((errorMessages) => {
+          errorMessages.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        });
       }
     }
-  }
+  };
 
   useEffect(() => {
-    getCarsSold()
-  },[])
+    getCarsSold();
+  }, []);
 
   return (
     <div>

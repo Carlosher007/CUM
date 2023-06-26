@@ -9,8 +9,7 @@ import { formatPrice } from '../../../assets/general/formatPrice';
 
 const CarItemD = (props) => {
   const cookies = new Cookies();
-  // const rol = cookies.get('rol');
-  const rol = 'Cliente'
+  const rol = cookies.get('rol');
 
   const {
     model,
@@ -56,10 +55,9 @@ const CarItemD = (props) => {
   return (
     <div className="w-full sm:w-1/2 md:w-1/3 lg:w-1/4 xl:w-1/4 p-2">
       <div className="border border-gray-400 p-4 rounded-lg">
-        <div className="car__img">
-          <img src={image} alt="" className="w-full max-h-[120px] object-cover" />
+        <div className="car__img flex justify-center items-center">
+          <img src={image} alt="" className="w-30 h-28 object-cover" />
         </div>
-
 
         <div className="mt-4">
           <h4 className="text-center text-xl font-semibold">

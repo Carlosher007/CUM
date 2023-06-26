@@ -74,12 +74,14 @@ const NewVehicle = () => {
         description,
       });
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -115,12 +117,14 @@ const NewVehicle = () => {
       const { data } = await getCarsBySucursal(idSucursal);
       setVehicles(data);
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -152,12 +156,14 @@ const NewVehicle = () => {
         position: toast.POSITION.TOP_RIGHT,
       });
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -166,12 +172,14 @@ const NewVehicle = () => {
       const { data } = await newCar(values);
       return data.id; // Devolver el ID del carro añadido
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -184,17 +192,19 @@ const NewVehicle = () => {
         quantity: values.quantity,
       };
 
-      const { data } = await newCarInSucursal(body);
+      await newCarInSucursal(body);
       toast.success('Se agrego la cantidad dada del vehiculo a la sucursal', {
         position: toast.POSITION.TOP_RIGHT,
       });
     } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+      const { data } = error.response;
+      Object.values(data).forEach((errorMessages) => {
+        errorMessages.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
         });
-      }
+      });
     }
   };
 
@@ -220,13 +230,116 @@ const NewVehicle = () => {
       sucursal: idSucursal,
       quantity: '',
     },
-    validationSchema: createVehicleValidation,
+    // validationSchema: createVehicleValidation,
     onSubmit: async (values) => {
+      if (
+        !values.model ||
+        !values.year ||
+        !values.brand ||
+        !values.bodywork ||
+        !values.doors ||
+        !values.motor ||
+        !values.potency ||
+        !values.range ||
+        !values.battery_capacity ||
+        !values.charging_time ||
+        !values.top_speed ||
+        !values.brakes ||
+        !values.suspension ||
+        !values.image ||
+        !values.price ||
+        !values.description ||
+        !values.color ||
+        !values.quantity
+      ) {
+        toast.error(
+          'Por favor, complete todos los campos antes de proceder con la cotización',
+          {
+            position: toast.POSITION.TOP_RIGHT,
+          }
+        );
+        return;
+      }
+
+      const file = values.image; // Obtener el archivo del formulario, ajusta esto según tu código
+      const maxSize = 10485760; // Tamaño máximo permitido en bytes
+
+      console.log(file);
+      console.log(file.size);
+      if (file && file.size > maxSize) {
+        toast.error('El tamaño del archivo es demasiado grande.', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+
+      const regex = /^\d+$/;
+      if (!regex.test(values.year)) {
+        toast.error('Por favor, ingrese un año valido', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (!regex.test(values.doors)) {
+        toast.error('Por favor, ingrese un numero de puertas valido', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (!regex.test(values.potency)) {
+        toast.error('Por favor, ingrese un numero de potencia valido', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (!regex.test(values.range)) {
+        toast.error('Por favor, ingrese un numero rango valido', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (!regex.test(values.battery_capacity)) {
+        toast.error(
+          'Por favor, ingrese un numero de capacidad de bateria valido',
+          {
+            position: toast.POSITION.TOP_RIGHT,
+          }
+        );
+        return;
+      }
+      if (!regex.test(values.charging_time)) {
+        toast.error('Por favor, ingrese un numero de tiempo de carga valido', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (!regex.test(values.top_speed)) {
+        toast.error('Por favor, ingrese un numero de velocidad maxima valido', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (!regex.test(values.price)) {
+        toast.error('Por favor, ingrese un precio valido', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+      if (!regex.test(values.quantity)) {
+        toast.error('Por favor, ingrese una cantidad valida', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+
+      console.log('paso');
+
       if (
         idCarSelectedValue === '' ||
         idCarSelectedValue === null ||
         isNaN(idCarSelectedValue)
       ) {
+        console.log('nuevo');
         const carId = await addNewVehicle(values); // Añadir el carro y obtener su ID
         // const carId = 1;
         if (carId) {
@@ -235,6 +348,7 @@ const NewVehicle = () => {
           // await getAllVehicles();
         }
       } else {
+        console.log('existente');
         await addVehicleInSucursal(values, idCarSelectedValue);
         resetFormik();
       }
@@ -456,7 +570,7 @@ const NewVehicle = () => {
               <Input
                 type="text"
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                placeholder="Potencia"
+                placeholder="Potencia (kW)"
                 name="potency"
                 value={values.potency}
                 onChange={handleChange}
@@ -478,7 +592,7 @@ const NewVehicle = () => {
               <Input
                 type="text"
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                placeholder="Rango"
+                placeholder="Rango (km)"
                 name="range"
                 value={values.range}
                 onChange={handleChange}
@@ -498,7 +612,7 @@ const NewVehicle = () => {
               <Input
                 type="text"
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                placeholder="Capacidad de bateria"
+                placeholder="Capacidad de bateria (kWh)"
                 name="battery_capacity"
                 value={values.battery_capacity}
                 disabled={!!idCarSelectedValue}
@@ -520,7 +634,7 @@ const NewVehicle = () => {
               <Input
                 type="text"
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                placeholder="Tiempo de carga"
+                placeholder="Tiempo de carga (hrs)"
                 name="charging_time"
                 value={values.charging_time}
                 disabled={!!idCarSelectedValue}
@@ -542,7 +656,7 @@ const NewVehicle = () => {
               <Input
                 type="text"
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                placeholder="Velocidad Máxima"
+                placeholder="Velocidad Máxima (km/h)"
                 name="top_speed"
                 value={values.top_speed}
                 onChange={handleChange}
@@ -675,7 +789,32 @@ const NewVehicle = () => {
                           className="w-28 h-28 object-cover rounded-lg"
                           alt="Imagen subida"
                         />
+                        <label
+                          htmlFor="image"
+                          className="absolute bg-secondary-100 p-2 rounded-full hover:cursor-pointer -top-2 left-24"
+                        >
+                          <RiEdit2Line />
+                        </label>
+                        <input
+                          type="file"
+                          id="image"
+                          className="hidden"
+                          // disabled={!!idCarSelectedValue}
+                          onChange={(event) => {
+                            const file = event.currentTarget.files[0];
+                            formik.setFieldValue('image', file);
+
+                            const reader = new FileReader();
+                            reader.onload = (e) => {
+                              setPreviewImage(e.target.result);
+                            };
+                            reader.readAsDataURL(file);
+                          }}
+                        />
                       </div>
+                      <p className="text-gray-500 text-sm">
+                        Tipos de img permitidos: png, jpg, jpeg.
+                      </p>
                     </div>
                     {touched.image &&
                       errors.image &&

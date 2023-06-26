@@ -9,18 +9,23 @@ import UsersTable from '../../components/Dashboard/UI/UsersTable';
 const AllUsers = () => {
   const cookies = new Cookies();
   const idSucursal = cookies.get('sucursal');
+  const miId = cookies.get('id');
   const [users, setUsers] = useState([]);
   const [citySucursal, setCitySucursal] = useState();
 
   const updateUserList = async () => {
     try {
       const { data } = await getUsersBySucursal(idSucursal);
-      setUsers(data);
+      setUsers(data.filter((user) => user.id !== miId));
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+        Object.values(data).forEach((errorMessages) => {
+          errorMessages.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
         });
       }
     }
@@ -30,12 +35,16 @@ const AllUsers = () => {
     const getUsersData = async () => {
       try {
         const { data } = await getUsersBySucursal(idSucursal);
-        setUsers(data);
+        setUsers(data.filter((user) => user.id !== miId));
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          toast.error(data.error, {
-            position: toast.POSITION.TOP_RIGHT,
+          Object.values(data).forEach((errorMessages) => {
+            errorMessages.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
           });
         }
       }
@@ -49,8 +58,12 @@ const AllUsers = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          toast.error(data.error, {
-            position: toast.POSITION.TOP_RIGHT,
+          Object.values(data).forEach((errorMessages) => {
+            errorMessages.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
           });
         }
       }

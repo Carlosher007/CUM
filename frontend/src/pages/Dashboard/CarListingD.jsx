@@ -53,8 +53,12 @@ const CarListingD = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          toast.error(data.error, {
-            position: toast.POSITION.TOP_RIGHT,
+          Object.values(data).forEach((errorMessages) => {
+            errorMessages.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
           });
         }
       }
@@ -68,8 +72,12 @@ const CarListingD = () => {
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
-          toast.error(data.error, {
-            position: toast.POSITION.TOP_RIGHT,
+          Object.values(data).forEach((errorMessages) => {
+            errorMessages.forEach((errorMessage) => {
+              toast.error(errorMessage, {
+                position: toast.POSITION.TOP_RIGHT,
+              });
+            });
           });
         }
       }

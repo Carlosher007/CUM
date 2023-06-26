@@ -11,7 +11,7 @@ import { createProfileValidation } from '../../assets/validation/CreateProfileVa
 const NewUser = () => {
   const submitUser = async (values) => {
     try {
-      const { data } = await newUser(values);
+      await newUser(values);
       formik.resetForm();
       toast.success('Usuario creado correctamente', {
         position: toast.POSITION.TOP_RIGHT,
@@ -19,12 +19,17 @@ const NewUser = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+        Object.values(data).forEach((errorMessages) => {
+          errorMessages.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
         });
       }
     }
   };
+
   const formik = useFormik({
     initialValues: {
       id: '',

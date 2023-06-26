@@ -32,83 +32,7 @@ const EditVehicle = () => {
 
   const [carData, setCarData] = useState({});
   const [previewImage, setPreviewImage] = useState('');
-
-  useEffect(() => {
-    const getVehicleData = async () => {
-      try {
-        const { data } = await getCar(idVehicle);
-        setCarData(data);
-        const {
-          model,
-          year,
-          brand,
-          bodywork,
-          doors,
-          motor,
-          potency,
-          range,
-          battery_capacity,
-          charging_time,
-          top_speed,
-          brakes,
-          suspension,
-          image,
-          price,
-          description,
-          id,
-        } = data;
-        formik.setValues({
-          ...formik.values,
-          id,
-          model,
-          year,
-          brand,
-          bodywork,
-          doors,
-          motor,
-          potency,
-          range,
-          battery_capacity,
-          charging_time,
-          top_speed,
-          brakes,
-          suspension,
-          image,
-          price,
-          description,
-        });
-        setPreviewImage(data.image);
-      } catch (error) {
-        if (error.response) {
-          const { data } = error.response;
-          toast.error(data.error, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        }
-      }
-    };
-    getVehicleData();
-  }, []);
-
-  const updateSelectedCar = async (values, id) => {
-    try {
-      const body = values;
-      if (typeof body.image === 'string') {
-        delete body.image;
-      }
-      const { data } = await updateCar(body, id);
-      toast.success('Vehiculo actualizado', {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    } catch (error) {
-      if (error.response) {
-        const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-      }
-    }
-  };
+  const [sentImage, setSentImage] = useState('');
 
   const formik = useFormik({
     initialValues: {
@@ -138,6 +62,94 @@ const EditVehicle = () => {
 
   const { handleSubmit, handleChange, values, touched, errors } = formik;
 
+  const getVehicleData = async () => {
+    try {
+      const { data } = await getCar(idVehicle);
+      setCarData(data);
+      const {
+        model,
+        year,
+        brand,
+        bodywork,
+        doors,
+        motor,
+        potency,
+        range,
+        battery_capacity,
+        charging_time,
+        top_speed,
+        brakes,
+        suspension,
+        image,
+        price,
+        description,
+        id,
+      } = data;
+      formik.setValues({
+        ...formik.values,
+        id,
+        model,
+        year,
+        brand,
+        bodywork,
+        doors,
+        motor,
+        potency,
+        range,
+        battery_capacity,
+        charging_time,
+        top_speed,
+        brakes,
+        suspension,
+        image,
+        price,
+        description,
+      });
+      setPreviewImage(data.image);
+      formik.setTouched({}); // Establecer formik.dirty en false
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        Object.values(data).forEach((errorMessages) => {
+          errorMessages.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        });
+      }
+    }
+  };
+
+  useEffect(() => {
+    getVehicleData();
+  }, []);
+
+  const updateSelectedCar = async (values, id) => {
+    try {
+      const body = values;
+      if (!sentImage) {
+        delete body.image;
+      }
+      await updateCar(body, id);
+      toast.success('Vehiculo actualizado', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+      await getVehicleData();
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        Object.values(data).forEach((errorMessages) => {
+          errorMessages.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        });
+      }
+    }
+  };
+
   const [errorShown, setErrorShown] = useState(false);
 
   const showErrorToast = (message) => {
@@ -152,6 +164,10 @@ const EditVehicle = () => {
   const resetErrorShown = () => {
     setErrorShown(false);
   };
+
+  useEffect(() => {
+    console.log(values.image);
+  }, [values.image]);
 
   return (
     <div className="bg-secondary-100 p-8 rounded-xl mb-4">
@@ -507,11 +523,7 @@ const EditVehicle = () => {
                   <div className="flex-1">
                     <div className="relative mt-2">
                       <img
-                        src={
-                          previewImage
-                            ? previewImage
-                            : 'https://img.freepik.com/fotos-premium/icono-archivo-imagen-ilustracion-procesamiento-3d_567294-3412.jpg?w=826'
-                        }
+                        src={previewImage}
                         className="w-full h-full object-cover rounded-lg"
                         alt="Imagen subida"
                       />
@@ -536,6 +548,7 @@ const EditVehicle = () => {
                             setPreviewImage(e.target.result);
                           };
                           reader.readAsDataURL(file);
+                          setSentImage(true);
                         }}
                       />
                     </div>
@@ -569,6 +582,7 @@ const EditVehicle = () => {
               type="submit"
               className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
               onClick={resetErrorShown}
+              disabled={!formik.dirty}
             >
               Guardar
             </button>

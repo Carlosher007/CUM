@@ -37,8 +37,12 @@ const Sidebar = () => {
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
-        toast.error(data.error, {
-          position: toast.POSITION.TOP_RIGHT,
+        Object.values(data).forEach((errorMessages) => {
+          errorMessages.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
         });
       }
     }
@@ -110,12 +114,12 @@ const Sidebar = () => {
     },
     {
       display: 'Vehiculos',
-      role: ['Gerente','JefeTaller','Vendedor'],
+      role: ['Gerente', 'JefeTaller', 'Vendedor'],
       sublinks: [
         {
           path: urls.seeCarsD,
           display: 'Ver vehiculos',
-          role: ['Gerente','JefeTaller','Vendedor'],
+          role: ['Gerente', 'JefeTaller', 'Vendedor'],
         },
         {
           path: urls.newVehicle,
@@ -126,28 +130,28 @@ const Sidebar = () => {
     },
     {
       display: 'Repuestos',
-      role: ['Gerente','JefeTaller'],
+      role: ['Gerente', 'JefeTaller'],
       sublinks: [
         {
           path: urls.seeParts,
           display: 'Ver repuestos',
-          role: ['Gerente','JefeTaller'],
+          role: ['Gerente', 'JefeTaller'],
         },
         {
           path: urls.newPart,
           display: 'Añadir reuestos',
-          role: ['Gerente','JefeTaller'],
+          role: ['Gerente', 'JefeTaller'],
         },
       ],
     },
     {
-      display: 'Ordenes de trabjo',
-      role: ['Gerente','JefeTaller'],
+      display: 'Ordenes T.',
+      role: ['Gerente', 'JefeTaller'],
       sublinks: [
         {
           path: urls.allWorkOrders,
           display: 'Ver Ordenes de Trabajo',
-          role: ['Gerente','JefeTaller'],
+          role: ['Gerente', 'JefeTaller'],
         },
       ],
     },
