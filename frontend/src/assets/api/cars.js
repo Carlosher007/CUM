@@ -1,15 +1,4 @@
-import axios from 'axios';
-
-const path = axios.create({
-  baseURL: 'http://localhost:8000/api/',
-});
-
-const path2 = axios.create({
-  baseURL: 'http://localhost:8000/api/',
-  headers: {
-    'Content-Type': 'multipart/form-data',
-  },
-});
+import { path, path2 } from './api';
 
 export const getCars = () => path.get('vehicle/');
 export const getCar = (id) => path.get(`vehicle/${id}`);

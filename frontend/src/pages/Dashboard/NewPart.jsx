@@ -35,6 +35,7 @@ import VehiclesWithPartTable from '../../components/Dashboard/UI/VehiclesWithPar
 const NewVehicle = () => {
   const cookies = new Cookies();
   const idSucursal = cookies.get('sucursal');
+  const token = cookies.get('token')
 
   const [vehicles, setVehicles] = useState([]);
   const [parts, setParts] = useState([]);

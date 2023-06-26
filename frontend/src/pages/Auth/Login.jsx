@@ -97,11 +97,6 @@ const Login = () => {
         sameSite: 'None',
         secure: true,
       });
-      cookies.set('is_superuser', data.usuario.is_superuser, {
-        path: '/',
-        sameSite: 'None',
-        secure: true,
-      });
 
       // Navegar al dashboard
       navigate(urls.home2);
@@ -142,13 +137,19 @@ const Login = () => {
       });
     } catch (error) {
       const { data } = error.response;
-      Object.values(data).forEach((errorMessages) => {
-        errorMessages.forEach((errorMessage) => {
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
           toast.error(errorMessage, {
             position: toast.POSITION.TOP_RIGHT,
           });
         });
-      });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
