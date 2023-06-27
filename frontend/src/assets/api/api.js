@@ -12,6 +12,10 @@ const path2 = axios.create({
   },
 });
 
+const path3 = axios.create({
+  baseURL: 'https://cum-api-rest.onrender.com/api/',
+});
+
 // Agregar el interceptor para modificar las solicitudes salientes
 path.interceptors.request.use(async (config) => {
   const token = await getTokenValue(); // Obtén el valor actualizado del token de las cookies
@@ -33,4 +37,4 @@ path2.interceptors.request.use(async (config) => {
   return config;
 });
 
-export { path, path2 };
+export { path, path2, path3 };

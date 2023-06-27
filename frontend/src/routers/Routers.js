@@ -39,6 +39,7 @@ const Routers = () => {
   const cookies = new Cookies();
   const token = cookies.get('token');
   const rol = cookies.get('rol');
+
   /*
   Available roles:
   Gerente
@@ -172,7 +173,7 @@ const Routers = () => {
         <Route
           path={urls.presentialquoteD}
           element={
-            <FilterPage roles={['Cliente']}>
+            <FilterPage roles={[]}>
               <PresentialQuoteD />
             </FilterPage>
           }
@@ -180,7 +181,7 @@ const Routers = () => {
         <Route
           path={urls.allUsers}
           element={
-            <FilterPage roles={['Gerente']}>
+            <FilterPage roles={[]}>
               <AllUsers />
             </FilterPage>
           }
@@ -196,7 +197,7 @@ const Routers = () => {
         <Route
           path={urls.newUser}
           element={
-            <FilterPage roles={['Gerente']}>
+            <FilterPage roles={[]}>
               <NewUser />
             </FilterPage>
           }
@@ -204,7 +205,7 @@ const Routers = () => {
         <Route
           path={urls.newSucursal}
           element={
-            <FilterPage roles={['Gerente']}>
+            <FilterPage roles={[]}>
               <NewSucursal />
             </FilterPage>
           }
@@ -212,7 +213,7 @@ const Routers = () => {
         <Route
           path={urls.newVehicle}
           element={
-            <FilterPage roles={['Gerente']}>
+            <FilterPage roles={[]}>
               <NewVehicle />
             </FilterPage>
           }
@@ -228,7 +229,7 @@ const Routers = () => {
         <Route
           path={urls.seeParts}
           element={
-            <FilterPage roles={['Gerente','JefeTaller']}>
+            <FilterPage roles={[]}>
               <PartsListing />
             </FilterPage>
           }

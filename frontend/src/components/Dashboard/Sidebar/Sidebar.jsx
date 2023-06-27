@@ -22,35 +22,8 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const deleteCookies = () => {
-    cookies.set('token', undefined, {
-      path: '/',
-      sameSite: 'None',
-      secure: true,
-    });
-    cookies.set('id', undefined, {
-      path: '/',
-      sameSite: 'None',
-      secure: true,
-    });
-    cookies.set('rol', undefined, {
-      path: '/',
-      sameSite: 'None',
-      secure: true,
-    });
-    cookies.set('email', undefined, {
-      path: '/',
-      sameSite: 'None',
-      secure: true,
-    });
-    cookies.set('full_name', undefined, {
-      path: '/',
-      sameSite: 'None',
-      secure: true,
-    });
-    cookies.set('sucursal', undefined, {
-      path: '/',
-      sameSite: 'None',
-      secure: true,
+    Object.keys(cookies.getAll()).forEach((cookieName) => {
+      cookies.remove(cookieName, { path: '/' });
     });
   };
 

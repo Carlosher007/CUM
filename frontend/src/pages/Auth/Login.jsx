@@ -89,7 +89,7 @@ const Login = () => {
 
   const verifyEmail = async (code) => {
     if (code === verificationCode) {
-    // if (true) {
+      // if (true) {
       const loginData = {
         username: usernameG,
         password: passwordG,
@@ -139,18 +139,20 @@ const Login = () => {
         position: toast.POSITION.TOP_RIGHT,
       });
     } catch (error) {
-      const { data } = error.response;
-      if (Array.isArray(data)) {
-        data.forEach((errorMessage) => {
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
+      if (error.response) {
+        const { data } = error.response;
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
           });
-        });
-      } else {
-        if (data.error) {
-          toast.error(data.error, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
         }
       }
     }
