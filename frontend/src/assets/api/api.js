@@ -16,7 +16,7 @@ const path2 = axios.create({
 path.interceptors.request.use(async (config) => {
   const token = await getTokenValue(); // Obtén el valor actualizado del token de las cookies
 
-  if (token) {
+  if (token && token !== undefined) {
     config.headers.Authorization = `Token ${token}`;
   }
 
@@ -26,7 +26,7 @@ path.interceptors.request.use(async (config) => {
 path2.interceptors.request.use(async (config) => {
   const token = await getTokenValue(); // Obtén el valor actualizado del token de las cookies
 
-  if (token) {
+  if (token && token !== undefined) {
     config.headers.Authorization = `Token ${token}`;
   }
 
