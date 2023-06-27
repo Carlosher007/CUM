@@ -44,6 +44,7 @@ const Home = () => {
   };
 
   useEffect(() => {
+    window.location.reload(false);
     getCarsSold();
   }, []);
 
