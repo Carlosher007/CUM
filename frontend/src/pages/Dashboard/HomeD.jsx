@@ -19,6 +19,13 @@ const Home = () => {
   const [cars, setCars] = useState([]);
   const [reload, setReload] = useState(true);
 
+  useEffect(() => {
+    if (reload) {
+      window.location.reload();
+      setReload(false);
+    }
+  }, [reload]);
+
   const getCarsSold = async () => {
     try {
       const { data } = await getCarsSoldBySucursal(parseInt(sucursal));
