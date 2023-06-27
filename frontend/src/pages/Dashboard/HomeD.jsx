@@ -17,11 +17,14 @@ const Home = () => {
   const rol = cookies.get('rol');
   const sucursal = cookies.get('sucursal');
   const [cars, setCars] = useState([]);
-  const [reload, setReload] = useState(true)
+  const [reload, setReload] = useState(true);
 
   useEffect(() => {
-    window.location.reload(false)
-  },[reload])
+    if (reload) {
+      window.location.reload(false);
+    }
+    setReload(false);
+  }, [reload]);
 
   const getCarsSold = async () => {
     try {
