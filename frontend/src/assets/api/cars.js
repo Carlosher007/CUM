@@ -1,9 +1,8 @@
 import axios from 'axios';
 import { path, path2 } from './api';
 
-
 const pathL = axios.create({
-  baseURL: 'http://localhost:8000/api/',
+  baseURL: 'https://cum-api-rest.onrender.com/api/',
 });
 
 export const getCars = () => path.get('vehicle/');

@@ -2,11 +2,11 @@ import axios from 'axios';
 import { getTokenValue } from './tokenCookie';
 
 const path = axios.create({
-  baseURL: 'http://localhost:8000/api/',
+  baseURL: 'https://cum-api-rest.onrender.com/api/',
 });
 
 const path2 = axios.create({
-  baseURL: 'http://localhost:8000/api/',
+  baseURL: 'https://cum-api-rest.onrender.com/api/',
   headers: {
     'Content-Type': 'multipart/form-data',
   },

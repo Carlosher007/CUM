@@ -2,7 +2,7 @@ import axios from 'axios';
 import { path } from './api';
 
 const pathL = axios.create({
-  baseURL: 'http://localhost:8000/api/',
+  baseURL: 'https://cum-api-rest.onrender.com/api/',
 });
 
 
