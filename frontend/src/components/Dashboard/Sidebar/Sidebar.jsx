@@ -22,8 +22,35 @@ const Sidebar = () => {
   const navigate = useNavigate();
 
   const deleteCookies = () => {
-    Object.keys(cookies.getAll()).forEach((cookieName) => {
-      cookies.remove(cookieName, { path: '/' });
+    cookies.set('token', undefined, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('id', undefined, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('rol', undefined, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('email', undefined, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('full_name', undefined, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
+    });
+    cookies.set('sucursal', undefined, {
+      path: '/',
+      sameSite: 'None',
+      secure: true,
     });
   };
 
@@ -91,7 +118,7 @@ const Sidebar = () => {
     },
     {
       display: 'Cotizaciones',
-      role: ['Cliente','Vendedor','Gerente'],
+      role: ['Cliente', 'Vendedor', 'Gerente'],
       sublinks: [
         {
           path: urls.seeCarsD,
