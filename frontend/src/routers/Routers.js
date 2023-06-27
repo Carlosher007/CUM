@@ -292,7 +292,7 @@ const Routers = () => {
         <Route
           path={urls.allWorkOrders}
           element={
-            <FilterPage roles={['Gerente','JefeTaller',]}>
+            <FilterPage roles={['Gerente','JefeTaller','Cliente']}>
               <AllWorkOrders />
             </FilterPage>
           }

@@ -563,7 +563,7 @@ const VirtualQuoteForm = ({
                   type="submit"
                   onClick={() => {
                     resetErrorShown();
-                    // handleQuote();
+                    handleQuote();
                   }}
                 >
                   Enviar
