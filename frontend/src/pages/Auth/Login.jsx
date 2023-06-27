@@ -88,8 +88,8 @@ const Login = () => {
   };
 
   const verifyEmail = async (code) => {
-    // if (code === verificationCode) {
-    if (true) {
+    if (code === verificationCode) {
+    // if (true) {
       const loginData = {
         username: usernameG,
         password: passwordG,
