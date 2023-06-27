@@ -17,16 +17,7 @@ const Home = () => {
   const rol = cookies.get('rol');
   const sucursal = cookies.get('sucursal');
   const [cars, setCars] = useState([]);
-  const [isPageLoaded, setIsPageLoaded] = useState(false);
 
-  useEffect(() => {
-    // Verificar si la página se ha cargado previamente antes de volver a cargarla
-    if (!isPageLoaded) {
-      setIsPageLoaded(true);
-    } else {
-      window.location.reload();
-    }
-  }, [isPageLoaded]);
 
   const getCarsSold = async () => {
     try {
