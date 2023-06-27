@@ -23,6 +23,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
   const [valueMensualDue, setValueMensualDue] = useState('');
   const tasa = 0.0185;
   const [valueTotal, setValueTotal] = useState('');
+  const [isQuantity, setIsQuantity] = useState(false);
 
   useEffect(() => {
     const getVehicleByColor = async () => {
@@ -34,6 +35,8 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
             slug,
             colorSinNumeral
           );
+          console.log(data);
+          setIsQuantity(data.quantity >= 1);
           formik.setFieldValue('vehicle_sucursal', data.id);
         }
       } catch (error) {
@@ -121,6 +124,25 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     },
     validationSchema: virtualQuoteValidation,
     onSubmit: (values) => {
+      if (!isQuantity) {
+        toast.error(
+          'Lo sentimos, el carro actualmente no cuenta con stock en este momento',
+          {
+            position: toast.POSITION.TOP_RIGHT,
+          }
+        );
+        return;
+      }
+      if(values.initial_fee>price){
+        toast.error(
+          'La cutoa inicial no puede sobrepasar el valor dle precio del carro',
+          {
+            position: toast.POSITION.TOP_RIGHT,
+          }
+        );
+        return;
+      }
+
       calculateQuote(values);
     },
   });

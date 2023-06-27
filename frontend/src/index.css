@@ -9,3 +9,12 @@
 .pagination .active {
   color: rgba(255, 255, 0, 0.473);
 }
+
+.text-white text {
+  fill: white;
+}
+
+
+.ooo .google-visualization-tooltip {
+  background-color: black; 
+}

@@ -116,7 +116,42 @@ const VirtualQuoteForm = ({
         client: parseInt(values.id),
         vehicle_sucursal: idCarSucursal,
       };
-      console.log(body);
+
+      // Verificar num_installments mayor a cero y menor a 22
+      const Regex = /^\d+$/;
+
+      if (parseInt(body.num_installments) >= 23) {
+        toast.error(
+          'Por favor, ingrese un número numero de cuotas menor a 22',
+          {
+            position: toast.POSITION.TOP_RIGHT,
+          }
+        );
+        return;
+      }
+
+      if (parseInt(body.num_installments) < 1000000) {
+        toast.error(
+          'Por favor, ingrese una cuota inicial mayor o iguañ a un millon',
+          {
+            position: toast.POSITION.TOP_RIGHT,
+          }
+        );
+        return;
+      }
+
+      // // Verificar cellphone como número
+      // const phoneRegex = /^\d+$/;
+      // if (!phoneRegex.test(values.cellphone)) {
+      //   toast.error(
+      //     'Por favor, ingrese un número válido para el campo de Teléfono',
+      //     {
+      //       position: toast.POSITION.TOP_RIGHT,
+      //     }
+      //   );
+      //   return;
+      // }
+
       const { data } = await createQuote(body);
       console.log(data);
       toast.success(
@@ -224,7 +259,7 @@ const VirtualQuoteForm = ({
     onSubmit: async (values) => {
       try {
         const id = await createUser();
-        console.log(id)
+        console.log(id);
         if (id !== undefined) {
           await handleQuote(values);
           navigate(urls.login);
@@ -336,10 +371,10 @@ const VirtualQuoteForm = ({
       const numInstallmentsRegex = /^\d+$/;
       if (
         !numInstallmentsRegex.test(values.num_installments) ||
-        parseInt(values.num_installments) >= 22
+        parseInt(values.num_installments) >= 23
       ) {
         toast.error(
-          'Por favor, ingrese un número válido menor a 22 para el número de cuotas',
+          'Por favor, ingrese un número válido menor a 23 para el número de cuotas',
           {
             position: toast.POSITION.TOP_RIGHT,
           }
@@ -391,6 +426,7 @@ const VirtualQuoteForm = ({
                 onChange={handleChange}
                 invalid={touched.cellphone && !!errors.cellphone}
                 disabled={isQuote}
+                maxLength={10}
               />
               {touched.cellphone &&
                 errors.cellphone &&
@@ -421,6 +457,7 @@ const VirtualQuoteForm = ({
                 onChange={handleChange}
                 invalid={touched.id && !!errors.id}
                 disabled={isQuote}
+                maxLength={10}
               />
               {touched.id && errors.id && showErrorToast(errors.id)}
             </FormGroup>

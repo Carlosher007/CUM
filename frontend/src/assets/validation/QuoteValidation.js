@@ -12,9 +12,6 @@ export const quoteValidation = yup.object().shape({
         return /^[0-9]+$/.test(value); // Verifica que el valor sea un número
       }
     ),
-  dateExpectedCC: yup
-    .string()
-    .required('Ponga la fecha de expedición de la tarjeta de crédito'),
   segurityCodeCC: yup
     .string()
     .required('Digite el número de seguridad de la tarjeta de crédito')

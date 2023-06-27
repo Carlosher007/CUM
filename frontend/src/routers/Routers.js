@@ -1,5 +1,5 @@
-import React from 'react';
-import { Navigate, Route, Routes } from 'react-router-dom';
+import React, { useEffect, useState } from 'react';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
 import Cookies from 'universal-cookie';
 import { urls } from '../assets/urls/urls';
 import LayoutAdmin from '../components/Dashboard/Layout/LayoutAdmin.jsx';
@@ -7,18 +7,26 @@ import EditUser from '../components/Dashboard/UI/EditUser';
 import Layout from '../components/Landing/Layout/Layout.jsx';
 import ForgetPassword from '../pages/Auth/ForgetPassword';
 import Login from '../pages/Auth/Login';
+import AllQuotes from '../pages/Dashboard/AllQuotes';
 import AllUsers from '../pages/Dashboard/AllUsers';
+import AllWorkOrders from '../pages/Dashboard/AllWorkOrders';
 import CarDetailsD from '../pages/Dashboard/CarDetailsD';
 import CarListingD from '../pages/Dashboard/CarListingD';
+import DetailsQuote from '../pages/Dashboard/DetailsQuote';
+import EditPart from '../pages/Dashboard/EditPart';
 import EditVehicle from '../pages/Dashboard/EditVehicle';
 import HomeD from '../pages/Dashboard/HomeD';
+import MyCar from '../pages/Dashboard/MyCar';
+import MyCars from '../pages/Dashboard/MyCars';
+import MyQuotes from '../pages/Dashboard/MyQuotes';
+import NewPart from '../pages/Dashboard/NewPart';
 import NewSucursal from '../pages/Dashboard/NewSucursal';
 import NewUser from '../pages/Dashboard/NewUser';
 import NewVehicle from '../pages/Dashboard/NewVehicle';
-import NewPart from '../pages/Dashboard/NewPart';
 import PartsListing from '../pages/Dashboard/PartsListing';
 import PresentialQuoteD from '../pages/Dashboard/PresentialQuoteD';
 import Profile from '../pages/Dashboard/Profile';
+import WorkOrderDetails from '../pages/Dashboard/WorkOrderDetails';
 import CarDetails from '../pages/Landing/CarDetails';
 import CarListing from '../pages/Landing/CarListing';
 import Contact from '../pages/Landing/Contact';
@@ -26,34 +34,24 @@ import Home from '../pages/Landing/Home';
 import NotFound from '../pages/Landing/NotFound';
 import Offices from '../pages/Landing/Offices';
 import PresentialQuote from '../pages/Landing/PresentialQuote';
-import EditPart from '../pages/Dashboard/EditPart';
-import MyQuotes from '../pages/Dashboard/MyQuotes';
-import DetailsQuote from '../pages/Dashboard/DetailsQuote';
-import AllQuotes from '../pages/Dashboard/AllQuotes';
-import MyCars from '../pages/Dashboard/MyCars';
-import MyCar from '../pages/Dashboard/MyCar';
-import AllWorkOrders from '../pages/Dashboard/AllWorkOrders';
-import WorkOrderDetails from '../pages/Dashboard/WorkOrderDetails';
+import NotFound2 from '../pages/Landing/NotFound2';
 
 const Routers = () => {
   const cookies = new Cookies();
   const token = cookies.get('token');
-  const rol = cookies.get('rol');
+  const [rol, setRol] = useState(cookies.get('rol'));
 
-  /*
-  Available roles:
-  Gerente
-  JefeTaller
-  Vendedor
-  Cliente
-  Anyone
-  */
+  const location = useLocation();
+
+  useEffect(() => {
+    setRol(cookies.get('rol'));
+  }, [location.pathname]);
 
   const FilterPage = ({ children, roles }) => {
     if (roles.includes(rol) || roles.length === 0) {
       return <>{children}</>;
     } else {
-      return <NotFound />;
+      return <NotFound2 />;
     }
   };
 
@@ -68,7 +66,7 @@ const Routers = () => {
           </FilterPage>
         }
       />
-      <Route path="*" element={<NotFound />} />
+      {/* <Route path="*" element={<NotFound />} /> */}
       <Route
         path={urls.forgetPassword}
         element={
@@ -173,7 +171,7 @@ const Routers = () => {
         <Route
           path={urls.presentialquoteD}
           element={
-            <FilterPage roles={[]}>
+            <FilterPage roles={['Cliente']}>
               <PresentialQuoteD />
             </FilterPage>
           }
@@ -181,7 +179,7 @@ const Routers = () => {
         <Route
           path={urls.allUsers}
           element={
-            <FilterPage roles={[]}>
+            <FilterPage roles={['Gerente']}>
               <AllUsers />
             </FilterPage>
           }
@@ -197,7 +195,7 @@ const Routers = () => {
         <Route
           path={urls.newUser}
           element={
-            <FilterPage roles={[]}>
+            <FilterPage roles={['Gerente']}>
               <NewUser />
             </FilterPage>
           }
@@ -205,7 +203,7 @@ const Routers = () => {
         <Route
           path={urls.newSucursal}
           element={
-            <FilterPage roles={[]}>
+            <FilterPage roles={['Gerente']}>
               <NewSucursal />
             </FilterPage>
           }
@@ -213,7 +211,7 @@ const Routers = () => {
         <Route
           path={urls.newVehicle}
           element={
-            <FilterPage roles={[]}>
+            <FilterPage roles={['Gerente']}>
               <NewVehicle />
             </FilterPage>
           }
@@ -229,7 +227,7 @@ const Routers = () => {
         <Route
           path={urls.seeParts}
           element={
-            <FilterPage roles={[]}>
+            <FilterPage roles={['Gerente', 'JefeTaller']}>
               <PartsListing />
             </FilterPage>
           }
@@ -237,7 +235,7 @@ const Routers = () => {
         <Route
           path={urls.newPart}
           element={
-            <FilterPage roles={[]}>
+            <FilterPage roles={['Gerente', 'JefeTaller']}>
               <NewPart />
             </FilterPage>
           }
@@ -253,7 +251,7 @@ const Routers = () => {
         <Route
           path={urls.myQuotes}
           element={
-            <FilterPage roles={[]}>
+            <FilterPage roles={['Cliente', 'Vendedor']}>
               <MyQuotes />
             </FilterPage>
           }
@@ -269,7 +267,7 @@ const Routers = () => {
         <Route
           path={urls.allQuotes}
           element={
-            <FilterPage roles={[]}>
+            <FilterPage roles={['Gerente']}>
               <AllQuotes />
             </FilterPage>
           }
@@ -277,7 +275,7 @@ const Routers = () => {
         <Route
           path={urls.myCars}
           element={
-            <FilterPage roles={[]}>
+            <FilterPage roles={['Cliente']}>
               <MyCars />
             </FilterPage>
           }
@@ -293,7 +291,7 @@ const Routers = () => {
         <Route
           path={urls.allWorkOrders}
           element={
-            <FilterPage roles={[]}>
+            <FilterPage roles={['Gerente', 'JefeTaller', 'Cliente']}>
               <AllWorkOrders />
             </FilterPage>
           }

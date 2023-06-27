@@ -114,7 +114,7 @@ const Header = () => {
               </div>
             </Col>
 
-            <Col lg="2" md="3" sm="0" className="flex items-center justify-end">
+            {/* <Col lg="2" md="3" sm="0" className="flex items-center justify-end">
               <Link
                 className="header__btn btn"
                 to={urls.contact}
@@ -122,7 +122,7 @@ const Header = () => {
               >
                 <i className="ri-phone-line"></i> Contactanos
               </Link>
-            </Col>
+            </Col> */}
           </Row>
         </Container>
       </div>

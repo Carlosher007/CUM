@@ -3,7 +3,7 @@ import { CirclePicker } from 'react-color';
 import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
-import { getCar, getColorsCar } from '../../assets/api/cars';
+import { getCar, getCarByColor, getColorsCar } from '../../assets/api/cars';
 import { getCarsWithSucursal } from '../../assets/api/sucursal.api';
 import { codeToColorName, colorOptions } from '../../assets/color/colorUtils';
 import { formatPrice } from '../../assets/general/formatPrice';
@@ -20,6 +20,7 @@ const CarDetailsD = () => {
   const [selectedColor, setSelectedColor] = useState('');
   const [availableColors, setAvailableColors] = useState([]);
   const [availableSucursals, setAvailableSucursals] = useState([]);
+  const [isQuantity, setIsQuantity] = useState([]);
 
   const handleColorChange = (color) => {
     setSelectedColor(color.hex.toUpperCase());
@@ -47,6 +48,31 @@ const CarDetailsD = () => {
     }
   };
 
+  const getIdVehicleSucursal = async () => {
+    try {
+      const selectedColor_ = selectedColor.slice(1);
+      const { data } = await getCarByColor(idSucursal, id, selectedColor_);
+      console.log(data);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
+      }
+    }
+  };
+  
   const getAvailableColors = async () => {
     try {
       const { data } = await getColorsCar(idSucursal, id);

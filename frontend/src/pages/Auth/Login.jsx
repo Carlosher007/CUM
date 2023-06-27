@@ -109,7 +109,7 @@ const Login = () => {
         toast.success(`¡Bienvenido, ${fullName}!`, {
           position: toast.POSITION.TOP_RIGHT,
         });
-      }, 1500);
+      }, 500);
     } else {
       toast.error('Código de verificación incorrecto', {
         position: toast.POSITION.TOP_RIGHT,
@@ -206,8 +206,8 @@ const Login = () => {
         </h1>
         {!emailVerificationStep ? (
           <Form className="mb-8" onSubmit={handleSubmit}>
-            <FormGroup>
-              <div className="mb-4 relative">
+            <FormGroup className="mb-6">
+              <div className="relative">
                 <RiMailLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
                 <input
                   type="email"
@@ -216,14 +216,15 @@ const Login = () => {
                   name="email"
                   value={values.email}
                   onChange={handleChange}
-                  invalid={touched.email && !!errors.email ? 'true' : 'false'}
                 />
               </div>
-              {touched.email && errors.email && showErrorToast(errors.email)}
+              {touched.email && errors.email && (
+                <p className="text-sm text-red-500">{errors.email}</p>
+              )}
             </FormGroup>
 
-            <FormGroup>
-              <div className="mb-8 relative">
+            <FormGroup className="mb-8">
+              <div className="relative">
                 <RiLockLine className="absolute top-1/2 -translate-y-1/2 left-2 text-primary" />
                 <input
                   type={showPassword ? 'text' : 'password'}
@@ -248,9 +249,9 @@ const Login = () => {
                   />
                 )}
               </div>
-              {touched.password &&
-                errors.password &&
-                showErrorToast(errors.password)}
+              {touched.password && errors.password && (
+                <p className="text-sm text-red-500">{errors.password}</p>
+              )}
             </FormGroup>
 
             <FormGroup>

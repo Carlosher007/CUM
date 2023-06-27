@@ -11,8 +11,13 @@ export const virtualQuoteValidation = yup.object().shape({
     )
     .test(
       'minimum-value',
-      'El valor de cuotas iniciales debe ser mínimo de 1 millón',
+      'El valor de cuotas iniciales debe ser mínimo de un millón',
       (value) => parseInt(value) >= 1000000
+    )
+    .test(
+      'minimum-value',
+      'El valor de cuotas iniciales no debe pasar de $2147.483.647',
+      (value) => parseInt(value) <2147483647
     ),
   num_installments: yup
     .string()

@@ -20,7 +20,7 @@ import { urls } from '../../assets/urls/urls';
 import CarItemD from '../../components/Dashboard/UI/CarItemD';
 
 const CarListingD = () => {
-  const ITEMS_PER_PAGE = 4;
+  const ITEMS_PER_PAGE = 5;
 
   const cookies = new Cookies();
   const idSucursal = cookies.get('sucursal');

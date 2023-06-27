@@ -145,8 +145,19 @@ const AllWorkOrders = () => {
   return (
     <div>
       <div className="text-center font-bold text-3xl bg-secondary-100 p-8 rounded-xl mb-8 booking__wrapper">
-        Ordenes de trabajo de la sucursal de:{' '}
-        <span className="text-primary">{citySucursal}</span>{' '}
+        {rol === 'Cliente' ? (
+          <>
+            {' '}
+            Mis{' '}
+            <span className="text-primary">ordenes de trabajo</span>{' '}
+          </>
+        ) : (
+          <>
+            {' '}
+            Ordenes de trabajo de la sucursal de:{' '}
+            <span className="text-primary">{citySucursal}</span>{' '}
+          </>
+        )}
       </div>
       <div className="bg-secondary-100 p-8 rounded-xl mb-8">
         <div className="flex flex-col md:flex-row items-center md:gap-16">

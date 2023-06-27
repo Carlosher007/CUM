@@ -72,7 +72,7 @@ const Home = () => {
             <Row>
               <Col lg="12" className="text-center mb-5">
                 {/* <h6 className="section__subtitle">Come with</h6> */}
-                <h2 className="font-bold">Mejores Ofertas</h2>
+                <h2 className="font-bold">Ultimos lanzamientos</h2>
               </Col>
 
               {dataCars.slice(0, 3).map((item) => (

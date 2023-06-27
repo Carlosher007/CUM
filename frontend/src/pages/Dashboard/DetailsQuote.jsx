@@ -27,6 +27,7 @@ const DetailsQuote = () => {
   const [client, setClient] = useState({});
   const [car, setCar] = useState({});
   const [isPagar, setIsPagar] = useState(false);
+  const [dateExpectedCC, setDateExpectedCC] = useState('');
   const typesOfPay = ['CreditCard', 'Efecty', 'Bank'];
   const bankCount = '91838282';
   const effectyCount = '2836342';
@@ -36,12 +37,20 @@ const DetailsQuote = () => {
 
   const finishQuoteData = async () => {
     try {
+      const regex = /^(0[1-9]|1[0-2])-(\d{4})$/; // Expresión regular para verificar el formato "mes-año"
+
+      if (!regex.test(dateExpectedCC)) {
+        toast.error('Ponga un formato de fecha correcto', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
       await finishQuote(idQuote);
       toast.success('Cotización finalizada', {
         position: toast.POSITION.TOP_RIGHT,
       });
       await getQuoteDataByRol();
-      setIsPagar(false)
+      setIsPagar(false);
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
@@ -278,6 +287,11 @@ const DetailsQuote = () => {
     }
   };
 
+  const handleChangeDate = (e) => {
+    const inputValue = e.target.value;
+    setDateExpectedCC(inputValue);
+  };
+
   return (
     <div>
       <div>
@@ -444,6 +458,7 @@ const DetailsQuote = () => {
                             name="numberCC"
                             value={values.numberCC}
                             onChange={handleChange}
+                            maxLength={16}
                           />
                           {touched.numberCC &&
                             errors.numberCC &&
@@ -456,16 +471,14 @@ const DetailsQuote = () => {
                         </div>
                         <div className="flex-1">
                           <input
-                            type="date"
+                            type="text"
                             className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
-                            placeholder="Fecha de expedicion"
+                            placeholder="MM-AAAA"
                             name="dateExpectedCC"
-                            value={values.dateExpectedCC}
-                            onChange={handleChange}
+                            value={dateExpectedCC}
+                            onChange={handleChangeDate}
+                            maxLength={7}
                           />
-                          {touched.dateExpectedCC &&
-                            errors.dateExpectedCC &&
-                            showErrorToast(errors.dateExpectedCC)}
                         </div>
                       </div>
                       <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">

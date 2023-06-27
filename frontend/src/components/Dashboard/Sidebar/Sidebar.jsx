@@ -1,6 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-
 import { toast } from 'react-toastify';
 // Icons
 import {
@@ -72,19 +71,30 @@ const Sidebar = () => {
           display: 'Perfil',
           role: ['Anyone'],
         },
+      ],
+    },
+    {
+      display: 'Acciones en sucursal',
+      role: ['Cliente'],
+      sublinks: [
         {
           path: urls.myQuotes,
-          display: 'Mis cotizaciones ',
+          display: 'Cotizaciones ',
           role: ['Cliente'],
         },
         {
           path: urls.myCars,
-          display: 'Mis Carros',
+          display: 'Carros',
           role: ['Cliente'],
         },
         {
           path: urls.allWorkOrders,
           display: 'Ordenes de Trabajo',
+          role: ['Cliente'],
+        },
+        {
+          path: urls.myCars,
+          display: 'Realizar Orden de Trabajo',
           role: ['Cliente'],
         },
       ],
