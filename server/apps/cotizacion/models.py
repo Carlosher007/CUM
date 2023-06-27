@@ -1,4 +1,5 @@
 from django.db import models
+from django.shortcuts import get_object_or_404
 from django.db.models import Count, Max
 from apps.usuario.models import User
 
@@ -13,16 +14,6 @@ class Quotation(models.Model):
 
     class Meta:
         db_table = 'quotation'
-
-    def save(self, *args, **kwargs):
-        super(Quotation, self).save(*args, **kwargs)
-        best_seller = AssignedQuote.objects.values('seller').annotate(
-            count=Count('quotation')
-        ).order_by('count').filter(seller__sucursal=self.client.sucursal).first()
-        best_seller = User.objects.get(pk=best_seller['seller'])
-
-        assigned_quote = AssignedQuote(quotation=self, seller=best_seller)
-        assigned_quote.save()
 
 class AssignedQuote(models.Model):
     STATE_CHOICES = (
