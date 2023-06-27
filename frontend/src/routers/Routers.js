@@ -237,7 +237,7 @@ const Routers = () => {
         <Route
           path={urls.newPart}
           element={
-            <FilterPage roles={['Gerente','JefeTaller']}>
+            <FilterPage roles={[]}>
               <NewPart />
             </FilterPage>
           }
@@ -253,7 +253,7 @@ const Routers = () => {
         <Route
           path={urls.myQuotes}
           element={
-            <FilterPage roles={['Cliente', 'Vendedor']}>
+            <FilterPage roles={[]}>
               <MyQuotes />
             </FilterPage>
           }
@@ -269,7 +269,7 @@ const Routers = () => {
         <Route
           path={urls.allQuotes}
           element={
-            <FilterPage roles={['Gerente']}>
+            <FilterPage roles={[]}>
               <AllQuotes />
             </FilterPage>
           }
@@ -277,7 +277,7 @@ const Routers = () => {
         <Route
           path={urls.myCars}
           element={
-            <FilterPage roles={['Cliente']}>
+            <FilterPage roles={[]}>
               <MyCars />
             </FilterPage>
           }
@@ -293,7 +293,7 @@ const Routers = () => {
         <Route
           path={urls.allWorkOrders}
           element={
-            <FilterPage roles={['Gerente','JefeTaller','Cliente']}>
+            <FilterPage roles={[]}>
               <AllWorkOrders />
             </FilterPage>
           }
