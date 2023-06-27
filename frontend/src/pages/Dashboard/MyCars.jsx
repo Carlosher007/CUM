@@ -7,8 +7,7 @@ import MyCarsTable from '../../components/Dashboard/UI/MyCarsTable';
 
 const MyCars = () => {
   const cookies = new Cookies();
-  // const id = cookies.get('id');
-  const id = '9999';
+  const id = cookies.get('id');
   const ITEMS_PER_PAGE = 5;
   const [currentPage, setCurrentPage] = useState(0);
   const [cars, setCars] = useState([]);

@@ -147,7 +147,7 @@ const MyQuotesTable = ({ data }) => {
                 >
                   <MenuItem className="p-0 hover:bg-transparent">
                     <Link
-                      to={`/dashboard/see-quote/${item.quotation.id}`}
+                      to={`/dashboard/see-quote/${item.quotation.id}/${0}`}
                       className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 p-2 flex-1"
                     >
                       Ver Detalladamente

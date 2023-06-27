@@ -252,7 +252,7 @@ const Routers = () => {
         <Route
           path={urls.myQuotes}
           element={
-            <FilterPage roles={['Cliente']}>
+            <FilterPage roles={['Cliente', 'Vendedor']}>
               <MyQuotes />
             </FilterPage>
           }
@@ -268,7 +268,7 @@ const Routers = () => {
         <Route
           path={urls.allQuotes}
           element={
-            <FilterPage roles={['Gerente','Vendedor']}>
+            <FilterPage roles={['Gerente']}>
               <AllQuotes />
             </FilterPage>
           }
@@ -292,7 +292,7 @@ const Routers = () => {
         <Route
           path={urls.allWorkOrders}
           element={
-            <FilterPage roles={['Gerente','JefeTaller']}>
+            <FilterPage roles={['Gerente','JefeTaller',]}>
               <AllWorkOrders />
             </FilterPage>
           }

@@ -431,14 +431,14 @@ const MyCar = () => {
                 El carro ya esta en mantenimiento, debe cancelar o esperar a que
                 el Jefe de taller termine
               </p>
-              {/* <div className="flex justify-end mt-10">
+              <div className="flex justify-end mt-2">
                 <button
                   className="bg-quaternary/70 text-black py-2 px-4 rounded-lg hover:bg-quaternary transition-colors"
                   onClick={handleCancel}
                 >
                   Cancelar
                 </button>
-              </div> */}
+              </div>
             </>
           )}
         </div>

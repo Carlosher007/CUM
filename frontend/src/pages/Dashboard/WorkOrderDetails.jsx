@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Cookies from 'universal-cookie';
 import { getCar } from '../../assets/api/cars';
@@ -30,19 +30,19 @@ const WorkOrderDetails = () => {
       setWorkOrder(data);
     } catch (error) {
       const { data } = error.response;
-     if (Array.isArray(data)) {
-            data.forEach((errorMessage) => {
-              toast.error(errorMessage, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            });
-          } else {
-            if (data.error) {
-              toast.error(data.error, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            }
-          }
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
@@ -52,19 +52,19 @@ const WorkOrderDetails = () => {
       setQuote(data);
     } catch (error) {
       const { data } = error.response;
-     if (Array.isArray(data)) {
-            data.forEach((errorMessage) => {
-              toast.error(errorMessage, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            });
-          } else {
-            if (data.error) {
-              toast.error(data.error, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            }
-          }
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
@@ -75,19 +75,19 @@ const WorkOrderDetails = () => {
       setIsDone(true);
     } catch (error) {
       const { data } = error.response;
-     if (Array.isArray(data)) {
-            data.forEach((errorMessage) => {
-              toast.error(errorMessage, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            });
-          } else {
-            if (data.error) {
-              toast.error(data.error, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            }
-          }
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
@@ -97,19 +97,19 @@ const WorkOrderDetails = () => {
       setCar(data);
     } catch (error) {
       const { data } = error.response;
-     if (Array.isArray(data)) {
-            data.forEach((errorMessage) => {
-              toast.error(errorMessage, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            });
-          } else {
-            if (data.error) {
-              toast.error(data.error, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            }
-          }
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
@@ -144,19 +144,19 @@ const WorkOrderDetails = () => {
       await getWorkOrderData();
     } catch (error) {
       const { data } = error.response;
-     if (Array.isArray(data)) {
-            data.forEach((errorMessage) => {
-              toast.error(errorMessage, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            });
-          } else {
-            if (data.error) {
-              toast.error(data.error, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            }
-          }
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
@@ -169,19 +169,19 @@ const WorkOrderDetails = () => {
       await getWorkOrderData();
     } catch (error) {
       const { data } = error.response;
-     if (Array.isArray(data)) {
-            data.forEach((errorMessage) => {
-              toast.error(errorMessage, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            });
-          } else {
-            if (data.error) {
-              toast.error(data.error, {
-                position: toast.POSITION.TOP_RIGHT,
-              });
-            }
-          }
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
     }
   };
 
@@ -321,6 +321,14 @@ const WorkOrderDetails = () => {
             </tbody>
           </table>
         </div>
+      </div>
+      <div className="flex justify-start">
+        <Link
+            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+            to={urls.allWorkOrders}
+          >
+            <i className="ri-arrow-left-line"></i> Volver
+          </Link>
       </div>
     </div>
   );

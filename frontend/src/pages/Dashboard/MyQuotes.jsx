@@ -50,9 +50,9 @@ const MyQuotes = () => {
       let response;
 
       if (idStateSelectedValue === '') {
-        response = await getQuotesByClient(idSucursal, 'ALL');
+        response = await getQuotesByClient(id, 'ALL');
       } else {
-        response = await getQuotesByClient(idSucursal, idStateSelectedValue);
+        response = await getQuotesByClient(id, idStateSelectedValue);
       }
 
       const { data } = response;
@@ -80,9 +80,9 @@ const MyQuotes = () => {
       let response;
 
       if (idStateSelectedValue === '') {
-        response = await getQuotesBySeller(idSucursal, 'ALL');
+        response = await getQuotesBySeller(id, 'ALL');
       } else {
-        response = await getQuotesBySeller(idSucursal, idStateSelectedValue);
+        response = await getQuotesBySeller(id, idStateSelectedValue);
       }
 
       const { data } = response;

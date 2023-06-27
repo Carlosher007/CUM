@@ -21,8 +21,8 @@ const Home = () => {
   const getCarsSold = async () => {
     try {
       const { data } = await getCarsSoldBySucursal(parseInt(sucursal));
-      console.log(data)
-      setCars(data);
+      console.log(data);
+      setCars(data.slice(0, 4));
     } catch (error) {
       if (error.response) {
         const { data } = error.response;

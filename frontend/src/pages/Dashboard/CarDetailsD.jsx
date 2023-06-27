@@ -191,12 +191,12 @@ const CarDetailsD = () => {
         </div>
       ) : (
         <div className="flex justify-start">
-          {/* <Link
+          <Link
             className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
             to={urls.seeCarsD}
           >
             <i className="ri-arrow-left-line"></i> Volver
-          </Link> */}
+          </Link>
         </div>
       )}
     </div>

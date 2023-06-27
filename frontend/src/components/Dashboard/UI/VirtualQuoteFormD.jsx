@@ -154,7 +154,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
         toast.success('Se agrego la cotizacion del carro', {
           position: toast.POSITION.TOP_RIGHT,
         });
-        navigate(urls.seeCars);
+        navigate(urls.seeCarsD);
       } catch (error) {
         if (error.response) {
           const { data } = error.response;

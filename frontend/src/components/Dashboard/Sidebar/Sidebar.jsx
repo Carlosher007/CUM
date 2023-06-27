@@ -82,11 +82,16 @@ const Sidebar = () => {
           display: 'Mis Carros',
           role: ['Cliente'],
         },
+        {
+          path: urls.allWorkOrders,
+          display: 'Ordenes de Trabajo',
+          role: ['Cliente'],
+        },
       ],
     },
     {
       display: 'Cotizaciones',
-      role: ['Anyone'],
+      role: ['Cliente','Vendedor','Gerente'],
       sublinks: [
         {
           path: urls.seeCarsD,
@@ -96,7 +101,12 @@ const Sidebar = () => {
         {
           path: urls.allQuotes,
           display: 'Todas las cotizaciones ',
-          role: ['Gerente', 'Vendedor'],
+          role: ['Gerente'],
+        },
+        {
+          path: urls.myQuotes,
+          display: 'Cotizaciones asignada ',
+          role: ['Vendedor'],
         },
       ],
     },

@@ -27,7 +27,7 @@ export const urls = {
   seePart: '/dashboard/parts/:id',
   myQuotes: '/dashboard/my-quotes/',
   allQuotes: '/dashboard/all-quotes/',
-  seeQuote: '/dashboard/see-quote/:idQuote',
+  seeQuote: '/dashboard/see-quote/:idQuote/:estado',
   myCars: '/dashboard/myCars',
   myCar: '/dashboard/myCar/:id/:color/:idQ',
   allWorkOrders: '/dashboard/allWorkOrders/',

@@ -20,7 +20,7 @@ import { quoteValidation } from '../../assets/validation/QuoteValidation';
 
 const DetailsQuote = () => {
   const cookies = new Cookies();
-  const { idQuote } = useParams();
+  const { idQuote, estado } = useParams();
   const rol = cookies.get('rol');
   const id = cookies.get('id');
   const [seller, setSeller] = useState({});
@@ -41,6 +41,7 @@ const DetailsQuote = () => {
         position: toast.POSITION.TOP_RIGHT,
       });
       await getQuoteDataByRol();
+      setIsPagar(false)
     } catch (error) {
       if (error.response) {
         const { data } = error.response;
@@ -172,7 +173,7 @@ const DetailsQuote = () => {
 
   const getQuoteSeller = async () => {
     try {
-      const { data } = await getQuotesBySeller(id, 'IN_PROGRESS');
+      const { data } = await getQuotesBySeller(id, 'ALL');
       const quoteP = data.find(
         (item) => item.quotation.id === parseInt(idQuote)
       );
@@ -520,9 +521,10 @@ const DetailsQuote = () => {
                       </div>
                     </div>
                   )}
-                  {rol !== 'Cliente' &&
+
+                  {rol === 'Cliente' &&
                     isPagar &&
-                    quote.state === 'IN_PROGRESS' && (
+                    quote.state === 'ACCEPTED' && (
                       <div>
                         <div className="flex justify-center space-x-4">
                           <button
@@ -616,11 +618,11 @@ const DetailsQuote = () => {
         </div>
       </div>
 
-      {rol !== 'Gerente' ? (
+      {estado === '1' ? (
         <div className="flex justify-start">
           <Link
             className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
-            to={urls.myQuotes}
+            to={urls.home2}
           >
             <i className="ri-arrow-left-line"></i> Volver
           </Link>

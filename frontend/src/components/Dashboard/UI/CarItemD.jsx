@@ -3,9 +3,9 @@ import { FaCarBattery, GiBatteryPack } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
 import { Col } from 'reactstrap';
 import Cookies from 'universal-cookie';
-import { urls } from '../../../assets/urls/urls';
 import { codeToColorName } from '../../../assets/color/colorUtils';
 import { formatPrice } from '../../../assets/general/formatPrice';
+import { urls } from '../../../assets/urls/urls';
 
 const CarItemD = (props) => {
   const cookies = new Cookies();
@@ -37,18 +37,33 @@ const CarItemD = (props) => {
         </div>
       );
     } else {
-      return (
-        <div className="text-center">
-          <Link to={`/dashboard/edit-vehicle/${id}`}>
-            <button className="w-2/3 sm:w-full bg-primary text-black rounded-full py-2 px-4 font-semibold">
-              Editar
-            </button>
-          </Link>
-          {/* <button className="w-2/3 sm:w-full bg-red-500 text-white rounded-full py-2 px-4 font-semibold mr-2 mt-3">
+      if (rol === 'Gerente') {
+        return (
+          <div className="text-center">
+            <Link to={`/dashboard/edit-vehicle/${id}`}>
+              <button className="w-2/3 sm:w-full bg-primary text-black rounded-full py-2 px-4 font-semibold">
+                Editar
+              </button>
+            </Link>
+            {/* <button className="w-2/3 sm:w-full bg-red-500 text-white rounded-full py-2 px-4 font-semibold mr-2 mt-3">
             Eliminar
           </button> */}
-        </div>
-      );
+          </div>
+        );
+      } else {
+        return (
+          <div className="text-center">
+            <Link to={`/dashboard/cars/${id}`}>
+              <button className="w-2/3 sm:w-full bg-primary text-black rounded-full py-2 px-4 font-semibold">
+                Ver
+              </button>
+            </Link>
+            {/* <button className="w-2/3 sm:w-full bg-red-500 text-white rounded-full py-2 px-4 font-semibold mr-2 mt-3">
+            Eliminar
+          </button> */}
+          </div>
+        );
+      }
     }
   };
 
