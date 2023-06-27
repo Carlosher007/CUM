@@ -26,7 +26,7 @@ import CarItemD from '../../components/Dashboard/UI/CarItemD';
 import PartsTable from '../../components/Dashboard/UI/PartsTable';
 
 const PartsListing = () => {
-  const ITEMS_PER_PAGE = 8;
+  const ITEMS_PER_PAGE = 5;
 
   const cookies = new Cookies();
   const idSucursal = cookies.get('sucursal');
