@@ -26,7 +26,8 @@ class AssignedQuote(models.Model):
     quotation = models.OneToOneField(Quotation,
                                      on_delete=models.CASCADE,
                                      primary_key=True)
-    seller = models.ForeignKey('usuario.User', on_delete=models.CASCADE)
+    seller = models.ForeignKey('usuario.User', on_delete=models.CASCADE,
+                               related_name='assigned_quote')
     state = models.CharField(max_length=100, 
                              choices=STATE_CHOICES,
                              default='IN_PROGRESS')
