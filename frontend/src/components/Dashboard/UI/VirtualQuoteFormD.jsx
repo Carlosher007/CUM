@@ -29,7 +29,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
     const getVehicleByColor = async () => {
       try {
         const colorSinNumeral = selectedColor.slice(1); // Utilizando slice())
-        if (colorSinNumeral != '') {
+        if (colorSinNumeral !== '') {
           const { data } = await getCarByColor(
             idSucursal,
             slug,
@@ -135,7 +135,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
       }
       if(values.initial_fee>price){
         toast.error(
-          'La cutoa inicial no puede sobrepasar el valor dle precio del carro',
+          'La cutoa inicial no puede sobrepasar el valor del precio del carro',
           {
             position: toast.POSITION.TOP_RIGHT,
           }

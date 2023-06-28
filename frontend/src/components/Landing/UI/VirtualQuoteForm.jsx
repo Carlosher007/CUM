@@ -23,6 +23,7 @@ const VirtualQuoteForm = ({
   const [valueMensualDue, setValueMensualDue] = useState('');
   const tasa = 0.0185;
   const [valueTotal, setValueTotal] = useState('');
+  const [isQuantity, setIsQuantity] = useState(false);
   const navigate = useNavigate();
 
   const calculateQuote = async (values) => {
@@ -100,6 +101,7 @@ const VirtualQuoteForm = ({
     try {
       const colorSinNumeral = selectedColor.slice(1); // Utilizando slice())
       let idCarSucursal = null;
+      let quantity_ = null;
       if (colorSinNumeral !== '') {
         const { data } = await getCarByColor(
           values.sucursal,
@@ -107,6 +109,17 @@ const VirtualQuoteForm = ({
           colorSinNumeral
         );
         idCarSucursal = data.id;
+        quantity_ = data.quantity_;
+      }
+
+      if (quantity_ === null || quantity_ <= 0) {
+        toast.error(
+          'Lo sentimos, el carro actualmente no cuenta con stock en este momento',
+          {
+            position: toast.POSITION.TOP_RIGHT,
+          }
+        );
+        return;
       }
 
       const body = {
@@ -116,6 +129,26 @@ const VirtualQuoteForm = ({
         client: parseInt(values.id),
         vehicle_sucursal: idCarSucursal,
       };
+
+      if (body.initial_fee> price) {
+        toast.error(
+          'La cutoa inicial no puede sobrepasar el valor del precio del carro',
+          {
+            position: toast.POSITION.TOP_RIGHT,
+          }
+        );
+        return;
+      }
+
+      if (body.initial_fee < 1000000) {
+        toast.error(
+          'La cutoa inicial debe ser mayor a un millon',
+          {
+            position: toast.POSITION.TOP_RIGHT,
+          }
+        );
+        return;
+      }
 
       // Verificar num_installments mayor a cero y menor a 22
       const Regex = /^\d+$/;
