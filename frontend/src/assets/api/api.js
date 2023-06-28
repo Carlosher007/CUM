@@ -2,18 +2,18 @@ import axios from 'axios';
 import { getTokenValue } from './tokenCookie';
 
 const path = axios.create({
-  baseURL: 'http://cum-api-rest.onrender.com/api/',
+  baseURL: 'https://cum-api-rest.onrender.com/api/',
 });
 
 const path2 = axios.create({
-  baseURL: 'http://cum-api-rest.onrender.com/api/',
+  baseURL: 'https://cum-api-rest.onrender.com/api/',
   headers: {
     'Content-Type': 'multipart/form-data',
   },
 });
 
 const path3 = axios.create({
-  baseURL: 'http://cum-api-rest.onrender.com/api/',
+  baseURL: 'https://cum-api-rest.onrender.com/api/',
 });
 
 // Agregar el interceptor para modificar las solicitudes salientes
