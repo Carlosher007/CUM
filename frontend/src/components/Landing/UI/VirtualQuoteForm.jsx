@@ -112,6 +112,8 @@ const VirtualQuoteForm = ({
         quantity_ = data.quantity_;
       }
 
+      console.log(quantity_);
+
       if (quantity_ === null || quantity_ <= 0) {
         toast.error(
           'Lo sentimos, el carro actualmente no cuenta con stock en este momento',
@@ -129,26 +131,6 @@ const VirtualQuoteForm = ({
         client: parseInt(values.id),
         vehicle_sucursal: idCarSucursal,
       };
-
-      if (body.initial_fee> price) {
-        toast.error(
-          'La cutoa inicial no puede sobrepasar el valor del precio del carro',
-          {
-            position: toast.POSITION.TOP_RIGHT,
-          }
-        );
-        return;
-      }
-
-      if (body.initial_fee < 1000000) {
-        toast.error(
-          'La cutoa inicial debe ser mayor a un millon',
-          {
-            position: toast.POSITION.TOP_RIGHT,
-          }
-        );
-        return;
-      }
 
       // Verificar num_installments mayor a cero y menor a 22
       const Regex = /^\d+$/;
@@ -419,6 +401,23 @@ const VirtualQuoteForm = ({
       const emailRegex = /^\S+@\S+\.\S+$/;
       if (!emailRegex.test(values.email)) {
         toast.error('Por favor, ingrese un correo electrónico válido', {
+          position: toast.POSITION.TOP_RIGHT,
+        });
+        return;
+      }
+
+      if (values.initial_fee > price) {
+        toast.error(
+          'La cutoa inicial no puede sobrepasar el valor del precio del carro',
+          {
+            position: toast.POSITION.TOP_RIGHT,
+          }
+        );
+        return;
+      }
+
+      if (values.initial_fee < 1000000) {
+        toast.error('La cutoa inicial debe ser mayor a un millon', {
           position: toast.POSITION.TOP_RIGHT,
         });
         return;
