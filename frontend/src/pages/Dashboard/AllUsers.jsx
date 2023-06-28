@@ -5,6 +5,8 @@ import Cookies from 'universal-cookie';
 import { getSucursal, getUsersBySucursal } from '../../assets/api/sucursal.api';
 import { urls } from '../../assets/urls/urls';
 import UsersTable from '../../components/Dashboard/UI/UsersTable';
+import listRols from '../../assets/general/rols'
+import { Input } from 'reactstrap';
 
 const AllUsers = () => {
   const cookies = new Cookies();
@@ -12,6 +14,8 @@ const AllUsers = () => {
   const miId = cookies.get('id');
   const [users, setUsers] = useState([]);
   const [citySucursal, setCitySucursal] = useState();
+  const [idStateSelectedValue, setIdStateSelectedValue] = useState('');
+
 
   const updateUserList = async () => {
     try {
@@ -41,7 +45,16 @@ const AllUsers = () => {
     const getUsersData = async () => {
       try {
         const { data } = await getUsersBySucursal(idSucursal);
-        setUsers(data.filter((user) => user.id !== miId));
+        
+        const allUsers = data.filter((user) => user.id !== miId);
+
+        if(idStateSelectedValue===''){
+          setUsers(allUsers)
+        }else{
+          //Filtramos donde user.rol === isStateSelectedValue
+          setUsers(allUsers.filter((user) => user.rol === idStateSelectedValue))
+        }
+
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
@@ -89,6 +102,12 @@ const AllUsers = () => {
     getSucursalData();
   }, []);
 
+
+  const handleSelectedState = async (e) => {
+    const selectedStateId = e.target.value;
+    setIdStateSelectedValue(selectedStateId);
+  };
+
   return (
     <div>
       <div className="text-center font-bold text-3xl bg-secondary-100 p-8 rounded-xl mb-8 booking__wrapper">
@@ -96,6 +115,28 @@ const AllUsers = () => {
           Usuarios de la sucursal de:{' '}
           <span className="text-primary">{citySucursal}</span>{' '}
         </h1>
+      </div>
+      <div className="flex flex-col md:flex-row items-center md:gap-16">
+        <div className="flex flex-col items-center md:flex-row gap-3 md:items-center">
+          <span className="flex items-center gap-2 md:order-1">
+            <i className="ri-sort-asc"></i> Filtrar por estado
+          </span>
+          <div className="flex-1 md:order-2 md:w-auto">
+            <Input
+              type="select"
+              name="idCarSelected"
+              onChange={handleSelectedState} // Usar solo onChange
+              className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
+            >
+              <option value="">Seleccione uno</option>
+              {listRols.map((state) => (
+                <option value={state.value} key={state.value}>
+                  {state.return}
+                </option>
+              ))}
+            </Input>
+          </div>
+        </div>
       </div>
       <div>
         {users.length > 0 ? (

@@ -127,7 +127,7 @@ const VirtualQuoteForm = ({
       const body = {
         num_installments: parseInt(values.num_installments),
         initial_fee: parseInt(values.initial_fee),
-        quota_value: parseInt(values.quota_value),
+        quota_value: parseInt(values.quota_value),K
         client: parseInt(values.id),
         vehicle_sucursal: idCarSucursal,
       };

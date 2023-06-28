@@ -111,6 +111,7 @@ const NewUser = () => {
               name="id"
               value={values.id}
               onChange={handleChange}
+              maxLength={10}
             />
             {touched.id && errors.id && showErrorToast(errors.id)}
           </div>
@@ -218,6 +219,7 @@ const NewUser = () => {
               placeholder="Celular"
               name="cellphone"
               value={values.cellphone}
+              maxLength={10}
               onChange={handleChange}
             />
             {touched.cellphone &&
