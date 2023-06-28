@@ -145,16 +145,6 @@ const VirtualQuoteForm = ({
         return;
       }
 
-      if (parseInt(body.num_installments) < 1000000) {
-        toast.error(
-          'Por favor, ingrese una cuota inicial mayor o iguañ a un millon',
-          {
-            position: toast.POSITION.TOP_RIGHT,
-          }
-        );
-        return;
-      }
-
       // // Verificar cellphone como número
       // const phoneRegex = /^\d+$/;
       // if (!phoneRegex.test(values.cellphone)) {
