@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import { Input } from 'reactstrap';
 import Cookies from 'universal-cookie';
 import { getSucursal, getUsersBySucursal } from '../../assets/api/sucursal.api';
+import { listRols } from '../../assets/general/rols.js';
 import { urls } from '../../assets/urls/urls';
 import UsersTable from '../../components/Dashboard/UI/UsersTable';
-import listRols from '../../assets/general/rols'
-import { Input } from 'reactstrap';
 
 const AllUsers = () => {
   const cookies = new Cookies();
@@ -15,7 +15,6 @@ const AllUsers = () => {
   const [users, setUsers] = useState([]);
   const [citySucursal, setCitySucursal] = useState();
   const [idStateSelectedValue, setIdStateSelectedValue] = useState('');
-
 
   const updateUserList = async () => {
     try {
@@ -45,16 +44,17 @@ const AllUsers = () => {
     const getUsersData = async () => {
       try {
         const { data } = await getUsersBySucursal(idSucursal);
-        
+
         const allUsers = data.filter((user) => user.id !== miId);
 
-        if(idStateSelectedValue===''){
-          setUsers(allUsers)
-        }else{
+        if (idStateSelectedValue === '') {
+          setUsers(allUsers);
+        } else {
           //Filtramos donde user.rol === isStateSelectedValue
-          setUsers(allUsers.filter((user) => user.rol === idStateSelectedValue))
+          setUsers(
+            allUsers.filter((user) => user.rol === idStateSelectedValue)
+          );
         }
-
       } catch (error) {
         if (error.response) {
           const { data } = error.response;
@@ -101,7 +101,6 @@ const AllUsers = () => {
     };
     getSucursalData();
   }, []);
-
 
   const handleSelectedState = async (e) => {
     const selectedStateId = e.target.value;
