@@ -243,7 +243,7 @@ const Home = () => {
           </h2>
         </>
       )}
-      {rol === 'Gerente' && (
+      {rol === 'Gerente' && cars.length === 0 && (
         <>
           <h2 className="text-2xl font-bold mt-10 mb-5">Gráficos</h2>
           <div class="flex flex-wrap">
