@@ -21,12 +21,27 @@ class QuotationApiView(viewsets.ModelViewSet):
     def create(self, request, *args, **kwargs):
         quotation_serializer = QuotationSerializer(data=request.data)
         if quotation_serializer.is_valid():
-            best_seller = AssignedQuote.objects.values('seller').annotate(
-                count=Count('quotation')
-            ).order_by('count').filter(
-                seller__sucursal=quotation_serializer.validated_data['client'].sucursal
-                )
-            
+            best_seller=User.objects.filter(
+                sucursal=quotation_serializer.validated_data['client'].sucursal,
+                assigned_quote=None,
+                rol='Vendedor'
+            )
+            if best_seller.exists():
+                best_seller = best_seller.first()
+            else:
+                best_seller = AssignedQuote.objects.values('seller').annotate(
+                    count=Count('quotation')
+                ).order_by('count').filter(
+                    seller__sucursal=quotation_serializer.validated_data['client'].sucursal
+                    )
+
+                if best_seller.exists():
+                    best_seller = best_seller.first()
+                    best_seller = User.objects.get(pk=best_seller['seller'])
+                else:
+                    return Response({'error':'La sucursal no tiene vendedores disponibles'},
+                                    status=status.HTTP_405_METHOD_NOT_ALLOWED)
+
             quotation = Quotation(
                     vehicle_sucursal=quotation_serializer.validated_data['vehicle_sucursal'],
                     client=quotation_serializer.validated_data['client'],
@@ -34,21 +49,6 @@ class QuotationApiView(viewsets.ModelViewSet):
                     initial_fee=quotation_serializer.validated_data['initial_fee'],
                     quota_value=quotation_serializer.validated_data['quota_value']
                 )
-
-            if best_seller.exists():
-                best_seller = best_seller.first()
-                best_seller = User.objects.get(pk=best_seller['seller'])
-            else:
-                best_seller = User.objects.filter(
-                    rol='Vendedor',
-                    sucursal=quotation_serializer.validated_data['client'].sucursal
-                )
-                if best_seller.exists():
-                    best_seller = best_seller.first()
-                else:
-                    return Response({'error':'La sucursal no tiene vendedores disponibles'},
-                                status=status.HTTP_405_METHOD_NOT_ALLOWED)
-
             quotation.save()
             assigned_quote = AssignedQuote(
                 quotation=quotation, 
