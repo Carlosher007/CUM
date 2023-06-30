@@ -6,7 +6,12 @@ import { Link, URL } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import { Form, FormGroup, FormText, Input } from 'reactstrap';
 import Cookies from 'universal-cookie';
-import { getCar, newCar, newCarInSucursal } from '../../assets/api/cars';
+import {
+  getCar,
+  getCarByColor,
+  newCar,
+  newCarInSucursal,
+} from '../../assets/api/cars';
 import {
   bodyWorkData,
   brakesData,
@@ -31,6 +36,8 @@ const NewVehicle = () => {
   const [car, setCar] = useState({});
   const [resetForm, setResetForm] = useState(false);
   const [previewImage, setPreviewImage] = useState('');
+  const [quantity, setQuantity] = useState(0);
+  const [isQuantity, setIsQuantity] = useState(false);
 
   const getCarData = async (id) => {
     try {
@@ -111,10 +118,11 @@ const NewVehicle = () => {
       image: '',
       price: '',
       description: '',
-      idCar: '', // restablecer a ''
+      idCar: '',
       quantity: '',
     });
-    setIdCarSelectedValue(''); // Set the state value to ""
+    setIdCarSelectedValue('');
+    setIsQuantity(false);
     setPreviewImage('');
   };
 
@@ -150,9 +158,36 @@ const NewVehicle = () => {
     setSelectedColor(color.hex.toUpperCase());
   };
 
+  const getVehicleByColor = async (color) => {
+    try {
+      const colorSinNumeral = color.slice(1); // Utilizando slice())
+      if (colorSinNumeral !== '' && idCarSelectedValue !== '') {
+        const { data } = await getCarByColor(
+          idSucursal,
+          idCarSelectedValue,
+          colorSinNumeral
+        );
+        setQuantity(data.quantity);
+      } else {
+        setQuantity(0);
+      }
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        if (data.error) {
+          setQuantity(0);
+        }
+      }
+    }
+  };
+
   useEffect(() => {
     formik.setFieldValue('color', selectedColor);
   }, [selectedColor]);
+
+  useEffect(() => {
+    getVehicleByColor(selectedColor);
+  }, [selectedColor, idCarSelectedValue]);
 
   const createNewVehicleInSucursal = async (values, carId) => {
     try {
@@ -409,6 +444,7 @@ const NewVehicle = () => {
     setIdCarSelectedValue(selectedCarId);
     if (selectedCarId) {
       await getCarData(selectedCarId);
+      setIsQuantity(true);
     }
   };
 
@@ -454,14 +490,12 @@ const NewVehicle = () => {
         onSubmit={handleSubmit}
         encType="multipart/form-data"
       >
-        <h2 className=" text-xl mb-4 font-bold">Datos del Vehiculo</h2>
+        <h2 className=" text-xl font-bold">Datos del Vehiculo</h2>
         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div>
             <FormGroup>
               <div>
-                <p>
-                  Modelo <span className="text-red-500">*</span>
-                </p>
+                <p>Modelo</p>
               </div>
               <Input
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
@@ -479,9 +513,7 @@ const NewVehicle = () => {
           <div>
             <FormGroup>
               <div>
-                <p>
-                  Año <span className="text-red-500">*</span>
-                </p>
+                <p>Año</p>
               </div>
               <Input
                 type="text"
@@ -499,9 +531,7 @@ const NewVehicle = () => {
           <div>
             <FormGroup>
               <div>
-                <p>
-                  Marca <span className="text-red-500">*</span>
-                </p>
+                <p>Marca</p>
               </div>
               <Input
                 type="text"
@@ -519,9 +549,7 @@ const NewVehicle = () => {
           <div>
             <FormGroup>
               <div>
-                <p>
-                  Carroceria <span className="text-red-500">*</span>
-                </p>
+                <p>Carroceria</p>
               </div>
               <Input
                 type="select"
@@ -547,9 +575,7 @@ const NewVehicle = () => {
           <div>
             <FormGroup>
               <div>
-                <p>
-                  Puertas <span className="text-red-500">*</span>
-                </p>
+                <p>Puertas</p>
               </div>
               <Input
                 type="text"
@@ -567,9 +593,7 @@ const NewVehicle = () => {
           <div>
             <FormGroup>
               <div>
-                <p>
-                  Motor <span className="text-red-500">*</span>
-                </p>
+                <p>Motor</p>
               </div>
               <Input
                 type="select"
@@ -593,9 +617,7 @@ const NewVehicle = () => {
           <div>
             <FormGroup>
               <div>
-                <p>
-                  Potencia <span className="text-red-500">*</span>
-                </p>
+                <p>Potencia</p>
               </div>
               <Input
                 type="text"
@@ -615,9 +637,7 @@ const NewVehicle = () => {
           <div>
             <FormGroup>
               <div>
-                <p>
-                  Rango <span className="text-red-500">*</span>
-                </p>
+                <p>Rango</p>
               </div>
               <Input
                 type="text"
@@ -635,9 +655,7 @@ const NewVehicle = () => {
           <div>
             <FormGroup>
               <div>
-                <p>
-                  Capacidad de Batería <span className="text-red-500">*</span>
-                </p>
+                <p>Capacidad de Batería</p>
               </div>
               <Input
                 type="text"
@@ -657,9 +675,7 @@ const NewVehicle = () => {
           <div>
             <FormGroup>
               <div>
-                <p>
-                  Tiempo de carga <span className="text-red-500">*</span>
-                </p>
+                <p>Tiempo de carga</p>
               </div>
               <Input
                 type="text"
@@ -679,9 +695,7 @@ const NewVehicle = () => {
           <div>
             <FormGroup>
               <div>
-                <p>
-                  Velocidad Máxima <span className="text-red-500">*</span>
-                </p>
+                <p>Velocidad Máxima</p>
               </div>
               <Input
                 type="text"
@@ -701,9 +715,7 @@ const NewVehicle = () => {
           <div>
             <FormGroup>
               <div>
-                <p>
-                  Frenos <span className="text-red-500">*</span>
-                </p>
+                <p>Frenos</p>
               </div>
               <Input
                 type="select"
@@ -727,9 +739,7 @@ const NewVehicle = () => {
           <div>
             <FormGroup>
               <div>
-                <p>
-                  Suspension <span className="text-red-500">*</span>
-                </p>
+                <p>Suspension</p>
               </div>
               <Input
                 type="select"
@@ -755,9 +765,7 @@ const NewVehicle = () => {
           <div>
             <FormGroup>
               <div>
-                <p>
-                  Precio <span className="text-red-500">*</span>
-                </p>
+                <p>Precio</p>
               </div>
               <Input
                 type="text"
@@ -775,13 +783,11 @@ const NewVehicle = () => {
         </div>
 
         <div className="flex flex-wrap items-center justify-between mt-12">
-          <div className="w-full  mt-4 sm:mt-0 space-x-2">
+          <div className="w-full sm:mt-0 space-x-2">
             <div>
               <FormGroup>
                 <div>
-                  <p>
-                    Descripción <span className="text-red-500">*</span>
-                  </p>
+                  <p>Descripción</p>
                 </div>
                 <Input
                   type="textarea"
@@ -808,9 +814,7 @@ const NewVehicle = () => {
                 <div>
                   <FormGroup>
                     <div>
-                      <p>
-                        Imagen <span className="text-red-500">*</span>
-                      </p>
+                      <p>Imagen</p>
                     </div>
                     <div className="flex-1">
                       <div className="relative mt-2">
@@ -856,9 +860,7 @@ const NewVehicle = () => {
               <div>
                 <FormGroup>
                   <div>
-                    <p>
-                      Imagen <span className="text-red-500">*</span>
-                    </p>
+                    <p>Imagen</p>
                   </div>
                   <div className="flex-1">
                     <div className="relative mt-2">
@@ -914,7 +916,7 @@ const NewVehicle = () => {
               <FormGroup>
                 <div>
                   <p>
-                    Color <span className="text-red-500">*</span> :{' '}
+                    Color :{' '}
                     {selectedColor
                       ? codeToColorName(selectedColor).charAt(0).toUpperCase() +
                         codeToColorName(selectedColor).slice(1)
@@ -937,13 +939,35 @@ const NewVehicle = () => {
             </div>
           </div>
         </div>
+        {isQuantity && (
+          <div className="mt-6">
+            <FormGroup>
+              <div>
+                <p className="text-primary">Cantidad actual</p>
+              </div>
+              {quantity > 0 ? (
+                <Input
+                  type="text"
+                  className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+                  value={quantity}
+                  disabled={true}
+                />
+              ) : (
+                <Input
+                  type="text"
+                  className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900"
+                  value={'Este vehiculo no tiene stock en este color'}
+                  disabled={true}
+                />
+              )}
+            </FormGroup>
+          </div>
+        )}
 
         <div className="mb-10 mt-3">
           <FormGroup>
             <div>
-              <p>
-                Cantidad <span className="text-red-500">*</span>
-              </p>
+              <p className="mb-4 text-primary">Cantidad</p>
             </div>
             <Input
               type="number"

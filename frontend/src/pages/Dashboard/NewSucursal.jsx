@@ -61,7 +61,7 @@ const NewSucursal = ({ sucursal }) => {
 
   return (
     <div className="bg-secondary-100 p-8 rounded-xl mb-8">
-      <h1 className="text-xl text-gray-100">Mi Sucursal</h1>
+      <h1 className="text-xl text-gray-100">Nueva Sucursal</h1>
       <hr className="my-8 border-gray-500/30" />
       <form>
         {/* City */}
@@ -119,6 +119,7 @@ const NewSucursal = ({ sucursal }) => {
               name="cellphone"
               value={values.cellphone}
               onChange={handleChange}
+              maxLength={10}
             />
             {touched.cellphone &&
               errors.cellphone &&

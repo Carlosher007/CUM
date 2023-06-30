@@ -50,7 +50,58 @@ const NewUser = () => {
     onSubmit: (values) => {
       values.sucursal = selectedSucursal; // Asignar el valor seleccionado al campo "sucursal"
       values.sucursal = parseInt(selectedSucursal);
-      submitUser(values);
+      if (
+        !values.id ||
+        !values.email ||
+        !values.rol ||
+        !values.cellphone ||
+        !values.full_name ||
+        !values.address ||
+        !values.sucursal
+      ) {
+        toast.error(
+          'Por favor, complete todos los campos antes de proceder con la cotización',
+          {
+            position: toast.POSITION.TOP_RIGHT,
+          }
+        );
+        return;
+      } else {
+        const ccRegex = /^\d+$/;
+
+        if (!ccRegex.test(values.id)) {
+          toast.error(
+            'Por favor, ingrese un número válido para el campo de Cedula',
+            {
+              position: toast.POSITION.TOP_RIGHT,
+            }
+          );
+          return;
+        }
+
+        // Verificar cellphone como número
+        const phoneRegex = /^\d+$/;
+        if (!phoneRegex.test(values.cellphone)) {
+          toast.error(
+            'Por favor, ingrese un número válido para el campo de Teléfono',
+            {
+              position: toast.POSITION.TOP_RIGHT,
+            }
+          );
+          return;
+        }
+
+        // Verificar email con formato válido
+        const emailRegex = /^\S+@\S+\.\S+$/;
+        if (!emailRegex.test(values.email)) {
+          toast.error('Por favor, ingrese un correo electrónico válido', {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+          return;
+        }
+
+        submitUser(values);
+      }
     },
   });
 
@@ -138,9 +189,7 @@ const NewUser = () => {
         {/* EMAIL */}
         <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
           <div className="w-full md:w-1/4">
-            <p>
-              Email <span className="text-red-500">*</span>
-            </p>
+            <p>Email</p>
           </div>
           <div className="flex-1">
             <input
@@ -157,9 +206,7 @@ const NewUser = () => {
         {/* ROL */}
         <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
           <div className="w-full md:w-1/4">
-            <p>
-              Rol <span className="text-red-500">*</span>
-            </p>
+            <p>Rol</p>
           </div>
           <div className="flex-1">
             <select
@@ -181,9 +228,7 @@ const NewUser = () => {
         {/* SUCURSAL */}
         <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
           <div className="w-full md:w-1/4">
-            <p>
-              Sucursal <span className="text-red-500">*</span>
-            </p>
+            <p>Sucursal</p>
           </div>
           <div className="flex-1">
             <select

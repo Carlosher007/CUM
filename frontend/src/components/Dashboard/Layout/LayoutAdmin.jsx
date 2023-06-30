@@ -13,7 +13,6 @@ const LayoutAdmin = () => {
   const token = cookies.get('token');
 
   useEffect(() => {
-    console.log(token)
     if (token === undefined) {
       navigate(urls.home);
     }

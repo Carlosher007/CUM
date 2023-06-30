@@ -1,26 +1,27 @@
 import axios from 'axios';
 import { getTokenValue } from './tokenCookie';
 
+// https://cum-api-rest.onrender.com/api/
+
 const path = axios.create({
-  baseURL: 'https://cum-api-rest.onrender.com/api/',
+  baseURL: 'http://localhost:8000/api/',
 });
 
 const path2 = axios.create({
-  baseURL: 'https://cum-api-rest.onrender.com/api/',
+  baseURL: 'http://localhost:8000/api/',
   headers: {
     'Content-Type': 'multipart/form-data',
   },
 });
 
 const path3 = axios.create({
-  baseURL: 'https://cum-api-rest.onrender.com/api/',
+  baseURL: 'http://localhost:8000/api/',
 });
 
 // Agregar el interceptor para modificar las solicitudes salientes
 path.interceptors.request.use(async (config) => {
   const token = await getTokenValue(); // Obtén el valor actualizado del token de las cookies
 
-  console.log(token)
 
   if (token && token !== undefined) {
     config.headers.Authorization = `Token ${token}`;
@@ -31,8 +32,6 @@ path.interceptors.request.use(async (config) => {
 
 path2.interceptors.request.use(async (config) => {
   const token = await getTokenValue(); // Obtén el valor actualizado del token de las cookies
-
-  console.log(token)
 
 
   if (token && token !== undefined) {

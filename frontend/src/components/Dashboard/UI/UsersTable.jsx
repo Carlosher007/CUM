@@ -104,7 +104,6 @@ const UsersTable = ({ data, updateUserList }) => {
 
   return (
     <div>
-      <div className="bg-secondary-100 p-6 rounded-xl">
         <div className="hidden md:grid grid-cols-1 md:grid-cols-6 mb-2 p-4">
           <h5>Id</h5>
           <h5>Nombre</h5>
@@ -181,7 +180,6 @@ const UsersTable = ({ data, updateUserList }) => {
             </div>
           </div>
         ))}
-      </div>
     </div>
   );
 };

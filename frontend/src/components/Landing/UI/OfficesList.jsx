@@ -43,6 +43,7 @@ const OfficeItem = ({ item }) => {
 
   const lengthVehicles = parts.length;
   const lengthStaff = staff.length;
+  const lengthAddress = address.length;
 
   return (
     <Col lg="4" md="6" sm="6" className="mb-5">
@@ -74,7 +75,8 @@ const OfficeItem = ({ item }) => {
 
             <div className=" d-flex align-items-center gap-3">
               <span className="blog__author">
-                <i className="ri-building-4-line"></i> {address}
+                <i className="ri-building-4-line"></i>{' '}
+                {lengthAddress < 16 ? address : address.slice(0, 16) + '...'}
               </span>
             </div>
           </div>

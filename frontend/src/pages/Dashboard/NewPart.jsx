@@ -35,7 +35,7 @@ import VehiclesWithPartTable from '../../components/Dashboard/UI/VehiclesWithPar
 const NewVehicle = () => {
   const cookies = new Cookies();
   const idSucursal = cookies.get('sucursal');
-  const token = cookies.get('token')
+  const token = cookies.get('token');
 
   const [vehicles, setVehicles] = useState([]);
   const [parts, setParts] = useState([]);
@@ -47,26 +47,39 @@ const NewVehicle = () => {
     try {
       const { data } = await getPart(id);
       setPart(data);
-      const { name, price, vehicle } = data;
-      formik.setValues({
-        ...formik.values,
-        name,
-        price,
-        vehicle: vehicle.id,
-      });
-    } catch (error) {
-      const { data } = error.response;
-      if (Array.isArray(data)) {
-        data.forEach((errorMessage) => {
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
+      const { name, price } = data;
+      if (data.vehicle === null) {
+        formik.setValues({
+          ...formik.values,
+          name,
+          price,
+          vehicle: '',
         });
       } else {
-        if (data.error) {
-          toast.error(data.error, {
-            position: toast.POSITION.TOP_RIGHT,
+        formik.setValues({
+          ...formik.values,
+          name,
+          price,
+          vehicle: data.vehicle,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+      if (error.response) {
+        const { data } = error.response;
+        console.log(data);
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
           });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
         }
       }
     }
@@ -217,35 +230,35 @@ const NewVehicle = () => {
     }
   };
 
-  const getGeneralPart = async (idPart) => {
-    try {
-      const { data } = await getPartsInSucursal(idSucursal);
-      let id = null;
-
-      data.map((item) => {
-        if (item.part.id === parseInt(idPart)) {
-          id = item.id;
-        }
-      });
-
-      return id;
-    } catch (error) {
-      const { data } = error.response;
-      if (Array.isArray(data)) {
-        data.forEach((errorMessage) => {
-          toast.error(errorMessage, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        });
-      } else {
-        if (data.error) {
-          toast.error(data.error, {
-            position: toast.POSITION.TOP_RIGHT,
-          });
-        }
-      }
-    }
-  };
+  //   const getGeneralPart = async (idPart) => {
+  //     try {
+  //       const { data } = await getPartsInSucursal(idSucursal);
+  //       let id = null;
+  //
+  //       data.map((item) => {
+  //         if (item.part.id === parseInt(idPart)) {
+  //           id = item.id;
+  //         }
+  //       });
+  //
+  //       return id;
+  //     } catch (error) {
+  //       const { data } = error.response;
+  //       if (Array.isArray(data)) {
+  //         data.forEach((errorMessage) => {
+  //           toast.error(errorMessage, {
+  //             position: toast.POSITION.TOP_RIGHT,
+  //           });
+  //         });
+  //       } else {
+  //         if (data.error) {
+  //           toast.error(data.error, {
+  //             position: toast.POSITION.TOP_RIGHT,
+  //           });
+  //         }
+  //       }
+  //     }
+  //   };
 
   const formik = useFormik({
     initialValues: {

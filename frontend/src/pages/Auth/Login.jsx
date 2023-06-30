@@ -88,7 +88,7 @@ const Login = () => {
   };
 
   const verifyEmail = async (code) => {
-    if (code === verificationCode || code === '1') {
+    if (code === verificationCode || code == '1') {
       // if (true) {
       const loginData = {
         username: usernameG,
@@ -178,7 +178,6 @@ const Login = () => {
   });
 
   const { handleSubmit, handleChange, values, touched, errors } = formik;
-
   const [errorShown, setErrorShown] = useState(false);
 
   const showErrorToast = (message) => {
