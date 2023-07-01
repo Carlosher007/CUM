@@ -1,0 +1,9 @@
+.pagination .active {
+  color: rgba(255, 255, 0, 0.473);
+}
+
+.active-page {
+  color: #1c2cc0;
+  font-weight: bold;
+  /* Agrega otros estilos según tus preferencias */
+}
