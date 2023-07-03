@@ -46,14 +46,26 @@ const DetailsQuote = () => {
           });
           return;
         }
-        if(values.numberCC===''){
-            toast.error('Ponga el numero de tarjeta', {
-              position: toast.POSITION.TOP_RIGHT,
-            });
-            return;
+        if (values.numberCC === '') {
+          toast.error('Ponga el numero de tarjeta', {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+          return;
+        }
+        if (isNaN(values.numberCC)) {
+          toast.error('El numero de tarjeta debe ser un número', {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+          return;
         }
         if (values.segurityCodeCC === '') {
           toast.error('Ponga el codigo de seguridad', {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+          return;
+        }
+        if (isNaN(values.segurityCodeCC)) {
+          toast.error('El codigo de seguridad debe ser un número', {
             position: toast.POSITION.TOP_RIGHT,
           });
           return;
