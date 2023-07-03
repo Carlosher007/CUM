@@ -5,6 +5,7 @@ import { toast } from 'react-toastify';
 import { deleteUser } from '../../../assets/api/user.api';
 import { urls } from '../../../assets/urls/urls';
 import { formatPrice } from '../../../assets/general/formatPrice';
+import { codeToColorName } from '../../../assets/color/colorUtils';
 
 const MyCarsTable = ({ data}) => {
 
@@ -33,7 +34,7 @@ const MyCarsTable = ({ data}) => {
             </div>
             <div>
               <h5 className="md:hidden text-white font-bold mb-2">Color</h5>
-              <span>{item.quotation.vehicle_sucursal.color}</span>
+              <span>{codeToColorName(item.quotation.vehicle_sucursal.color)}</span>
             </div>
             <div>
               <h5 className="md:hidden mt-6 text-white font-bold mb-2">
