@@ -78,7 +78,7 @@ const DetailsQuote = () => {
       dateExpectedCC: '',
       segurityCodeCC: '',
     },
-    validationSchema: quoteValidation,
+    // validationSchema: quoteValidation,
     onSubmit: (values) => {
       finishQuoteData();
     },
