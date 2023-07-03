@@ -11,6 +11,7 @@ import {
   getCarByColor,
   newCar,
   newCarInSucursal,
+  newCarInSucursal2,
 } from '../../assets/api/cars';
 import {
   bodyWorkData,
@@ -243,15 +244,52 @@ const NewVehicle = () => {
   };
 
   const addVehicleInSucursal = async (values, carId) => {
+    console.log(values)
+    console.log(carId)
     try {
       const body = {
         sucursal: parseInt(values.sucursal),
         vehicle: parseInt(carId),
         color: values.color,
-        quantity: values.quantity,
+        quantity: parseInt(values.quantity),
       };
+      console.log(body)
 
       await newCarInSucursal(body);
+      toast.success('Se agrego la cantidad dada del vehiculo a la sucursal', {
+        position: toast.POSITION.TOP_RIGHT,
+      });
+    } catch (error) {
+      const { data } = error.response;
+      if (Array.isArray(data)) {
+        data.forEach((errorMessage) => {
+          toast.error(errorMessage, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        });
+      } else {
+        if (data.error) {
+          toast.error(data.error, {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+        }
+      }
+    }
+  };
+
+  const addVehicleInSucursal2 = async (values, carId) => {
+    console.log(values);
+    console.log(carId);
+    try {
+      const body = {
+        sucursal: parseInt(values.sucursal),
+        vehicle: parseInt(carId),
+        color: values.color,
+        quantity: parseInt(values.quantity),
+      };
+      console.log(body);
+
+      await newCarInSucursal2(body);
       toast.success('Se agrego la cantidad dada del vehiculo a la sucursal', {
         position: toast.POSITION.TOP_RIGHT,
       });
@@ -414,7 +452,7 @@ const NewVehicle = () => {
         }
       } else {
         console.log('existente');
-        await addVehicleInSucursal(values, idCarSelectedValue);
+        await addVehicleInSucursal2(values, idCarSelectedValue);
         resetFormik();
       }
       await getAllVehicles();

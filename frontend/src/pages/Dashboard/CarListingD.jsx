@@ -39,10 +39,12 @@ const CarListingD = () => {
 
   const offset = currentPage * ITEMS_PER_PAGE;
 
-  const handleSortChange = (event, property) => {
-    const newSortOrder = { ...sortOrder };
-    newSortOrder[property] = event.target.value;
-    setSortOrder(newSortOrder);
+  const handleSortChange = (event) => {
+    const { value } = event.target;
+    setSortOrder((prevSortOrder) => ({
+      ...prevSortOrder,
+      price: value,
+    }));
   };
 
   useEffect(() => {
@@ -103,7 +105,7 @@ const CarListingD = () => {
     if (sortOrder.price === 'low') {
       result = a.vehicle.price - b.vehicle.price;
     } else if (sortOrder.price === 'high') {
-      result = b.vehicle.price - a.vehicle.precio;
+      result = b.vehicle.price - a.vehicle.price;
     }
 
     return result;
@@ -152,7 +154,7 @@ const CarListingD = () => {
                 onChange={(event) => handleSortChange(event, 'price')}
                 className="w-full py-2 px-4 outline-none rounded-lg bg-secondary-900 appearance-none"
               >
-                <option>Select</option>
+                <option>Sin filtro</option>
                 <option value="low">Ascendente</option>
                 <option value="high">Descendente</option>
               </Input>

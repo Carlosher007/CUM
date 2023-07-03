@@ -12,8 +12,8 @@ import {
   RiThumbUpLine,
 } from 'react-icons/ri';
 import { Link, useNavigate } from 'react-router-dom';
-
 import { toast } from 'react-toastify';
+import { Button } from 'reactstrap';
 import Cookies from 'universal-cookie';
 import { logout } from '../../../assets/api/login.api';
 import notificationsData from '../../../assets/data/notificationsData';
@@ -27,7 +27,6 @@ const Header = () => {
   const rol = cookies.get('rol');
   const token = cookies.get('token');
   const navigate = useNavigate();
-
 
   const deleteCookies = () => {
     Object.keys(cookies.getAll()).forEach((cookieName) => {
@@ -119,15 +118,14 @@ const Header = () => {
             </Link>
           </MenuItem>
           <MenuItem className="p-0 hover:bg-transparent">
-            <Link
-              to={urls.home}
+            <Button
               className="rounded-lg transition-colors text-gray-300 hover:bg-secondary-900 flex items-center gap-x-4 py-2 px-6 flex-1"
               onClick={() => {
                 handleLogout();
               }}
             >
               <RiLogoutCircleRLine /> Cerrar sesión
-            </Link>
+            </Button>
           </MenuItem>
         </Menu>
       </nav>

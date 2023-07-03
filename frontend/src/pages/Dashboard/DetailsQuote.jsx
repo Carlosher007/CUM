@@ -668,14 +668,28 @@ const DetailsQuote = () => {
           </Link>
         </div>
       ) : (
-        <div className="flex justify-start">
-          <Link
-            className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
-            to={urls.allQuotes}
-          >
-            <i className="ri-arrow-left-line"></i> Volver
-          </Link>
-        </div>
+        <>
+          {rol === 'Cliente' && (
+            <div className="flex justify-start">
+              <Link
+                className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+                to={urls.myQuotes}
+              >
+                <i className="ri-arrow-left-line"></i> Volver
+              </Link>
+            </div>
+          )}
+          {rol !== 'Cliente' && (
+            <div className="flex justify-start">
+              <Link
+                className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+                to={urls.allQuotes}
+              >
+                <i className="ri-arrow-left-line"></i> Volver
+              </Link>
+            </div>
+          )}
+        </>
       )}
     </div>
   );

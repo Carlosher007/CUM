@@ -13,6 +13,7 @@ import {
 import Cookies from 'universal-cookie';
 import { logout } from '../../../assets/api/login.api';
 import { urls } from '../../../assets/urls/urls';
+import { Button } from 'reactstrap';
 
 const Sidebar = () => {
   const cookies = new Cookies();
@@ -74,17 +75,17 @@ const Sidebar = () => {
       ],
     },
     {
-      display: 'Acciones en sucursal',
+      display: 'Acciones',
       role: ['Cliente'],
       sublinks: [
         {
           path: urls.myQuotes,
-          display: 'Cotizaciones ',
+          display: 'Mis Cotizaciones ',
           role: ['Cliente'],
         },
         {
           path: urls.myCars,
-          display: 'Carros',
+          display: 'Mis Carros',
           role: ['Cliente'],
         },
         {
@@ -296,13 +297,12 @@ const Sidebar = () => {
           </ul>
         </div>
         <nav>
-          <Link
-            to={urls.home}
+          <Button
             className="flex items-center gap-4 py-2 px-4 rounded-lg hover:bg-secondary-900 transition-colors"
             onClick={handleLogout}
           >
             <RiLogoutCircleRLine className="text-primary" /> Cerrar sesión
-          </Link>
+          </Button>
         </nav>
       </div>
       <button

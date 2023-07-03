@@ -99,10 +99,43 @@ const CarDetailsD = () => {
     }
   };
 
+  const getStockCar = async () => {
+    try {
+      const { data } = await getColorsCar(idSucursal, id);
+      const colors = data.map((obj) => obj.color);
+      setAvailableColors(colors);
+      setSelectedColor(colors[0]);
+    } catch (error) {
+      if (error.response) {
+        const { data } = error.response;
+        if (Array.isArray(data)) {
+          data.forEach((errorMessage) => {
+            toast.error(errorMessage, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          });
+        } else {
+          if (data.error) {
+            toast.error(data.error, {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+          }
+        }
+      }
+    }
+  };
+
   useEffect(() => {
-    getCarData();
-    getAvailableColors();
-  }, []);
+    if(selectedColor!==''){
+
+    }
+  }, [selectedColor]);
+
+    useEffect(() => {
+      getCarData();
+      getAvailableColors();
+    }, []);
+
 
   return (
     <div className="">
