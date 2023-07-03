@@ -39,12 +39,27 @@ const DetailsQuote = () => {
     try {
       const regex = /^(0[1-9]|1[0-2])-(\d{4})$/; // Expresión regular para verificar el formato "mes-año"
 
-      if (!regex.test(dateExpectedCC)) {
-        toast.error('Ponga un formato de fecha correcto', {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        return;
+      if (values.wayPay === typesOfPay[0]) {
+        if (!regex.test(dateExpectedCC)) {
+          toast.error('Ponga un formato de fecha correcto', {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+          return;
+        }
+        if(values.numberCC===''){
+            toast.error('Ponga el numero de tarjeta', {
+              position: toast.POSITION.TOP_RIGHT,
+            });
+            return;
+        }
+        if (values.segurityCodeCC === '') {
+          toast.error('Ponga el codigo de seguridad', {
+            position: toast.POSITION.TOP_RIGHT,
+          });
+          return;
+        }
       }
+
       await finishQuote(idQuote);
       toast.success('Cotización finalizada', {
         position: toast.POSITION.TOP_RIGHT,
