@@ -245,7 +245,7 @@ const Sidebar = () => {
         <div>
           <h1 className="text-center text-2xl font-bold text-white mb-10">
             <Link to={urls.home2}>
-              Dashboard<span className="text-primary text-4xl">.</span>
+              CUM<span className="text-primary text-4xl">.</span>
             </Link>
           </h1>
           <ul>
