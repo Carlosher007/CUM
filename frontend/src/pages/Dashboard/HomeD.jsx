@@ -141,6 +141,7 @@ const Home = () => {
   const getCarsSoldCount = () => {
     const carsSoldCount = {};
 
+
     carsSold.forEach((car) => {
       const vehicleId = car.vehicle;
 
@@ -294,7 +295,7 @@ const Home = () => {
                 data={[['Vendedor', 'Cantidad'], ...getTopSellers(3)]}
                 className="text-black font-bold bg-secondary-300 rounded-lg"
                 options={{
-                  title: 'Vendedores con más cotizaciones',
+                  title: 'Vendedores con mejores ventas',
                   hAxis: {
                     title: 'Cantidad',
                     minValue: 0,
@@ -319,7 +320,7 @@ const Home = () => {
                 data={[['Cliente', 'Cantidad'], ...getTopClients(3)]}
                 className="text-black font-bold bg-secondary-300 rounded-lg"
                 options={{
-                  title: 'Clientes con más cotizaciones en estado "FINISHED"',
+                  title: 'Clientes con más compras',
                   hAxis: {
                     title: 'Cantidad',
                     minValue: 0,
