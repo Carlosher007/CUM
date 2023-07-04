@@ -2,7 +2,7 @@ import { Menu, MenuButton, MenuItem } from '@szhsin/react-menu';
 import '@szhsin/react-menu/dist/index.css';
 import '@szhsin/react-menu/dist/transitions/slide.css';
 import { all } from 'axios';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   RiArrowDownSLine,
   RiChat3Line,
@@ -22,11 +22,16 @@ import NotificationItem from '../UI/NotificationItem';
 
 const Header = () => {
   const cookies = new Cookies();
-  const full_name = cookies.get('full_name');
   const email = cookies.get('email');
   const rol = cookies.get('rol');
   const token = cookies.get('token');
   const navigate = useNavigate();
+
+  const [full_name, set_full_name] = useState(cookies.get('full_name'));
+
+  useEffect(() => {
+    set_full_name(cookies.get('full_name'));
+  }, [cookies.get('full_name')]);
 
   const deleteCookies = () => {
     Object.keys(cookies.getAll()).forEach((cookieName) => {

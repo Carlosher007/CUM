@@ -42,6 +42,11 @@ const MiPerfil = ({ user }) => {
   const updateProfile = async () => {
     try {
       const { data } = await updateMyProfile(user.id, values);
+      cookies.set('full_name', values.full_name, {
+        path: '/',
+        sameSite: 'None',
+        secure: true,
+      });
       toast.success('Usuario actualizado con exito', {
         position: toast.POSITION.TOP_RIGHT,
       });
@@ -179,6 +184,7 @@ const MiPerfil = ({ user }) => {
               name="cellphone"
               value={values.cellphone}
               onChange={handleChange}
+              maxLength={10}
             />
             {touched.cellphone &&
               errors.cellphone &&

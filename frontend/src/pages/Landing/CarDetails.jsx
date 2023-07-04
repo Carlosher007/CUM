@@ -170,8 +170,10 @@ const CarDetails = () => {
 
             <Row>
               {/* Description */}
-              <div className="mt-4">
-                <p className="section__description">{car.description}</p>
+              <div className="mt-4 text-black">
+                <p className="section__description text-black">
+                  {car.description}
+                </p>
               </div>
             </Row>
 

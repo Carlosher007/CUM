@@ -183,7 +183,7 @@ const CarListing = () => {
                     onChange={(event) => handleSortChange(event, 'price')}
                     style={{ maxWidth: '160px', minWidth: '160px' }}
                   >
-                    <option value="">Seleccione</option>
+                    <option value="">Sin Filtro</option>
                     <option value="low">Ascendente</option>
                     <option value="high">Descendente</option>
                   </Input>
@@ -218,7 +218,7 @@ const CarListing = () => {
                   <CarItem item={item} key={item.id} />
                 ))
               ) : (
-                <div>
+                <div className='text-black'> 
                   No se encontraron resultados o seleccione el numero de pagina
                 </div>
               )}
