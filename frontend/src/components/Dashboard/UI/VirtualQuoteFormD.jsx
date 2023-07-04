@@ -292,7 +292,7 @@ const VirtualQuoteFormD = ({ slug, selectedColor, price }) => {
             </div>
             <div>
               <p>
-                Valor total de la cuota:{' '}
+                Valor total de la cuota mensual:{' '}
                 <span className="text-primary/60">
                   {formatPrice(values.quota_value)}
                 </span>

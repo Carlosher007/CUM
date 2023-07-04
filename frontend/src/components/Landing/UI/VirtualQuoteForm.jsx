@@ -602,7 +602,7 @@ const VirtualQuoteForm = ({
                 </div>
                 <div>
                   <p>
-                    <FormText>Valor total de la cuota: </FormText>
+                    <FormText>Valor total de la cuota mensual: </FormText>
                     <span className="">{formatPrice(valueTotal)}</span>
                   </p>
                 </div>
