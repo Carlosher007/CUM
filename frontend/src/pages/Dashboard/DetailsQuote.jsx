@@ -28,7 +28,7 @@ const DetailsQuote = () => {
   const [car, setCar] = useState({});
   const [isPagar, setIsPagar] = useState(false);
   const [dateExpectedCC, setDateExpectedCC] = useState('');
-  const typesOfPay = ['CreditCard', 'Efecty', 'Bank'];
+  const typesOfPay = ['CreditCard', 'Bancolombia', 'Tyba'];
   const bankCount = '91838282';
   const effectyCount = '2836342';
 
@@ -352,7 +352,7 @@ const DetailsQuote = () => {
                   Valor de la cuota inicial:
                 </td>
                 <td className="py-2 text-right">
-                  {formatPrice(quote.quotation.num_installments)}
+                  {formatPrice(quote.quotation.initia_fee)}
                 </td>
               </tr>
               <tr className="hover:bg-secondary-200">
@@ -530,7 +530,7 @@ const DetailsQuote = () => {
                     </>
                   )}
 
-                  {values.wayPay === 'Efecty' && (
+                  {values.wayPay === 'Bancolombia' && (
                     <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
                       <div className="w-full md:w-1/4">
                         <p>Numero de Cuenta a consignar</p>
@@ -546,7 +546,7 @@ const DetailsQuote = () => {
                     </div>
                   )}
 
-                  {values.wayPay === 'Bank' && (
+                  {values.wayPay === 'Tyba' && (
                     <div className="flex flex-col md:flex-row md:items-center gap-y-2 mb-8">
                       <div className="w-full md:w-1/4">
                         <p>Numero de Cuenta a consignar</p>
@@ -669,7 +669,7 @@ const DetailsQuote = () => {
         </div>
       ) : (
         <>
-          {rol === 'Cliente' && (
+          {(rol === 'Cliente' || rol==='Vendedor')  && (
             <div className="flex justify-start">
               <Link
                 className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"

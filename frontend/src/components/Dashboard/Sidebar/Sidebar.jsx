@@ -111,12 +111,12 @@ const Sidebar = () => {
         },
         {
           path: urls.allQuotes,
-          display: 'Todas las cotizaciones ',
+          display: 'Todas las cotizaciones',
           role: ['Gerente'],
         },
         {
           path: urls.myQuotes,
-          display: 'Cotizaciones asignada ',
+          display: 'Cotizaciones asignadas',
           role: ['Vendedor'],
         },
       ],

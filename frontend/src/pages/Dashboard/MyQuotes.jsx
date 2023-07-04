@@ -177,16 +177,21 @@ const MyQuotes = () => {
           )}
         </div>
 
-        <div className="flex justify-end mt-5">
-          <Link to={urls.seeCarsD}>
-            <button
-              className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
-              onClick={() => {}}
-            >
-              Cotizar
-            </button>
-          </Link>
-        </div>
+        {rol === 'Cliente' && (
+          <>
+            {' '}
+            <div className="flex justify-end mt-5">
+              <Link to={urls.seeCarsD}>
+                <button
+                  className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
+                  onClick={() => {}}
+                >
+                  Cotizar
+                </button>
+              </Link>
+            </div>
+          </>
+        )}
       </div>
     </div>
   );
