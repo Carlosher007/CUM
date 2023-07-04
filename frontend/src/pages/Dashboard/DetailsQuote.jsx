@@ -679,7 +679,7 @@ const DetailsQuote = () => {
               </Link>
             </div>
           )}
-          {rol !== 'Cliente' && (
+          {(rol !== 'Cliente' && rol!=='Vendedor') && (
             <div className="flex justify-start">
               <Link
                 className="bg-primary/80 text-black py-2 px-4 rounded-lg hover:bg-primary transition-colors"
