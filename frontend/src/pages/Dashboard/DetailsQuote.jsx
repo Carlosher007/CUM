@@ -352,7 +352,7 @@ const DetailsQuote = () => {
                   Valor de la cuota inicial:
                 </td>
                 <td className="py-2 text-right">
-                  {formatPrice(quote.quotation.initia_fee)}
+                  {formatPrice(quote.quotation.initial_fee)}
                 </td>
               </tr>
               <tr className="hover:bg-secondary-200">
