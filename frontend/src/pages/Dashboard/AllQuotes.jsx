@@ -87,7 +87,7 @@ const AllQuotes = () => {
   return (
     <div className="bookings">
       <div className="text-center font-bold text-3xl bg-secondary-100 p-8 rounded-xl mb-8 booking__wrapper">
-        <h1>Todas las cotizacioens</h1>
+        <h1>Todas las cotizaciones</h1>
       </div>
       <div className="bg-secondary-100 p-8 rounded-xl mb-8">
         <div className="flex flex-col md:flex-row items-center md:gap-16">

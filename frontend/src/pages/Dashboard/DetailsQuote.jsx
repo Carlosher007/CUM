@@ -167,6 +167,7 @@ const DetailsQuote = () => {
   const getQuoteGerente = async () => {
     try {
       const { data } = await getQuote(idQuote);
+      console.log(data)
       setQuote(data);
     } catch (error) {
       const { data } = error.response;
